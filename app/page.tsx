@@ -1,65 +1,302 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
+import { getPhotoUrl, timeAgo } from '@/lib/utils'
+import Link from 'next/link'
+
+interface Board {
+  id: string
+  name: string
+  slug: string
+  address: string
+  view_count: number
+  updated_at: string
+  photo: {
+    id: string
+    storage_path: string
+    created_at: string
+  } | null
+}
+
+// Random rotation for cards
+function getRandomRotation() {
+  return Math.random() * 6 - 3 // -3 to +3 degrees
+}
+
+// Pushpin colors from style guide
+const pushpinColors = [
+  '#D94F4F', // Pushpin Red
+  '#F4D03F', // Pushpin Yellow  
+  '#5B9BD5', // Pushpin Blue
+  '#6BBF59'  // Pushpin Green
+]
+
+function getRandomPushpinColor() {
+  return pushpinColors[Math.floor(Math.random() * pushpinColors.length)]
+}
+
+export default function HomePage() {
+  const [boards, setBoards] = useState<Board[]>([])
+  const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
+  const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid')
+
+  useEffect(() => {
+    setMounted(true)
+    loadBoards()
+  }, [])
+
+  async function loadBoards() {
+    const { data: locations } = await supabase
+      .from('locations')
+      .select('id, name, slug, address, view_count, updated_at')
+      .eq('is_active', true)
+      .order('updated_at', { ascending: false })
+    
+    if (!locations) {
+      setLoading(false)
+      return
+    }
+    
+    const boardsWithPhotos = await Promise.all(
+      locations.map(async (location) => {
+        const { data: photo } = await supabase
+          .from('photos')
+          .select('id, storage_path, created_at')
+          .eq('location_id', location.id)
+          .eq('is_current', true)
+          .eq('is_flagged', false)
+          .single()
+        
+        return { ...location, photo }
+      })
+    )
+    
+    // Sort by most recent photo/update
+    const sorted = boardsWithPhotos.sort((a, b) => {
+      const dateA = a.photo ? new Date(a.photo.created_at).getTime() : new Date(a.updated_at).getTime()
+      const dateB = b.photo ? new Date(b.photo.created_at).getTime() : new Date(b.updated_at).getTime()
+      return dateB - dateA
+    })
+    
+    setBoards(sorted)
+    setLoading(false)
+  }
+  
+  if (!mounted) {
+    return <div className="min-h-screen bg-[#C4A574]" />
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main className="min-h-screen bg-[#C4A574] relative">
+      {/* Cork Board Texture Overlay */}
+      <div 
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A68B5B' fill-opacity='0.4'%3E%3Ccircle cx='9' cy='9' r='1'/%3E%3Ccircle cx='49' cy='21' r='1'/%3E%3Ccircle cx='19' cy='29' r='1'/%3E%3Ccircle cx='39' cy='41' r='1'/%3E%3Ccircle cx='9' cy='49' r='1'/%3E%3Ccircle cx='29' cy='9' r='1'/%3E%3Ccircle cx='51' cy='51' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}
+      />
+      
+      {/* Header - Pinned Note Style */}
+      <header className="relative z-10 text-center pt-8 pb-4">
+        <div className="max-w-md mx-auto">
+          {/* Main Title on Paper */}
+          <div className="relative inline-block">
+            <div 
+              className="bg-[#FFFEF9] p-6 shadow-lg border-[1px] border-[#E5E5E5] relative"
+              style={{ 
+                transform: `rotate(${getRandomRotation()}deg)`,
+                boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
+              }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              <h1 className="text-[32px] font-bold text-[#2C2C2C] leading-[1.2] mb-2">
+                The Drift
+              </h1>
+              <p className="text-[16px] font-medium text-[#6B6B6B] leading-[1.4]">
+                Where flyers get a second life
+              </p>
+              
+              {/* Pushpin at top */}
+              <div 
+                className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2"
+                style={{ backgroundColor: getRandomPushpinColor() }}
+              >
+                <div 
+                  className="w-3 h-3 rounded-full absolute top-1 left-1"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* What Is This Callout */}
+      <div className="relative z-10 text-center mb-6">
+        <Link href="/about" className="inline-block group">
+          <div 
+            className="bg-[#F4D03F] p-3 px-6 shadow-lg border-[1px] border-[#E5E5E5] relative mx-auto"
+            style={{ 
+              transform: `rotate(${getRandomRotation()}deg)`,
+              boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+              borderRadius: '2px'
+            }}
+          >
+            <div className="text-[14px] font-semibold text-[#2C2C2C] group-hover:text-[#1a1a1a] transition-colors">
+              👁️ WHAT IS THIS?
+            </div>
+            
+            {/* Pushpin */}
+            <div 
+              className="absolute -top-2 left-1/2 w-4 h-4 rounded-full shadow-sm transform -translate-x-1/2"
+              style={{ backgroundColor: '#D94F4F' }}
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <div 
+                className="w-2.5 h-2.5 rounded-full absolute top-0.5 left-0.5"
+                style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+              />
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      {/* View Mode Toggle */}
+      <div className="relative z-10 max-w-6xl mx-auto px-4 mb-6">
+        <div className="flex justify-center">
+          <div className="bg-[#FFFEF9] border-[1px] border-[#E5E5E5] rounded-lg p-1 shadow-sm">
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                viewMode === 'grid'
+                  ? 'bg-[#D94F4F] text-white'
+                  : 'text-[#6B6B6B] hover:text-[#2C2C2C]'
+              }`}
+            >
+              📌 Grid
+            </button>
+            <button
+              onClick={() => setViewMode('map')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                viewMode === 'map'
+                  ? 'bg-[#D94F4F] text-white'
+                  : 'text-[#6B6B6B] hover:text-[#2C2C2C]'
+              }`}
+            >
+              🗺️ Map
+            </button>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+      </div>
+
+      {/* Polaroid Cards Grid */}
+      <section className="relative z-10 max-w-6xl mx-auto px-4 py-8">
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="text-[#2C2C2C] font-medium">Loading boards...</div>
+          </div>
+        ) : viewMode === 'grid' ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {boards.map((board) => {
+              const rotation = getRandomRotation()
+              const pushpinColor = getRandomPushpinColor()
+              
+              return (
+                <Link
+                  key={board.id}
+                  href={`/${board.slug}`}
+                  className="group block"
+                >
+                  <div 
+                    className="relative w-44 md:w-52 bg-[#FFFEF9] p-3 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
+                    style={{ 
+                      transform: `rotate(${rotation}deg)`,
+                      boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+                      borderRadius: '2px'
+                    }}
+                  >
+                    {/* Pushpin */}
+                    <div 
+                      className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2 z-10"
+                      style={{ backgroundColor: pushpinColor }}
+                    >
+                      <div 
+                        className="w-3 h-3 rounded-full absolute top-1 left-1"
+                        style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+                      />
+                    </div>
+                    
+                    {/* Photo/Thumbnail with polaroid border */}
+                    <div className="aspect-square bg-[#FDF6E3] border-2 border-[#E5E5E5] mb-4 p-2 overflow-hidden">
+                      <div className="w-full h-full bg-white border border-[#E5E5E5] overflow-hidden">
+                        {board.photo ? (
+                          <img 
+                            src={getPhotoUrl(board.photo.storage_path)}
+                            alt={board.name}
+                            className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-[#FDF6E3] flex items-center justify-center">
+                            <span className="text-4xl opacity-20 text-[#C4A574]">📌</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {/* Card Text Content */}
+                    <div className="text-left px-1">
+                      <h3 className="text-[16px] font-semibold text-[#2C2C2C] leading-[1.3] mb-2 line-clamp-2">
+                        {board.name}
+                      </h3>
+                      <p className="text-[11px] text-[#6B6B6B] leading-[1.2]">
+                        {board.photo 
+                          ? `Updated: ${new Date(board.photo.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                          : 'No photo yet'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-20">
+            <div className="relative inline-block">
+              <div 
+                className="bg-[#F4D03F] p-8 shadow-lg border-[1px] border-[#E5E5E5] relative mx-auto"
+                style={{ 
+                  transform: `rotate(${getRandomRotation()}deg)`,
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+                  borderRadius: '2px'
+                }}
+              >
+                <h3 className="text-[24px] font-bold text-[#2C2C2C] leading-[1.3] mb-3">
+                  🗺️ Coming Soon
+                </h3>
+                <p className="text-[14px] text-[#2C2C2C] leading-[1.4] max-w-sm">
+                  Map view is in the works! For now, use the grid to browse all community boards.
+                </p>
+                
+                {/* Pushpin */}
+                <div 
+                  className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2"
+                  style={{ backgroundColor: '#D94F4F' }}
+                >
+                  <div 
+                    className="w-3 h-3 rounded-full absolute top-1 left-1"
+                    style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+      
+      <footer className="mt-16 py-8 border-t border-stone-200 text-center text-sm text-stone-400">
+        <p>For The Driftless: Slow News is Good News</p>
+      </footer>
+    </main>
+  )
 }
