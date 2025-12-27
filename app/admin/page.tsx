@@ -208,8 +208,10 @@ function AdminDashboard() {
       if (!error) {
         setEditingId(null)
         loadLocations()
+        setForm({ name: '', slug: '', address: '', description: '' })
       } else {
         console.error('Update failed:', error)
+        alert(`Failed to update location: ${error.message || 'Unknown error'}`)
       }
     } else {
       const { error } = await supabase.rpc('admin_create_location', {
@@ -222,12 +224,12 @@ function AdminDashboard() {
       if (!error) {
         setShowAddForm(false)
         loadLocations()
+        setForm({ name: '', slug: '', address: '', description: '' })
       } else {
         console.error('Create failed:', error)
+        alert(`Failed to add location: ${error.message || 'Unknown error'}`)
       }
     }
-    
-    setForm({ name: '', slug: '', address: '', description: '' })
   }
 
   const startEdit = (location: Location) => {
