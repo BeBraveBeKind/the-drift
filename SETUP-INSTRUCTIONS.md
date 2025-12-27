@@ -25,7 +25,7 @@ This will add all Viroqua locations including:
 - County Seat Laundry (124 S Main St)
 - Nelson's AgriCenter (126 N Main St)
 - Driftless Cafe (118 W Court St)
-- Magie's (116 S Main St)
+- Magpie's (116 S Main St)
 - Driftless Books (108 S Main St)
 
 ### 3. Verify Setup
