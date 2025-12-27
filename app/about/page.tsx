@@ -290,22 +290,22 @@ export default function AboutPage() {
         <div className="mt-16 text-center">
           <div className="relative inline-block">
             <div 
-              className="bg-[#2C2C2C] p-6 shadow-lg border-[1px] border-[#E5E5E5] relative mx-auto"
+              className="bg-[#FDF6E3] p-6 shadow-lg border-[1px] border-[#E5E5E5] relative mx-auto"
               style={{ 
                 transform: `rotate(${getRandomRotation()}deg)`,
                 boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
                 borderRadius: '2px'
               }}
             >
-              <h2 className="text-[18px] font-semibold text-white leading-[1.3] mb-3">
+              <h2 className="text-[18px] font-semibold text-[#2C2C2C] leading-[1.3] mb-3">
                 💼 For Businesses
               </h2>
-              <p className="text-[14px] text-white leading-[1.4] mb-4 max-w-md">
+              <p className="text-[14px] text-[#2C2C2C] leading-[1.4] mb-4 max-w-md">
                 Want your community board featured on The Drift?
               </p>
               <a 
                 href="mailto:michael@rise-above.net?subject=Community Board Request"
-                className="inline-block bg-[#F4D03F] text-[#2C2C2C] px-4 py-2 rounded-md text-[14px] font-semibold hover:bg-[#f1c40f] transition-colors"
+                className="inline-block bg-[#D94F4F] text-white px-4 py-2 rounded-md text-[14px] font-semibold hover:bg-[#c44343] transition-colors"
               >
                 Email michael@rise-above.net
               </a>
