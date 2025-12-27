@@ -197,8 +197,8 @@ export default function HomePage() {
           </div>
         ) : viewMode === 'grid' ? (
           <div className="max-w-[1200px] mx-auto">
-            {/* Mobile: Simple 2-column grid */}
-            <div className="md:hidden grid grid-cols-2 gap-4 justify-items-center">
+            {/* Mobile: Fixed 2-column grid with exact card widths */}
+            <div className="md:hidden grid gap-4 justify-center" style={{ gridTemplateColumns: 'repeat(auto-fill, 160px)' }}>
               {boards.map((board) => {
                 const rotation = getRandomRotation()
                 const pushpinColor = getRandomPushpinColor()
@@ -228,8 +228,8 @@ export default function HomePage() {
                         />
                       </div>
                       
-                      {/* Photo/Thumbnail with polaroid border */}
-                      <div className="aspect-square bg-[#FDF6E3] border-2 border-[#E5E5E5] mb-3 p-2 overflow-hidden">
+                      {/* Fixed square thumbnail area */}
+                      <div className="w-36 h-36 bg-[#FDF6E3] border-2 border-[#E5E5E5] mb-3 p-2 overflow-hidden mx-auto">
                         <div className="w-full h-full bg-white border border-[#E5E5E5] overflow-hidden">
                           {board.photo ? (
                             <img 
@@ -263,11 +263,11 @@ export default function HomePage() {
               })}
             </div>
             
-            {/* Desktop: Auto-fit grid */}
+            {/* Desktop: Fixed grid with exact card widths */}
             <div 
               className="hidden md:grid gap-4 justify-center"
               style={{
-                gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 200px))'
+                gridTemplateColumns: 'repeat(auto-fill, 200px)'
               }}
             >
               {boards.map((board) => {
@@ -281,7 +281,7 @@ export default function HomePage() {
                     className="group block"
                   >
                     <div 
-                      className="relative w-full bg-[#FFFEF9] p-2 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
+                      className="relative w-50 bg-[#FFFEF9] p-2 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
                       style={{ 
                         transform: `rotate(${rotation}deg)`,
                         boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
@@ -299,8 +299,8 @@ export default function HomePage() {
                         />
                       </div>
                       
-                      {/* Photo/Thumbnail with polaroid border */}
-                      <div className="aspect-square bg-[#FDF6E3] border-2 border-[#E5E5E5] mb-3 p-2 overflow-hidden">
+                      {/* Fixed square thumbnail area */}
+                      <div className="w-44 h-44 bg-[#FDF6E3] border-2 border-[#E5E5E5] mb-3 p-2 overflow-hidden mx-auto">
                         <div className="w-full h-full bg-white border border-[#E5E5E5] overflow-hidden">
                           {board.photo ? (
                             <img 
