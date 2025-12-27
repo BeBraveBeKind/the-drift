@@ -1,6 +1,6 @@
 # The Drift - Database Setup Instructions
 
-## Important: If Noble Rind is Missing or "Add Location" Doesn't Work
+## Important: If Locations are Missing or "Add Location" Doesn't Work
 
 This means the database RPC functions haven't been set up yet. Follow these steps:
 
@@ -11,16 +11,22 @@ This means the database RPC functions haven't been set up yet. Follow these step
 3. Copy and paste the contents of `admin-functions.sql`
 4. Click "Run"
 
-### 2. Add the Initial Locations (including Noble Rind)
+### 2. Add All Viroqua Locations
 
 1. In the SQL Editor, paste the contents of `add-all-locations.sql`
 2. Click "Run"
 
 This will add all Viroqua locations including:
 - Noble Rind (105 S Main St)
-- Viroqua Food Co+op 
-- County Seat Laundry
-- And all other local businesses
+- Maybe Lately's (117 N Main St)
+- Kwik Trip North (1301 N Main St)  
+- Kwik Trip South (603 S Main St)
+- Viroqua Food Co+op (609 Main St)
+- County Seat Laundry (124 S Main St)
+- Nelson's AgriCenter (126 N Main St)
+- Driftless Cafe (118 W Court St)
+- Magie's (116 S Main St)
+- Driftless Books (108 S Main St)
 
 ### 3. Verify Setup
 

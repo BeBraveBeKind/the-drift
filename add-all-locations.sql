@@ -12,7 +12,10 @@ insert into locations (name, slug, address, description) values
 ('Driftless Cafe', 'driftless-cafe', '118 W Court St', 'Community board by the door'),
 ('Noble Rind', 'noble-rind', '105 S Main St', 'Board near entrance'),
 ('Magie''s', 'magies', '116 S Main St', 'Bulletin board by register'),
-('Driftless Books', 'driftless-books', '108 S Main St', 'Community board in entry')
+('Driftless Books', 'driftless-books', '108 S Main St', 'Community board in entry'),
+('Maybe Lately''s', 'maybe-latelys', '117 N Main St', 'Board inside restaurant'),
+('Kwik Trip North', 'kwik-trip-north', '1301 N Main St', 'Community board by entrance'),
+('Kwik Trip South', 'kwik-trip-south', '603 S Main St', 'Community board by entrance')
 on conflict (slug) do nothing;
 
 -- Verify all were added
