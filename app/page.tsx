@@ -114,7 +114,7 @@ export default function HomePage() {
                 The Drift
               </h1>
               <p className="text-[16px] font-medium text-[#6B6B6B] leading-[1.4]">
-                Where flyers get a second life
+                Where Viroqua-area flyers get a second life
               </p>
               
               {/* Pushpin at top */}
