@@ -196,69 +196,143 @@ export default function HomePage() {
             <div className="text-[#2C2C2C] font-medium">Loading boards...</div>
           </div>
         ) : viewMode === 'grid' ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center max-w-[1400px] mx-auto">
-            {boards.map((board) => {
-              const rotation = getRandomRotation()
-              const pushpinColor = getRandomPushpinColor()
-              
-              return (
-                <Link
-                  key={board.id}
-                  href={`/${board.slug}`}
-                  className="group block"
-                >
-                  <div 
-                    className="relative w-40 md:w-50 max-w-[160px] md:max-w-[200px] bg-[#FFFEF9] p-2 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
-                    style={{ 
-                      transform: `rotate(${rotation}deg)`,
-                      boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
-                      borderRadius: '2px'
-                    }}
+          <div className="max-w-[1200px] mx-auto">
+            {/* Mobile: Simple 2-column grid */}
+            <div className="md:hidden grid grid-cols-2 gap-4 justify-items-center">
+              {boards.map((board) => {
+                const rotation = getRandomRotation()
+                const pushpinColor = getRandomPushpinColor()
+                
+                return (
+                  <Link
+                    key={board.id}
+                    href={`/${board.slug}`}
+                    className="group block"
                   >
-                    {/* Pushpin */}
                     <div 
-                      className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2 z-10"
-                      style={{ backgroundColor: pushpinColor }}
+                      className="relative w-40 bg-[#FFFEF9] p-2 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
+                      style={{ 
+                        transform: `rotate(${rotation}deg)`,
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+                        borderRadius: '2px'
+                      }}
                     >
+                      {/* Pushpin */}
                       <div 
-                        className="w-3 h-3 rounded-full absolute top-1 left-1"
-                        style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
-                      />
-                    </div>
-                    
-                    {/* Photo/Thumbnail with polaroid border */}
-                    <div className="aspect-square bg-[#FDF6E3] border-2 border-[#E5E5E5] mb-3 p-2 overflow-hidden">
-                      <div className="w-full h-full bg-white border border-[#E5E5E5] overflow-hidden">
-                        {board.photo ? (
-                          <img 
-                            src={getPhotoUrl(board.photo.storage_path)}
-                            alt={board.name}
-                            className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-[#FDF6E3] flex items-center justify-center">
-                            <span className="text-3xl opacity-20 text-[#C4A574]">📌</span>
-                          </div>
-                        )}
+                        className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2 z-10"
+                        style={{ backgroundColor: pushpinColor }}
+                      >
+                        <div 
+                          className="w-3 h-3 rounded-full absolute top-1 left-1"
+                          style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+                        />
+                      </div>
+                      
+                      {/* Photo/Thumbnail with polaroid border */}
+                      <div className="aspect-square bg-[#FDF6E3] border-2 border-[#E5E5E5] mb-3 p-2 overflow-hidden">
+                        <div className="w-full h-full bg-white border border-[#E5E5E5] overflow-hidden">
+                          {board.photo ? (
+                            <img 
+                              src={getPhotoUrl(board.photo.storage_path)}
+                              alt={board.name}
+                              className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-[#FDF6E3] flex items-center justify-center">
+                              <span className="text-3xl opacity-20 text-[#C4A574]">📌</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Card Text Content */}
+                      <div className="text-left px-1">
+                        <h3 className="text-[14px] font-semibold text-[#2C2C2C] leading-[1.3] mb-1 line-clamp-2">
+                          {board.name}
+                        </h3>
+                        <p className="text-[11px] text-[#6B6B6B] leading-[1.2]">
+                          {board.photo 
+                            ? `Updated: ${new Date(board.photo.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                            : 'No photo yet'
+                          }
+                        </p>
                       </div>
                     </div>
-                    
-                    {/* Card Text Content */}
-                    <div className="text-left px-1">
-                      <h3 className="text-[14px] font-semibold text-[#2C2C2C] leading-[1.3] mb-1 line-clamp-2">
-                        {board.name}
-                      </h3>
-                      <p className="text-[11px] text-[#6B6B6B] leading-[1.2]">
-                        {board.photo 
-                          ? `Updated: ${new Date(board.photo.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
-                          : 'No photo yet'
-                        }
-                      </p>
+                  </Link>
+                )
+              })}
+            </div>
+            
+            {/* Desktop: Auto-fit grid */}
+            <div 
+              className="hidden md:grid gap-4 justify-center"
+              style={{
+                gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 200px))'
+              }}
+            >
+              {boards.map((board) => {
+                const rotation = getRandomRotation()
+                const pushpinColor = getRandomPushpinColor()
+                
+                return (
+                  <Link
+                    key={board.id}
+                    href={`/${board.slug}`}
+                    className="group block"
+                  >
+                    <div 
+                      className="relative w-full bg-[#FFFEF9] p-2 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
+                      style={{ 
+                        transform: `rotate(${rotation}deg)`,
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+                        borderRadius: '2px'
+                      }}
+                    >
+                      {/* Pushpin */}
+                      <div 
+                        className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2 z-10"
+                        style={{ backgroundColor: pushpinColor }}
+                      >
+                        <div 
+                          className="w-3 h-3 rounded-full absolute top-1 left-1"
+                          style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+                        />
+                      </div>
+                      
+                      {/* Photo/Thumbnail with polaroid border */}
+                      <div className="aspect-square bg-[#FDF6E3] border-2 border-[#E5E5E5] mb-3 p-2 overflow-hidden">
+                        <div className="w-full h-full bg-white border border-[#E5E5E5] overflow-hidden">
+                          {board.photo ? (
+                            <img 
+                              src={getPhotoUrl(board.photo.storage_path)}
+                              alt={board.name}
+                              className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-[#FDF6E3] flex items-center justify-center">
+                              <span className="text-3xl opacity-20 text-[#C4A574]">📌</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Card Text Content */}
+                      <div className="text-left px-1">
+                        <h3 className="text-[14px] font-semibold text-[#2C2C2C] leading-[1.3] mb-1 line-clamp-2">
+                          {board.name}
+                        </h3>
+                        <p className="text-[11px] text-[#6B6B6B] leading-[1.2]">
+                          {board.photo 
+                            ? `Updated: ${new Date(board.photo.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                            : 'No photo yet'
+                          }
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              )
-            })}
+                  </Link>
+                )
+              })}
+            </div>
           </div>
         ) : (
           <div className="text-center py-20">
