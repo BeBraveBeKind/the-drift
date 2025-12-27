@@ -11,7 +11,6 @@ insert into locations (name, slug, address, description) values
 ('Nelson''s AgriCenter', 'nelsons-agricenter', '126 N Main St', 'Community board inside'),
 ('Driftless Cafe', 'driftless-cafe', '118 W Court St', 'Community board by the door'),
 ('Noble Rind', 'noble-rind', '105 S Main St', 'Board near entrance'),
-('Magpie''s', 'magpies', '116 S Main St', 'Bulletin board by register'),
 ('Driftless Books', 'driftless-books', '108 S Main St', 'Community board in entry'),
 ('Maybe Lately''s', 'maybe-latelys', '117 N Main St', 'Board inside restaurant'),
 ('Kwik Trip North', 'kwik-trip-north', '1301 N Main St', 'Community board by entrance'),

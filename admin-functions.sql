@@ -65,7 +65,25 @@ begin
 end;
 $$;
 
+-- Function: Remove location (and all associated photos)
+create or replace function admin_remove_location(
+  p_id uuid
+)
+returns void
+language plpgsql
+security definer
+as $$
+begin
+  -- First delete all photos for this location
+  delete from photos where location_id = p_id;
+  
+  -- Then delete the location
+  delete from locations where id = p_id;
+end;
+$$;
+
 -- Grant execute permissions to anon role (for client-side calls)
 grant execute on function admin_create_location(text, text, text, text) to anon;
 grant execute on function admin_update_location(uuid, text, text, text, text) to anon;
 grant execute on function admin_toggle_location_active(uuid, boolean) to anon;
+grant execute on function admin_remove_location(uuid) to anon;

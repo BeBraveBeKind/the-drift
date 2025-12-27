@@ -193,6 +193,24 @@ function AdminDashboard() {
     }
   }
 
+  const removeLocation = async (id: string, name: string) => {
+    if (!confirm(`Are you sure you want to permanently delete "${name}"? This will also delete all photos for this location.`)) {
+      return
+    }
+
+    const { error } = await supabase.rpc('admin_remove_location', {
+      p_id: id
+    })
+    
+    if (!error) {
+      loadLocations()
+      alert(`Location "${name}" has been removed successfully.`)
+    } else {
+      console.error('Remove failed:', error)
+      alert(`Failed to remove location: ${error.message || 'Unknown error'}`)
+    }
+  }
+
   const saveLocation = async () => {
     if (!form.name.trim() || !form.slug.trim()) return
 
@@ -546,6 +564,12 @@ function AdminDashboard() {
                             className="text-[#5B9BD5] hover:text-[#4a8bc2] text-[12px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             {uploadingPhoto === location.slug ? 'Uploading...' : 'Upload Photo'}
+                          </button>
+                          <button
+                            onClick={() => removeLocation(location.id, location.name)}
+                            className="text-[#D94F4F] hover:text-[#c44343] text-[12px] font-medium"
+                          >
+                            Remove
                           </button>
                         </div>
                       </td>
