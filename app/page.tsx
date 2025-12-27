@@ -369,7 +369,8 @@ export default function HomePage() {
       </section>
       
       <footer className="mt-16 py-8 border-t border-stone-200 text-center text-sm text-stone-400">
-        <p>For The Driftless: Slow News is Good News</p>
+        <p>Slow News is Good News</p>
+        <p className="mt-1">A production of Ofigona, LLC</p>
       </footer>
     </main>
   )

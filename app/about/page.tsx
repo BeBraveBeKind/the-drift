@@ -290,7 +290,7 @@ export default function AboutPage() {
         <div className="mt-16 text-center">
           <div className="relative inline-block">
             <div 
-              className="bg-[#5B9BD5] p-6 shadow-lg border-[1px] border-[#E5E5E5] relative mx-auto"
+              className="bg-[#2C2C2C] p-6 shadow-lg border-[1px] border-[#E5E5E5] relative mx-auto"
               style={{ 
                 transform: `rotate(${getRandomRotation()}deg)`,
                 boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
@@ -305,7 +305,7 @@ export default function AboutPage() {
               </p>
               <a 
                 href="mailto:michael@rise-above.net?subject=Community Board Request"
-                className="inline-block bg-white text-[#5B9BD5] px-4 py-2 rounded-md text-[14px] font-semibold hover:bg-gray-50 transition-colors"
+                className="inline-block bg-[#F4D03F] text-[#2C2C2C] px-4 py-2 rounded-md text-[14px] font-semibold hover:bg-[#f1c40f] transition-colors"
               >
                 Email michael@rise-above.net
               </a>
@@ -327,7 +327,8 @@ export default function AboutPage() {
       </div>
       
       <footer className="mt-16 py-8 border-t border-stone-200 text-center text-sm text-stone-400">
-        <p>For The Driftless: Slow News is Good News</p>
+        <p>Slow News is Good News</p>
+        <p className="mt-1">A production of Ofigona, LLC</p>
       </footer>
     </main>
   )
