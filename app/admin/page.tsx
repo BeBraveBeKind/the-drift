@@ -139,6 +139,7 @@ function AdminDashboard() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [showAddForm, setShowAddForm] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [uploadingPhoto, setUploadingPhoto] = useState<string | null>(null)
   const [form, setForm] = useState<LocationForm>({
     name: '',
     slug: '',
@@ -265,6 +266,44 @@ function AdminDashboard() {
     } catch (error) {
       console.error('QR generation failed:', error)
     }
+  }
+
+  const uploadPhoto = async (slug: string) => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/*'
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (!file) return
+
+      setUploadingPhoto(slug)
+      
+      try {
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('slug', slug)
+        
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        })
+        
+        if (response.ok) {
+          alert('Photo uploaded successfully!')
+          // Optionally reload locations to see updated timestamps
+          loadLocations()
+        } else {
+          const error = await response.text()
+          alert(`Upload failed: ${error}`)
+        }
+      } catch (error) {
+        console.error('Upload error:', error)
+        alert('Upload failed: Network error')
+      } finally {
+        setUploadingPhoto(null)
+      }
+    }
+    input.click()
   }
 
   const logout = () => {
@@ -498,6 +537,13 @@ function AdminDashboard() {
                             className="text-[#6BBF59] hover:text-[#5da850] text-[12px] font-medium"
                           >
                             QR Code
+                          </button>
+                          <button
+                            onClick={() => uploadPhoto(location.slug)}
+                            disabled={uploadingPhoto === location.slug}
+                            className="text-[#5B9BD5] hover:text-[#4a8bc2] text-[12px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {uploadingPhoto === location.slug ? 'Uploading...' : 'Upload Photo'}
                           </button>
                         </div>
                       </td>
