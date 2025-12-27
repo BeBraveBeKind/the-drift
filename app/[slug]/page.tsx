@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { getPhotoUrl, timeAgo } from '@/lib/utils'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import ShareButton from '@/components/ShareButton'
 import FlagButton from '@/components/FlagButton'
 import ViewTracker from '@/components/ViewTracker'
@@ -75,6 +76,26 @@ export default async function BoardPage({ params }: PageProps) {
               <FlagButton photoId={photo.id} />
             </div>
           </div>
+          
+          {/* How to Post Link */}
+          <div className="mt-6 p-4 bg-stone-50 rounded-lg border border-stone-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-stone-700">
+                  📸 Want to update this board?
+                </p>
+                <p className="text-xs text-stone-500 mt-1">
+                  Use the QR code at this location to post a fresh photo
+                </p>
+              </div>
+              <Link 
+                href="/how-to-post" 
+                className="text-xs bg-stone-600 text-white px-3 py-2 rounded hover:bg-stone-700 transition-colors"
+              >
+                How to Post
+              </Link>
+            </div>
+          </div>
         </div>
       ) : (
         <div className="bg-stone-100 rounded-lg p-12 text-center">
@@ -82,6 +103,14 @@ export default async function BoardPage({ params }: PageProps) {
           <p className="text-sm text-stone-300 mt-1">
             Be the first to share what's posted
           </p>
+          <div className="mt-6">
+            <Link 
+              href="/how-to-post" 
+              className="inline-block bg-stone-600 text-white px-4 py-2 rounded text-sm hover:bg-stone-700 transition-colors"
+            >
+              📸 How to Post
+            </Link>
+          </div>
         </div>
       )}
     </main>

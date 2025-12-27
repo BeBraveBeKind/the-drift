@@ -391,6 +391,19 @@ function AdminDashboard() {
                 </div>
               </div>
 
+              {/* How to Post Reminder */}
+              {!editingId && (
+                <div className="mt-4 p-3 bg-[#F4D03F] bg-opacity-20 border border-[#F4D03F] border-opacity-30 rounded-md">
+                  <div className="flex items-start gap-2">
+                    <span className="text-[16px]">💡</span>
+                    <div className="text-[13px] text-[#2C2C2C]">
+                      <p className="font-medium mb-1">Reminder: Each location automatically includes a "How to Post" link</p>
+                      <p>Users will see instructions on using QR codes and photo guidelines. After adding this location, generate its QR code below.</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="flex gap-3 mt-4">
                 <button
                   onClick={saveLocation}
