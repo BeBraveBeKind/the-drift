@@ -44,20 +44,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Upload failed' }, { status: 500 })
     }
     
-    // Create record + set current
-    await supabaseAdmin
-      .from('photos')
-      .insert({
-        location_id: location.id,
-        storage_path: storagePath,
-        is_current: true
+    // Use RPC function to properly handle photo upload
+    const { error: photoError } = await supabaseAdmin
+      .rpc('upload_photo_for_location', {
+        p_location_id: location.id,
+        p_storage_path: storagePath
       })
     
-    // Update location timestamp
-    await supabaseAdmin
-      .from('locations')
-      .update({ updated_at: new Date().toISOString() })
-      .eq('id', location.id)
+    if (photoError) {
+      console.error('Photo record creation failed:', photoError)
+      return NextResponse.json({ error: 'Photo record creation failed' }, { status: 500 })
+    }
     
     return NextResponse.json({ success: true })
     

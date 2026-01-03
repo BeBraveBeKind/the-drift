@@ -70,16 +70,43 @@ BEGIN
 END;
 $$;
 
--- 7. Grant execute permissions to anon role
+-- 7. Create function to properly handle photo uploads
+CREATE OR REPLACE FUNCTION upload_photo_for_location(
+  p_location_id uuid,
+  p_storage_path text
+)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  -- First, mark all existing photos for this location as not current
+  UPDATE photos 
+  SET is_current = false 
+  WHERE location_id = p_location_id;
+  
+  -- Then insert the new photo as current
+  INSERT INTO photos (location_id, storage_path, is_current)
+  VALUES (p_location_id, p_storage_path, true);
+  
+  -- Update location timestamp
+  UPDATE locations 
+  SET updated_at = CURRENT_TIMESTAMP 
+  WHERE id = p_location_id;
+END;
+$$;
+
+-- 8. Grant execute permissions to anon role
 GRANT EXECUTE ON FUNCTION admin_create_location(text, text, text, text, text) TO anon;
 GRANT EXECUTE ON FUNCTION admin_update_location(uuid, text, text, text, text, text) TO anon;
 GRANT EXECUTE ON FUNCTION get_locations_by_town(text) TO anon;
+GRANT EXECUTE ON FUNCTION upload_photo_for_location(uuid, text) TO anon;
 
--- 8. Also grant the old function signatures for backwards compatibility during transition
+-- 9. Also grant the old function signatures for backwards compatibility during transition
 GRANT EXECUTE ON FUNCTION admin_create_location(text, text, text, text) TO anon;
 GRANT EXECUTE ON FUNCTION admin_update_location(uuid, text, text, text, text) TO anon;
 
--- 9. Verification - show all locations with their towns
+-- 10. Verification - show all locations with their towns
 SELECT 
   name, 
   slug, 
@@ -90,5 +117,5 @@ SELECT
 FROM locations 
 ORDER BY town, name;
 
--- 10. Success message
+-- 11. Success message
 SELECT 'Switchboard migration complete! Database updated with town support.' as status;
