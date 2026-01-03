@@ -294,7 +294,7 @@ function AdminDashboard() {
     }
   }
 
-  const uploadPhoto = async (slug: string) => {
+  const uploadPhoto = async (location: Location) => {
     const input = document.createElement('input')
     input.type = 'file'
     input.accept = 'image/*'
@@ -302,12 +302,13 @@ function AdminDashboard() {
       const file = (e.target as HTMLInputElement).files?.[0]
       if (!file) return
 
-      setUploadingPhoto(slug)
+      setUploadingPhoto(location.slug)
       
       try {
         const formData = new FormData()
         formData.append('file', file)
-        formData.append('slug', slug)
+        formData.append('slug', location.slug)
+        formData.append('town', location.town || 'viroqua')
         
         const response = await fetch('/api/upload', {
           method: 'POST',
@@ -584,7 +585,7 @@ function AdminDashboard() {
                             QR Code
                           </button>
                           <button
-                            onClick={() => uploadPhoto(location.slug)}
+                            onClick={() => uploadPhoto(location)}
                             disabled={uploadingPhoto === location.slug}
                             className="text-[#5B9BD5] hover:text-[#4a8bc2] text-[12px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                           >

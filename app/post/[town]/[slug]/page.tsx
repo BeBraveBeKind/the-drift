@@ -22,11 +22,22 @@ export default function PostPage({ params }: PageProps) {
     setUploading(true)
     setError(null)
     
+    // Debug logging
+    console.log('Upload starting with params:', { town, slug, hasFile: !!file })
+    
     try {
       const formData = new FormData()
       formData.append('file', file)
       formData.append('slug', slug)
       formData.append('town', town)
+      
+      // Debug what we're sending
+      console.log('FormData contents:', {
+        file: file.name,
+        slug,
+        town,
+        formDataKeys: Array.from(formData.keys())
+      })
       
       const res = await fetch('/api/upload', {
         method: 'POST',
@@ -63,9 +74,15 @@ export default function PostPage({ params }: PageProps) {
     <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-stone-50">
       <div className="max-w-xs w-full text-center">
         <h1 className="text-2xl font-bold mb-2">Post to Switchboard</h1>
-        <p className="text-stone-500 mb-8">
+        <p className="text-stone-500 mb-4">
           Snap a photo of the board. Give your post a longer life.
         </p>
+        
+        {/* Debug info */}
+        <div className="mb-4 p-2 bg-gray-100 rounded text-xs">
+          <div>Town: {town || 'undefined'}</div>
+          <div>Slug: {slug || 'undefined'}</div>
+        </div>
         
         <input
           ref={fileInputRef}
