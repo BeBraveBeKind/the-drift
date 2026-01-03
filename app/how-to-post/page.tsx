@@ -269,7 +269,7 @@ export default function HowToPostPage() {
       
       <footer className="mt-16 py-8 border-t border-stone-200 text-center text-sm text-stone-400">
         <p>Questions? Contact us through the About page or find us around town!</p>
-        <p className="mt-1">A production of Ofigona, LLC</p>
+        <p className="mt-1">Built by Rise Above Partners with support from Ofigona, LLC</p>
       </footer>
     </main>
   )

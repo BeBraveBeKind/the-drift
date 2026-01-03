@@ -2,17 +2,17 @@
 
 import { useState } from 'react'
 
-export default function ShareButton({ slug, name }: { slug: string, name: string }) {
+export default function ShareButton({ town, slug, name }: { town: string, slug: string, name: string }) {
   const [copied, setCopied] = useState(false)
   
   async function handleShare() {
-    const url = `${window.location.origin}/${slug}`
+    const url = `${window.location.origin}/${town}/${slug}`
     
     // Try native share first (mobile)
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${name} — The Drift`,
+          title: `${name} — Switchboard`,
           url
         })
         return

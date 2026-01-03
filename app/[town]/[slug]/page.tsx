@@ -8,11 +8,17 @@ import ViewTracker from '@/components/ViewTracker'
 
 export const revalidate = 60
 
-async function getBoard(slug: string) {
+// Format town name for display
+function formatTownName(town: string) {
+  return town.charAt(0).toUpperCase() + town.slice(1)
+}
+
+async function getBoard(town: string, slug: string) {
   const { data: location } = await supabase
     .from('locations')
     .select('*')
     .eq('slug', slug)
+    .eq('town', town)
     .eq('is_active', true)
     .single()
   
@@ -30,12 +36,13 @@ async function getBoard(slug: string) {
 }
 
 interface PageProps {
-  params: Promise<{ slug: string }>
+  params: Promise<{ town: string; slug: string }>
 }
 
 export default async function BoardPage({ params }: PageProps) {
-  const { slug } = await params
-  const data = await getBoard(slug)
+  const { town, slug } = await params
+  const townName = formatTownName(town)
+  const data = await getBoard(town, slug)
   
   if (!data) notFound()
   
@@ -46,8 +53,8 @@ export default async function BoardPage({ params }: PageProps) {
       <ViewTracker locationId={location.id} />
       
       <nav className="mb-6">
-        <a href="/" className="text-sm text-stone-400 hover:text-stone-600">
-          ← The Drift
+        <a href={`/${town}`} className="text-sm text-stone-400 hover:text-stone-600">
+          ← Back to {townName}
         </a>
       </nav>
       
@@ -72,7 +79,7 @@ export default async function BoardPage({ params }: PageProps) {
               Updated {timeAgo(photo.created_at)} · {location.view_count} looks
             </span>
             <div className="flex items-center gap-4">
-              <ShareButton slug={location.slug} name={location.name} />
+              <ShareButton town={town} slug={location.slug} name={location.name} />
               <FlagButton photoId={photo.id} />
             </div>
           </div>

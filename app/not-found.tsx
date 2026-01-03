@@ -9,7 +9,7 @@ export default function NotFound() {
         href="/" 
         className="text-blue-600 hover:underline"
       >
-        ← Back to The Drift
+        ← Back to Switchboard
       </Link>
     </main>
   )

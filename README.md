@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Switchboard
+
+A community bulletin board platform that brings physical bulletin boards online. Share what's posted in your local community boards and discover local happenings beyond social media.
+
+## What is Switchboard?
+
+Switchboard gives community bulletin boards a second life online. When someone posts a flyer on a physical board, visitors can take a photo and upload it to Switchboard, making local announcements discoverable to a wider community.
+
+**Real. Local. Now.**
+
+## Features
+
+- **Town-based organization**: Each town has its own board collection
+- **QR code posting**: Physical QR codes at each location enable authentic, location-verified uploads
+- **Photo sharing**: Full bulletin board photos show everything that's currently posted
+- **Mobile-first design**: Optimized for quick photo capture and sharing
+- **Admin panel**: Easy location management and QR code generation
+
+## Tech Stack
+
+- **Framework**: Next.js 16 with App Router
+- **Database**: Supabase (PostgreSQL)
+- **Storage**: Supabase Storage for photos
+- **Styling**: Tailwind CSS with cork board aesthetic
+- **Deployment**: Netlify
+- **QR Codes**: Generated with qrcode library
+
+## URL Structure
+
+```
+switchboard.town/                        → Landing page / town picker
+switchboard.town/{town}                  → Town homepage (board grid)
+switchboard.town/{town}/{slug}           → Individual location view
+switchboard.town/post/{town}/{slug}      → Upload page (QR destination)
+switchboard.town/about                   → About page
+switchboard.town/how-to-post            → How to post guide
+switchboard.town/admin                   → Admin panel
+```
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone and install**:
+   ```bash
+   npm install
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. **Environment setup**:
+   Copy `.env.local.example` to `.env.local` and add your Supabase credentials:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. **Database setup**:
+   Run the SQL files in this order:
+   ```bash
+   # 1. Basic schema
+   psql -f schema.sql
+   
+   # 2. Storage policies
+   psql -f storage-policies.sql
+   
+   # 3. Admin functions
+   psql -f admin-functions.sql
+   
+   # 4. Migration for town support
+   psql -f migration-add-town.sql
+   psql -f update-admin-functions.sql
+   
+   # 5. Sample data (optional)
+   psql -f test-data.sql
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. **Run development server**:
+   ```bash
+   npm run dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. **Access the app**:
+   - Main site: http://localhost:3000
+   - Admin panel: http://localhost:3000/admin (password required)
 
-## Learn More
+## Database Schema
 
-To learn more about Next.js, take a look at the following resources:
+Key tables:
+- `locations`: Bulletin board locations with town, slug, name, address
+- `photos`: Uploaded photos linked to locations
+- `analytics`: Page view and upload tracking
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Admin Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Add/edit/disable locations
+- Generate QR codes for physical posting
+- Town management
+- View analytics
+- Moderate content
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Deploy to Netlify:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Build settings**:
+   - Build command: `npm run build`
+   - Publish directory: `.next`
+
+2. **Environment variables**: Add the same variables from `.env.local`
+
+3. **Domain**: Configure `switchboard.town` domain in Netlify
+
+4. **Supabase CORS**: Add `switchboard.town` to allowed origins
+
+## Design Philosophy
+
+Switchboard celebrates the democratic, analog nature of community bulletin boards while extending their reach through digital tools. The cork board aesthetic preserves the tactile, handmade feeling of physical boards.
+
+## Contributing
+
+Built by Rise Above Partners with support from Ofigona, LLC.
+
+For business inquiries about featuring your community board: michael@rise-above.net

@@ -84,7 +84,7 @@ export default function AboutPage() {
               }}
             >
               <h1 className="text-[36px] font-bold text-[#2C2C2C] leading-[1.2] mb-4">
-                The Drift
+                Switchboard
               </h1>
               <p className="text-[18px] font-medium text-[#6B6B6B] leading-[1.4]">
                 Where Viroqua-area flyers get a second life
@@ -133,7 +133,7 @@ export default function AboutPage() {
                 </p>
                 <p>
                   Those boards are full of real people doing real things in your actual neighborhood — not an 
-                  algorithm, not a sponsored post, not someone trying to go viral. <strong>The Drift makes sure 
+                  algorithm, not a sponsored post, not someone trying to go viral. <strong>Switchboard makes sure 
                   that stuff gets seen.</strong>
                 </p>
               </div>
@@ -260,7 +260,7 @@ export default function AboutPage() {
                   just a thumbtack and something to say.
                 </p>
                 <p>
-                  The Drift isn't replacing that. We're extending it. The physical board is still the 
+                  Switchboard isn't replacing that. We're extending it. The physical board is still the 
                   real thing. This is just a way to make sure more people actually see it.
                 </p>
                 <p>
@@ -301,7 +301,7 @@ export default function AboutPage() {
                 💼 For Businesses
               </h2>
               <p className="text-[14px] text-[#2C2C2C] leading-[1.4] mb-4 max-w-md">
-                Want your community board featured on The Drift?
+                Want your community board featured on Switchboard?
               </p>
               <a 
                 href="mailto:michael@rise-above.net?subject=Community Board Request"
@@ -327,8 +327,8 @@ export default function AboutPage() {
       </div>
       
       <footer className="mt-16 py-8 border-t border-stone-200 text-center text-sm text-stone-400">
-        <p>Slow News is Good News</p>
-        <p className="mt-1">A production of Ofigona, LLC</p>
+        <p>The local news nobody's covering.</p>
+        <p className="mt-1">Built by Rise Above Partners with support from Ofigona, LLC</p>
       </footer>
     </main>
   )

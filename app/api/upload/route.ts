@@ -12,9 +12,10 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData()
     const file = formData.get('file') as File
     const slug = formData.get('slug') as string
+    const town = formData.get('town') as string
     
-    if (!file || !slug) {
-      return NextResponse.json({ error: 'Missing file or location' }, { status: 400 })
+    if (!file || !slug || !town) {
+      return NextResponse.json({ error: 'Missing file, location, or town' }, { status: 400 })
     }
     
     // Get location
@@ -22,6 +23,7 @@ export async function POST(request: NextRequest) {
       .from('locations')
       .select('id')
       .eq('slug', slug)
+      .eq('town', town)
       .eq('is_active', true)
       .single()
     

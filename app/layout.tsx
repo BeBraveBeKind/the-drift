@@ -1,8 +1,8 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'The Drift',
-  description: 'Discover what\'s happening beyond social media',
+  title: 'Switchboard',
+  description: 'Real. Local. Now.',
 }
 
 export default function RootLayout({

@@ -1,9 +1,9 @@
-# The Drift — Design Style Guide
+# Switchboard — Design Style Guide
 
 ## Brand Overview
 
-**App Name:** The Drift  
-**Tagline:** "Discover what's happening beyond social media"  
+**App Name:** Switchboard  
+**Tagline:** "Real. Local. Now."  
 **Concept:** A digital community board that captures the nostalgic feel of physical bulletin boards — cork textures, pushpins, and polaroid-style cards.
 
 ---

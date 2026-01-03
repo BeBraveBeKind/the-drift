@@ -24,6 +24,7 @@ interface Location {
   id: string
   name: string
   slug: string
+  town: string
   address: string | null
   description: string | null
   view_count: number
@@ -35,6 +36,7 @@ interface Location {
 interface LocationForm {
   name: string
   slug: string
+  town: string
   address: string
   description: string
 }
@@ -143,6 +145,7 @@ function AdminDashboard() {
   const [form, setForm] = useState<LocationForm>({
     name: '',
     slug: '',
+    town: 'viroqua',
     address: '',
     description: ''
   })
@@ -219,6 +222,7 @@ function AdminDashboard() {
         p_id: editingId,
         p_name: form.name,
         p_slug: form.slug,
+        p_town: form.town,
         p_address: form.address || null,
         p_description: form.description || null
       })
@@ -226,7 +230,7 @@ function AdminDashboard() {
       if (!error) {
         setEditingId(null)
         loadLocations()
-        setForm({ name: '', slug: '', address: '', description: '' })
+        setForm({ name: '', slug: '', town: 'viroqua', address: '', description: '' })
       } else {
         console.error('Update failed:', error)
         alert(`Failed to update location: ${error.message || 'Unknown error'}`)
@@ -235,6 +239,7 @@ function AdminDashboard() {
       const { error } = await supabase.rpc('admin_create_location', {
         p_name: form.name,
         p_slug: form.slug,
+        p_town: form.town,
         p_address: form.address || null,
         p_description: form.description || null
       })
@@ -242,7 +247,7 @@ function AdminDashboard() {
       if (!error) {
         setShowAddForm(false)
         loadLocations()
-        setForm({ name: '', slug: '', address: '', description: '' })
+        setForm({ name: '', slug: '', town: 'viroqua', address: '', description: '' })
       } else {
         console.error('Create failed:', error)
         alert(`Failed to add location: ${error.message || 'Unknown error'}`)
@@ -254,6 +259,7 @@ function AdminDashboard() {
     setForm({
       name: location.name,
       slug: location.slug,
+      town: location.town || 'viroqua',
       address: location.address || '',
       description: location.description || ''
     })
@@ -263,12 +269,12 @@ function AdminDashboard() {
   const cancelEdit = () => {
     setEditingId(null)
     setShowAddForm(false)
-    setForm({ name: '', slug: '', address: '', description: '' })
+    setForm({ name: '', slug: '', town: 'viroqua', address: '', description: '' })
   }
 
-  const generateQRCode = async (slug: string) => {
+  const generateQRCode = async (location: Location) => {
     try {
-      const url = `https://the-drift.netlify.app/post/${slug}`
+      const url = `https://switchboard.town/post/${location.town}/${location.slug}`
       const qrDataUrl = await QRCode.toDataURL(url, {
         width: 256,
         margin: 2,
@@ -280,7 +286,7 @@ function AdminDashboard() {
       
       // Create download link
       const link = document.createElement('a')
-      link.download = `qr-${slug}.png`
+      link.download = `qr-${location.slug}.png`
       link.href = qrDataUrl
       link.click()
     } catch (error) {
@@ -425,6 +431,19 @@ function AdminDashboard() {
                 
                 <div>
                   <label className="block text-[14px] font-medium text-[#2C2C2C] mb-1">
+                    Town *
+                  </label>
+                  <select
+                    value={form.town}
+                    onChange={(e) => setForm(prev => ({ ...prev, town: e.target.value }))}
+                    className="w-full p-3 border border-[#E5E5E5] rounded-md text-[14px] focus:outline-none focus:ring-2 focus:ring-[#D94F4F]"
+                  >
+                    <option value="viroqua">Viroqua</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-[14px] font-medium text-[#2C2C2C] mb-1">
                     Address
                   </label>
                   <input
@@ -504,6 +523,9 @@ function AdminDashboard() {
                       Slug
                     </th>
                     <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
+                      Town
+                    </th>
+                    <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
                       Address
                     </th>
                     <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
@@ -525,6 +547,9 @@ function AdminDashboard() {
                       </td>
                       <td className="px-4 py-3 text-[14px] text-[#6B6B6B] font-mono">
                         {location.slug}
+                      </td>
+                      <td className="px-4 py-3 text-[14px] text-[#6B6B6B]">
+                        {location.town || 'viroqua'}
                       </td>
                       <td className="px-4 py-3 text-[14px] text-[#6B6B6B]">
                         {location.address || '-'}
@@ -553,7 +578,7 @@ function AdminDashboard() {
                             Edit
                           </button>
                           <button
-                            onClick={() => generateQRCode(location.slug)}
+                            onClick={() => generateQRCode(location)}
                             className="text-[#6BBF59] hover:text-[#5da850] text-[12px] font-medium"
                           >
                             QR Code

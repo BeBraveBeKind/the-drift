@@ -4,11 +4,11 @@ import { useState, useRef, use } from 'react'
 import { useRouter } from 'next/navigation'
 
 interface PageProps {
-  params: Promise<{ slug: string }>
+  params: Promise<{ town: string; slug: string }>
 }
 
 export default function PostPage({ params }: PageProps) {
-  const { slug } = use(params)
+  const { town, slug } = use(params)
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
@@ -26,6 +26,7 @@ export default function PostPage({ params }: PageProps) {
       const formData = new FormData()
       formData.append('file', file)
       formData.append('slug', slug)
+      formData.append('town', town)
       
       const res = await fetch('/api/upload', {
         method: 'POST',
@@ -38,7 +39,7 @@ export default function PostPage({ params }: PageProps) {
       }
       
       setDone(true)
-      setTimeout(() => router.push(`/${slug}`), 1500)
+      setTimeout(() => router.push(`/${town}/${slug}`), 1500)
       
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
@@ -52,7 +53,7 @@ export default function PostPage({ params }: PageProps) {
       <main className="min-h-screen flex items-center justify-center p-4 bg-stone-50">
         <div className="text-center">
           <div className="text-4xl mb-3">📌</div>
-          <p className="text-xl font-medium">Posted to The Drift</p>
+          <p className="text-xl font-medium">Posted to Switchboard</p>
         </div>
       </main>
     )
@@ -61,9 +62,9 @@ export default function PostPage({ params }: PageProps) {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-stone-50">
       <div className="max-w-xs w-full text-center">
-        <h1 className="text-2xl font-bold mb-2">Post to The Drift</h1>
+        <h1 className="text-2xl font-bold mb-2">Post to Switchboard</h1>
         <p className="text-stone-500 mb-8">
-          Pinning something? Snap a photo so others can see what's up.
+          Snap a photo of the board. Give your post a longer life.
         </p>
         
         <input
@@ -89,7 +90,7 @@ export default function PostPage({ params }: PageProps) {
         )}
         
         <p className="mt-8 text-xs text-stone-400">
-          Your photo will be public on The Drift
+          Your photo will be public on Switchboard
         </p>
       </div>
     </main>
