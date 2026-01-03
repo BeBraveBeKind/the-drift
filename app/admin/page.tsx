@@ -380,6 +380,12 @@ function AdminDashboard() {
           </div>
 
           <div className="flex gap-4">
+            <a
+              href="/viroqua"
+              className="bg-[#5B9BD5] text-white px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#4a8bc2] transition-colors"
+            >
+              ← Back to Homepage
+            </a>
             <button
               onClick={() => setShowAddForm(true)}
               className="bg-[#6BBF59] text-white px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#5da850] transition-colors"
