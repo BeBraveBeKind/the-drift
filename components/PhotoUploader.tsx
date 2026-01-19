@@ -2,11 +2,7 @@
 
 import { useState } from 'react'
 import { compressImage, formatFileSize } from '@/lib/imageCompression'
-
-interface PhotoUploaderProps {
-  onUpload: (file: File) => Promise<void>
-  isLoading?: boolean
-}
+import type { PhotoUploaderProps } from '@/types'
 
 export default function PhotoUploader({ onUpload, isLoading }: PhotoUploaderProps) {
   const [preview, setPreview] = useState<string | null>(null)

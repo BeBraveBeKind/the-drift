@@ -3,28 +3,27 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import ImageViewer from './ImageViewer'
-
-interface BoardImageProps {
-  src: string
-  alt: string
-}
+import type { BoardImageProps } from '@/types'
 
 export default function BoardImage({ src, alt }: BoardImageProps) {
   const [showViewer, setShowViewer] = useState(false)
 
+  const handleImageClick = () => {
+    setShowViewer(true)
+  }
+  
   return (
     <>
       <div className="bg-white rounded-lg overflow-hidden shadow-sm">
-        <div className="relative group">
+        <div className="relative group cursor-pointer" onClick={handleImageClick}>
           <Image 
             src={src}
             alt={alt}
             width={1200}
             height={900}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 80vw"
-            className="w-full h-auto cursor-pointer hover:opacity-95 transition-opacity"
+            className="w-full h-auto hover:opacity-95 transition-opacity"
             priority={true}
-            onClick={() => setShowViewer(true)}
           />
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all pointer-events-none flex items-center justify-center">
             <div className="bg-white px-4 py-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">

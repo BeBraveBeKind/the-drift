@@ -6,6 +6,9 @@ import { supabase } from '@/lib/supabase'
 import { signOut } from '@/lib/auth'
 import QRCode from 'qrcode'
 import TownsList from './TownsList'
+import LocationForm from './LocationForm'
+import LocationsTable from './LocationsTable'
+import type { Location, LocationFormData, Town } from '@/types'
 
 function getRandomRotation() {
   return Math.random() * 6 - 3
@@ -22,34 +25,6 @@ function getRandomPushpinColor() {
   return pushpinColors[Math.floor(Math.random() * pushpinColors.length)]
 }
 
-interface Location {
-  id: string
-  name: string
-  slug: string
-  town: string
-  town_id: string
-  address: string | null
-  description: string | null
-  view_count: number
-  is_active: boolean
-  created_at: string
-  updated_at: string
-}
-
-interface LocationForm {
-  name: string
-  slug: string
-  town_id: string
-  address: string
-  description: string
-}
-
-interface Town {
-  id: string
-  name: string
-  slug: string
-}
-
 export default function AdminDashboard() {
   const router = useRouter()
   const [locations, setLocations] = useState<Location[]>([])
@@ -59,7 +34,7 @@ export default function AdminDashboard() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [showTownsSection, setShowTownsSection] = useState(false)
   const [uploadingPhoto, setUploadingPhoto] = useState<string | null>(null)
-  const [form, setForm] = useState<LocationForm>({
+  const [form, setForm] = useState<LocationFormData>({
     name: '',
     slug: '',
     town_id: '',
@@ -113,22 +88,6 @@ export default function AdminDashboard() {
     }
   }
 
-  const generateSlug = (name: string) => {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim()
-  }
-
-  const handleNameChange = (name: string) => {
-    setForm(prev => ({
-      ...prev,
-      name,
-      slug: editingId ? prev.slug : generateSlug(name)
-    }))
-  }
 
   const toggleActive = async (id: string, currentStatus: boolean) => {
     const { error } = await supabase.rpc('admin_toggle_location_active', {
@@ -361,205 +320,28 @@ export default function AdminDashboard() {
 
         {(showAddForm || editingId) && (
           <div className="mb-8">
-            <div className="bg-[#FFFEF9] p-6 rounded-lg border border-[#E5E5E5] shadow-sm">
-              <h2 className="text-[18px] font-semibold text-[#2C2C2C] mb-4">
-                {editingId ? 'Edit Location' : 'Add New Location'}
-              </h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[14px] font-medium text-[#2C2C2C] mb-1">
-                    Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={form.name}
-                    onChange={(e) => handleNameChange(e.target.value)}
-                    className="w-full p-3 border border-[#E5E5E5] rounded-md text-[14px] focus:outline-none focus:ring-2 focus:ring-[#D94F4F]"
-                    placeholder="Business name"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-[14px] font-medium text-[#2C2C2C] mb-1">
-                    Slug *
-                  </label>
-                  <input
-                    type="text"
-                    value={form.slug}
-                    onChange={(e) => setForm(prev => ({ ...prev, slug: e.target.value }))}
-                    className="w-full p-3 border border-[#E5E5E5] rounded-md text-[14px] focus:outline-none focus:ring-2 focus:ring-[#D94F4F]"
-                    placeholder="url-friendly-name"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-[14px] font-medium text-[#2C2C2C] mb-1">
-                    Town *
-                  </label>
-                  <select
-                    value={form.town_id}
-                    onChange={(e) => setForm(prev => ({ ...prev, town_id: e.target.value }))}
-                    className="w-full p-3 border border-[#E5E5E5] rounded-md text-[14px] focus:outline-none focus:ring-2 focus:ring-[#D94F4F]"
-                  >
-                    {towns.map(town => (
-                      <option key={town.id} value={town.id}>{town.name}</option>
-                    ))}
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-[14px] font-medium text-[#2C2C2C] mb-1">
-                    Address
-                  </label>
-                  <input
-                    type="text"
-                    value={form.address}
-                    onChange={(e) => setForm(prev => ({ ...prev, address: e.target.value }))}
-                    className="w-full p-3 border border-[#E5E5E5] rounded-md text-[14px] focus:outline-none focus:ring-2 focus:ring-[#D94F4F]"
-                    placeholder="123 Main St"
-                  />
-                </div>
-                
-                <div className="md:col-span-2">
-                  <label className="block text-[14px] font-medium text-[#2C2C2C] mb-1">
-                    Description
-                  </label>
-                  <input
-                    type="text"
-                    value={form.description}
-                    onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))}
-                    className="w-full p-3 border border-[#E5E5E5] rounded-md text-[14px] focus:outline-none focus:ring-2 focus:ring-[#D94F4F]"
-                    placeholder="Optional description"
-                  />
-                </div>
-              </div>
-
-              <div className="flex gap-3 mt-4">
-                <button
-                  onClick={saveLocation}
-                  disabled={!form.name.trim() || !form.slug.trim() || !form.town_id}
-                  className="bg-[#6BBF59] text-white px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#5da850] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {editingId ? 'Update' : 'Add'} Location
-                </button>
-                <button
-                  onClick={cancelEdit}
-                  className="bg-gray-500 text-white px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-gray-600 transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
+            <LocationForm
+              form={form}
+              towns={towns}
+              isEditing={!!editingId}
+              onFormChange={setForm}
+              onSubmit={saveLocation}
+              onCancel={cancelEdit}
+            />
           </div>
         )}
 
-        <div className="bg-[#FFFEF9] rounded-lg border border-[#E5E5E5] shadow-sm overflow-hidden">
-          <div className="p-4 border-b border-[#E5E5E5]">
-            <h2 className="text-[18px] font-semibold text-[#2C2C2C]">
-              All Locations ({locations.length})
-            </h2>
-          </div>
-
-          {loading ? (
-            <div className="p-8 text-center text-[#6B6B6B]">Loading...</div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                      Name
-                    </th>
-                    <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                      Slug
-                    </th>
-                    <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                      Town
-                    </th>
-                    <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                      Address
-                    </th>
-                    <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                      Views
-                    </th>
-                    <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {locations.map((location) => {
-                    const town = towns.find(t => t.id === location.town_id)
-                    return (
-                      <tr key={location.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-3 text-[14px] text-[#2C2C2C] font-medium">
-                          {location.name}
-                        </td>
-                        <td className="px-4 py-3 text-[14px] text-[#6B6B6B] font-mono">
-                          {location.slug}
-                        </td>
-                        <td className="px-4 py-3 text-[14px] text-[#6B6B6B]">
-                          {town?.name || location.town || 'Unknown'}
-                        </td>
-                        <td className="px-4 py-3 text-[14px] text-[#6B6B6B]">
-                          {location.address || '-'}
-                        </td>
-                        <td className="px-4 py-3 text-[14px] text-[#6B6B6B]">
-                          {location.view_count}
-                        </td>
-                        <td className="px-4 py-3">
-                          <button
-                            onClick={() => toggleActive(location.id, location.is_active)}
-                            className={`px-2 py-1 rounded-full text-[12px] font-medium ${
-                              location.is_active
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-red-100 text-red-800'
-                            }`}
-                          >
-                            {location.is_active ? 'Active' : 'Inactive'}
-                          </button>
-                        </td>
-                        <td className="px-4 py-3">
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => startEdit(location)}
-                              className="text-[#5B9BD5] hover:text-[#4a8bc2] text-[12px] font-medium"
-                            >
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => generateQRCode(location)}
-                              className="text-[#6BBF59] hover:text-[#5da850] text-[12px] font-medium"
-                            >
-                              QR Code
-                            </button>
-                            <button
-                              onClick={() => uploadPhoto(location)}
-                              disabled={uploadingPhoto === location.slug}
-                              className="text-[#5B9BD5] hover:text-[#4a8bc2] text-[12px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              {uploadingPhoto === location.slug ? 'Uploading...' : 'Upload Photo'}
-                            </button>
-                            <button
-                              onClick={() => removeLocation(location.id, location.name)}
-                              className="text-[#D94F4F] hover:text-[#c44343] text-[12px] font-medium"
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+        <LocationsTable
+          locations={locations}
+          towns={towns}
+          loading={loading}
+          uploadingPhoto={uploadingPhoto}
+          onEdit={startEdit}
+          onToggleActive={toggleActive}
+          onRemove={removeLocation}
+          onGenerateQR={generateQRCode}
+          onUploadPhoto={uploadPhoto}
+        />
       </div>
     </main>
   )

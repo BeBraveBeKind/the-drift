@@ -1,27 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
-import { getPhotoUrl, timeAgo } from '@/lib/utils'
+import { getPhotoUrl } from '@/lib/utils'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useParams, notFound } from 'next/navigation'
-
-interface Board {
-  id: string
-  name: string
-  slug: string
-  address: string
-  town: string
-  town_id: string
-  view_count: number
-  updated_at: string
-  photo: {
-    id: string
-    storage_path: string
-    created_at: string
-  } | null
-}
+import { useLocations } from '@/hooks/useLocations'
 
 // Random rotation for cards
 function getRandomRotation() {
@@ -48,71 +32,23 @@ function formatTownName(town: string) {
 export default function TownHomePage() {
   const params = useParams()
   const townSlug = params.town as string
-  const [townName, setTownName] = useState(formatTownName(townSlug))
-  
-  const [boards, setBoards] = useState<Board[]>([])
-  const [loading, setLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid')
 
+  const { locations: boards, loading, error } = useLocations(townSlug)
+  
+  // Use formatted town name from townSlug as fallback
+  const townName = formatTownName(townSlug)
+
   useEffect(() => {
     setMounted(true)
-    loadBoards()
-  }, [townSlug])
+  }, [])
 
-  async function loadBoards() {
-    // First get the town by slug to get its ID
-    const { data: townData } = await supabase
-      .from('towns')
-      .select('id, name, slug')
-      .eq('slug', townSlug)
-      .eq('is_active', true)
-      .single()
-    
-    if (!townData) {
-      setLoading(false)
+  useEffect(() => {
+    if (error === 'Town not found') {
       notFound()
-      return
     }
-    
-    setTownName(townData.name)
-    
-    const { data: locations } = await supabase
-      .from('locations')
-      .select('id, name, slug, address, town, town_id, view_count, updated_at')
-      .eq('is_active', true)
-      .eq('town_id', townData.id)
-      .order('updated_at', { ascending: false })
-    
-    if (!locations) {
-      setLoading(false)
-      return
-    }
-    
-    const boardsWithPhotos = await Promise.all(
-      locations.map(async (location) => {
-        const { data: photo } = await supabase
-          .from('photos')
-          .select('id, storage_path, created_at')
-          .eq('location_id', location.id)
-          .eq('is_current', true)
-          .eq('is_flagged', false)
-          .single()
-        
-        return { ...location, photo }
-      })
-    )
-    
-    // Sort by most recent photo/update
-    const sorted = boardsWithPhotos.sort((a, b) => {
-      const dateA = a.photo ? new Date(a.photo.created_at).getTime() : new Date(a.updated_at).getTime()
-      const dateB = b.photo ? new Date(b.photo.created_at).getTime() : new Date(b.updated_at).getTime()
-      return dateB - dateA
-    })
-    
-    setBoards(sorted)
-    setLoading(false)
-  }
+  }, [error])
   
   if (!mounted) {
     return <div className="min-h-screen bg-[#C4A574]" />
