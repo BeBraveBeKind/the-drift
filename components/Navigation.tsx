@@ -10,11 +10,11 @@ export default function Navigation() {
 
   return (
     <nav className="bg-white border-b border-stone-200 sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="font-bold text-xl text-stone-900">
-            Switchboard
+          <Link href="/" className="font-bold text-xl text-stone-900 hover:text-stone-700 transition-colors">
+            📌 Switchboard
           </Link>
 
           {/* Desktop Navigation */}
