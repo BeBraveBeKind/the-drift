@@ -208,8 +208,8 @@ export default function TownHomePage() {
               </div>
             </div>
           ) : (
-            // Grid View - Polaroid Cards
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 max-w-[1400px] mx-auto">
+            // Grid View - Polaroid Cards - Show the full array of boards
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 justify-center">
               {filteredBoards.map((board) => {
                 const rotation = getRandomRotation(board.id)
                 const hasImageError = imageLoadErrors.has(board.id)
@@ -221,33 +221,34 @@ export default function TownHomePage() {
                     className="group block"
                   >
                     <div 
-                      className="relative bg-[#FFFEF9] p-2 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
+                      className="relative bg-[#FFFEF9] p-1.5 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
                       style={{ 
                         transform: `rotate(${rotation}deg)`,
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
-                        borderRadius: '2px'
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.15)',
+                        borderRadius: '1px',
+                        maxWidth: '180px'
                       }}
                     >
                       {/* Pushpin */}
                       <div 
-                        className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2 z-10"
+                        className="absolute -top-1.5 left-1/2 w-3 h-3 rounded-full shadow-sm transform -translate-x-1/2 z-10"
                         style={{ backgroundColor: '#2C2C2C' }}
                       >
                         <div 
-                          className="w-3 h-3 rounded-full absolute top-1 left-1"
+                          className="w-2 h-2 rounded-full absolute top-0.5 left-0.5"
                           style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
                         />
                       </div>
                       
                       {/* Polaroid Photo Container */}
-                      <div className="aspect-square bg-[#FDF6E3] border-2 border-[#E5E5E5] mb-3 p-1 overflow-hidden">
+                      <div className="aspect-square bg-[#FDF6E3] border border-[#E5E5E5] mb-2 overflow-hidden">
                         {board.photo && !hasImageError ? (
                           <Image 
                             src={getPhotoUrl(board.photo.storage_path)}
                             alt={board.name}
-                            width={200}
-                            height={200}
-                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 200px"
+                            width={150}
+                            height={150}
+                            sizes="150px"
                             className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
                             onError={() => handleImageError(board.id)}
                           />
@@ -257,12 +258,12 @@ export default function TownHomePage() {
                       </div>
                       
                       {/* Location Label */}
-                      <div className="text-center">
-                        <h3 className="text-[12px] font-semibold text-[#2C2C2C] leading-tight line-clamp-2">
+                      <div className="text-center px-1">
+                        <h3 className="text-[10px] font-semibold text-[#2C2C2C] leading-tight line-clamp-2">
                           {board.name}
                         </h3>
                         {board.photo && (
-                          <p className="text-[10px] text-[#6B6B6B] mt-1">
+                          <p className="text-[8px] text-[#6B6B6B] mt-0.5">
                             {new Date(board.photo.created_at).toLocaleDateString()}
                           </p>
                         )}
