@@ -1,14 +1,15 @@
 /**
  * Compress image before upload
+ * Bulletin board photos need high resolution for zooming/reading
  * @param file - Input image file
- * @param maxWidth - Maximum width in pixels (default: 1600)
- * @param quality - JPEG quality 0-1 (default: 0.85)
+ * @param maxWidth - Maximum width in pixels (default: 3000 for readability)
+ * @param quality - JPEG quality 0-1 (default: 0.92 for text clarity)
  * @returns Compressed image as Blob
  */
 export async function compressImage(
   file: File,
-  maxWidth = 1600,
-  quality = 0.85
+  maxWidth = 3000,  // High res for zooming in to read flyers
+  quality = 0.92    // High quality to preserve text readability
 ): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
