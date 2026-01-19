@@ -183,7 +183,9 @@ export default function ImageViewer({ src, alt, onClose }: ImageViewerProps) {
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
-          cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'zoom-in'
+          cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'zoom-in',
+          position: 'relative',
+          padding: '20px'
         }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -196,8 +198,11 @@ export default function ImageViewer({ src, alt, onClose }: ImageViewerProps) {
           alt={alt}
           style={{
             transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
-            maxWidth: '90vw',
-            maxHeight: '90vh',
+            maxWidth: 'calc(100vw - 40px)',
+            maxHeight: 'calc(100vh - 200px)', // Account for controls and instructions
+            width: 'auto',
+            height: 'auto',
+            objectFit: 'contain',
             transition: isDragging ? 'none' : 'transform 0.2s ease',
             cursor: scale === 1 ? 'zoom-in' : 'inherit'
           }}
