@@ -11,9 +11,18 @@ import MapView from '@/components/MapView'
 import type { LocationWithPhoto } from '@/types'
 import type { DiscoveryCategory } from '@/lib/businessProfiles'
 
+// Memoize random values to prevent layout shifts
+const cardRotations = new Map<string, number>()
+const cardPushpinColors = new Map<string, string>()
+
 // Random rotation for cards
-function getRandomRotation() {
-  return Math.random() * 6 - 3 // -3 to +3 degrees
+function getRandomRotation(id?: string) {
+  if (id && cardRotations.has(id)) {
+    return cardRotations.get(id)!
+  }
+  const rotation = Math.random() * 6 - 3 // -3 to +3 degrees
+  if (id) cardRotations.set(id, rotation)
+  return rotation
 }
 
 // Pushpin colors from style guide
@@ -24,8 +33,13 @@ const pushpinColors = [
   '#6BBF59'  // Pushpin Green
 ]
 
-function getRandomPushpinColor() {
-  return pushpinColors[Math.floor(Math.random() * pushpinColors.length)]
+function getRandomPushpinColor(id?: string) {
+  if (id && cardPushpinColors.has(id)) {
+    return cardPushpinColors.get(id)!
+  }
+  const color = pushpinColors[Math.floor(Math.random() * pushpinColors.length)]
+  if (id) cardPushpinColors.set(id, color)
+  return color
 }
 
 // Format town name for display
@@ -224,8 +238,8 @@ export default function TownHomePage() {
             {/* Mobile: Fixed 2-column grid with exact card widths */}
             <div className="md:hidden grid gap-4 justify-center" style={{ gridTemplateColumns: 'repeat(auto-fill, 160px)' }}>
               {filteredBoards.map((board, index) => {
-                const rotation = getRandomRotation()
-                const pushpinColor = getRandomPushpinColor()
+                const rotation = getRandomRotation(board.id)
+                const pushpinColor = getRandomPushpinColor(board.id)
                 
                 return (
                   <Link
@@ -263,8 +277,10 @@ export default function TownHomePage() {
                               height={144}
                               sizes="144px"
                               className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
-                              priority={index < 4}
-                              loading={index < 4 ? "eager" : "lazy"}
+                              priority={index < 6}
+                              loading={index < 6 ? "eager" : "lazy"}
+                              placeholder="blur"
+                              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k="
                             />
                           ) : (
                             <div className="w-full h-full bg-[#FDF6E3] flex items-center justify-center">
@@ -300,8 +316,8 @@ export default function TownHomePage() {
               }}
             >
               {filteredBoards.map((board, index) => {
-                const rotation = getRandomRotation()
-                const pushpinColor = getRandomPushpinColor()
+                const rotation = getRandomRotation(board.id)
+                const pushpinColor = getRandomPushpinColor(board.id)
                 
                 return (
                   <Link
@@ -339,8 +355,10 @@ export default function TownHomePage() {
                               height={144}
                               sizes="144px"
                               className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
-                              priority={index < 4}
-                              loading={index < 4 ? "eager" : "lazy"}
+                              priority={index < 6}
+                              loading={index < 6 ? "eager" : "lazy"}
+                              placeholder="blur"
+                              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k="
                             />
                           ) : (
                             <div className="w-full h-full bg-[#FDF6E3] flex items-center justify-center">
