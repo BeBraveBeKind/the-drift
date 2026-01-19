@@ -235,7 +235,7 @@ export default function TownHomePage() {
                 return (
                   <Link
                     key={board.id}
-                    href={`/${town}/${board.slug}`}
+                    href={`/${townSlug}/${board.slug}`}
                     className="group block"
                   >
                     <div 
@@ -306,7 +306,7 @@ export default function TownHomePage() {
                 return (
                   <Link
                     key={board.id}
-                    href={`/${town}/${board.slug}`}
+                    href={`/${townSlug}/${board.slug}`}
                     className="group block"
                   >
                     <div 
