@@ -118,6 +118,42 @@ export default function LocationForm({
           />
         </div>
         
+        <div>
+          <label className="block text-[14px] font-medium text-[#2C2C2C] mb-1">
+            Latitude
+            <span className="text-[11px] text-[#6B6B6B] ml-2">(for map view)</span>
+          </label>
+          <input
+            type="number"
+            step="0.00000001"
+            value={form.latitude || ''}
+            onChange={(e) => onFormChange({ ...form, latitude: e.target.value ? parseFloat(e.target.value) : null })}
+            className="w-full p-3 border border-[#E5E5E5] rounded-md text-[14px] focus:outline-none focus:ring-2 focus:ring-[#D94F4F]"
+            placeholder="43.5569"
+            disabled={disabled}
+          />
+        </div>
+        
+        <div>
+          <label className="block text-[14px] font-medium text-[#2C2C2C] mb-1">
+            Longitude
+            <span className="text-[11px] text-[#6B6B6B] ml-2">(for map view)</span>
+          </label>
+          <input
+            type="number"
+            step="0.00000001"
+            value={form.longitude || ''}
+            onChange={(e) => onFormChange({ ...form, longitude: e.target.value ? parseFloat(e.target.value) : null })}
+            className="w-full p-3 border border-[#E5E5E5] rounded-md text-[14px] focus:outline-none focus:ring-2 focus:ring-[#D94F4F]"
+            placeholder="-90.8885"
+            disabled={disabled}
+          />
+        </div>
+        
+        <div className="md:col-span-2 text-[12px] text-[#6B6B6B] -mt-2">
+          💡 Get coordinates from Google Maps: Right-click on location → "What's here?" → Click coordinates to copy
+        </div>
+        
         <div className="md:col-span-2">
           <label className="block text-[14px] font-medium text-[#2C2C2C] mb-1">
             Description

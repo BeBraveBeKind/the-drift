@@ -41,7 +41,9 @@ export default function AdminDashboard() {
     address: '',
     description: '',
     business_category: '',
-    business_tags: []
+    business_tags: [],
+    latitude: null,
+    longitude: null
   })
 
   useEffect(() => {
@@ -126,7 +128,7 @@ export default function AdminDashboard() {
     if (!selectedTown) return
 
     if (editingId) {
-      const { error } = await supabase.rpc('admin_update_location', {
+      const { error: updateError } = await supabase.rpc('admin_update_location', {
         p_id: editingId,
         p_name: form.name,
         p_slug: form.slug,
@@ -135,12 +137,21 @@ export default function AdminDashboard() {
         p_description: form.description || null
       })
       
-      if (!error) {
+      // Also update coordinates separately since RPC might not handle them
+      const { error: coordError } = await supabase
+        .from('locations')
+        .update({
+          latitude: form.latitude,
+          longitude: form.longitude
+        })
+        .eq('id', editingId)
+      
+      if (!updateError && !coordError) {
         setEditingId(null)
         loadLocations()
         resetForm()
       } else {
-        alert(`Failed to update location: ${error.message || 'Unknown error'}`)
+        alert(`Failed to update location: ${updateError?.message || coordError?.message || 'Unknown error'}`)
       }
     } else {
       const { error } = await supabase
@@ -152,6 +163,8 @@ export default function AdminDashboard() {
           town_id: form.town_id,
           address: form.address || null,
           description: form.description || null,
+          latitude: form.latitude,
+          longitude: form.longitude,
           is_active: true
         }])
       
@@ -173,7 +186,9 @@ export default function AdminDashboard() {
       address: '',
       description: '',
       business_category: '',
-      business_tags: []
+      business_tags: [],
+      latitude: null,
+      longitude: null
     })
   }
 
@@ -185,7 +200,9 @@ export default function AdminDashboard() {
       address: location.address || '',
       description: location.description || '',
       business_category: location.business_category || '',
-      business_tags: location.business_tags || []
+      business_tags: location.business_tags || [],
+      latitude: location.latitude || null,
+      longitude: location.longitude || null
     })
     setEditingId(location.id)
   }

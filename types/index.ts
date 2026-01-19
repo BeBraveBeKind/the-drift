@@ -26,6 +26,9 @@ export interface Location {
   business_tags: string[]
   profile_completed: boolean
   profile_completed_at?: string | null
+  // Map fields
+  latitude?: number | null
+  longitude?: number | null
 }
 
 export interface Photo {
@@ -51,6 +54,9 @@ export interface LocationWithPhoto {
   business_category?: string | null
   business_tags?: string[]
   profile_completed?: boolean
+  // Map fields
+  latitude?: number | null
+  longitude?: number | null
   photo: {
     id: string
     storage_path: string
@@ -68,6 +74,9 @@ export interface LocationFormData {
   // Business profile fields
   business_category?: string
   business_tags: string[]
+  // Map fields
+  latitude?: number | null
+  longitude?: number | null
 }
 
 export interface TownFormData {

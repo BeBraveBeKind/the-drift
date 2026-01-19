@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { useParams, notFound } from 'next/navigation'
 import { useLocations } from '@/hooks/useLocations'
 import DiscoveryFilter from '@/components/DiscoveryFilter'
+import MapView from '@/components/MapView'
 import type { LocationWithPhoto } from '@/types'
 import type { DiscoveryCategory } from '@/lib/businessProfiles'
 
@@ -369,35 +370,12 @@ export default function TownHomePage() {
           </div>
           )
         ) : (
-          <div className="text-center py-20">
-            <div className="relative inline-block">
-              <div 
-                className="bg-[#F4D03F] p-8 shadow-lg border-[1px] border-[#E5E5E5] relative mx-auto"
-                style={{ 
-                  transform: `rotate(${getRandomRotation()}deg)`,
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
-                  borderRadius: '2px'
-                }}
-              >
-                <h3 className="text-[24px] font-bold text-[#2C2C2C] leading-[1.3] mb-3">
-                  🗺️ Coming Soon
-                </h3>
-                <p className="text-[14px] text-[#2C2C2C] leading-[1.4] max-w-sm">
-                  Map view is in the works! For now, use the grid to browse all community boards.
-                </p>
-                
-                {/* Pushpin */}
-                <div 
-                  className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2"
-                  style={{ backgroundColor: '#D94F4F' }}
-                >
-                  <div 
-                    className="w-3 h-3 rounded-full absolute top-1 left-1"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
-                  />
-                </div>
-              </div>
-            </div>
+          <div className="max-w-6xl mx-auto">
+            <MapView 
+              locations={filteredBoards}
+              townSlug={townSlug}
+              activeFilter={activeCategory}
+            />
           </div>
         )}
       </section>
