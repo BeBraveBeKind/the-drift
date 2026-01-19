@@ -62,9 +62,9 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
     zoom: 14
   })
   const [selectedLocation, setSelectedLocation] = useState<LocationWithPhoto | null>(null)
-  const [clusters, setClusters] = useState<PointFeature[]>([])
+  const [clusters, setClusters] = useState<any[]>([])
   const mapRef = useRef<any>(null)
-  const superclusterRef = useRef<Supercluster<ClusterProperties>>()
+  const superclusterRef = useRef<Supercluster<ClusterProperties> | null>(null)
 
   // Filter locations that have coordinates
   const mappableLocations = useMemo(() => {
@@ -179,7 +179,6 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
         <GeolocateControl 
           position="top-right"
           trackUserLocation={false}
-          showUserHeading={false}
         />
 
         {/* Render clusters and individual pins */}
@@ -232,13 +231,13 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
                     cx="15" 
                     cy="15" 
                     r="14" 
-                    fill={CATEGORY_COLORS[category || 'other']}
+                    fill={CATEGORY_COLORS[(category as DiscoveryCategory) || 'other']}
                     stroke="white"
                     strokeWidth="2"
                   />
                   <path 
                     d="M 15 30 L 10 40 L 20 40 Z" 
-                    fill={CATEGORY_COLORS[category || 'other']}
+                    fill={CATEGORY_COLORS[(category as DiscoveryCategory) || 'other']}
                   />
                   <circle 
                     cx="15" 
