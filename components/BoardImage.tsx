@@ -22,6 +22,21 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
   
   return (
     <>
+      {/* Info card above the frame */}
+      <div className="mb-6 bg-amber-50 border-2 border-amber-200 rounded-lg p-4">
+        <div className="flex items-start gap-3">
+          <span className="text-2xl">💡</span>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-amber-900 mb-1">
+              Pro Tip: Click the photo to zoom in!
+            </p>
+            <p className="text-xs text-amber-700">
+              You can pan around when zoomed, and click multiple times for different zoom levels.
+            </p>
+          </div>
+        </div>
+      </div>
+      
       {/* Cork Board Style Frame */}
       <div className="relative bg-[#C4A574] p-8 rounded-lg shadow-2xl">
         {/* Cork texture overlay */}
@@ -107,21 +122,6 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
             className="w-3 h-3 rounded-full absolute top-1 left-1"
             style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
           />
-        </div>
-      </div>
-      
-      {/* Info card below the frame */}
-      <div className="mt-6 bg-amber-50 border-2 border-amber-200 rounded-lg p-4">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">💡</span>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-amber-900 mb-1">
-              Pro Tip: Click the photo to zoom in!
-            </p>
-            <p className="text-xs text-amber-700">
-              You can pan around when zoomed, and click multiple times for different zoom levels.
-            </p>
-          </div>
         </div>
       </div>
 
