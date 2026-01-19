@@ -209,7 +209,7 @@ export default function TownHomePage() {
             </div>
           ) : (
             // Grid View - Polaroid Cards
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 max-w-6xl mx-auto justify-items-center">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 max-w-7xl mx-auto">
               {filteredBoards.map((board) => {
                 const rotation = getRandomRotation(board.id)
                 const hasImageError = imageLoadErrors.has(board.id)
