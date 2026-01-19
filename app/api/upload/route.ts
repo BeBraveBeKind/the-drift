@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import sharp from 'sharp'
+import convert from 'heic-convert'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -47,11 +48,41 @@ export async function POST(request: NextRequest) {
     // Process and convert image
     const timestamp = Date.now()
     
+    let processedBuffer: Buffer
+    
     try {
       const buffer = await file.arrayBuffer()
+      const inputBuffer = Buffer.from(buffer)
       
-      // Convert to JPEG with compression (handles HEIC, PNG, etc.)
-      const convertedBuffer = await sharp(Buffer.from(buffer))
+      // Check if it's HEIC/HEIF format
+      const isHEIC = file.name.toLowerCase().endsWith('.heic') || 
+                     file.name.toLowerCase().endsWith('.heif') ||
+                     file.type === 'image/heic' ||
+                     file.type === 'image/heif'
+      
+      let imageBuffer: Buffer
+      
+      if (isHEIC) {
+        console.log(`Converting HEIC to JPEG: ${file.name}`)
+        try {
+          // Convert HEIC to JPEG first
+          const jpegBuffer = await convert({
+            buffer: inputBuffer,
+            format: 'JPEG',
+            quality: 0.9
+          })
+          imageBuffer = Buffer.from(jpegBuffer)
+        } catch (heicError) {
+          console.error('HEIC conversion failed:', heicError)
+          // Fallback: try sharp directly (might work for some HEIC files)
+          imageBuffer = inputBuffer
+        }
+      } else {
+        imageBuffer = inputBuffer
+      }
+      
+      // Process with sharp for final optimization
+      processedBuffer = await sharp(imageBuffer)
         .jpeg({ 
           quality: 85, // Good quality with compression
           progressive: true // Better web loading
@@ -62,12 +93,11 @@ export async function POST(request: NextRequest) {
         })
         .toBuffer()
       
-      console.log(`Image converted: ${file.name} (${file.type}) -> JPEG (${convertedBuffer.length} bytes)`)
+      console.log(`Image processed: ${file.name} (${file.type}) -> JPEG (${processedBuffer.length} bytes)`)
       
-      var processedBuffer = convertedBuffer
     } catch (conversionError) {
-      console.error('Image conversion failed:', conversionError)
-      return NextResponse.json({ error: 'Image format not supported or corrupted' }, { status: 400 })
+      console.error('Image processing failed:', conversionError)
+      return NextResponse.json({ error: 'Image format not supported or corrupted. Try converting HEIC to JPG on your device first.' }, { status: 400 })
     }
     
     const storagePath = `${location.id}/${timestamp}.jpg` // Always save as JPEG
