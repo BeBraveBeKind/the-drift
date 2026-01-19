@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { getPhotoUrl, timeAgo } from '@/lib/utils'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useParams, notFound } from 'next/navigation'
 
 interface Board {
@@ -261,9 +262,12 @@ export default function TownHomePage() {
                       <div className="w-36 h-36 bg-[#FDF6E3] border-2 border-[#E5E5E5] mb-3 p-2 overflow-hidden mx-auto">
                         <div className="w-full h-full bg-white border border-[#E5E5E5] overflow-hidden">
                           {board.photo ? (
-                            <img 
+                            <Image 
                               src={getPhotoUrl(board.photo.storage_path)}
                               alt={board.name}
+                              width={144}
+                              height={144}
+                              sizes="144px"
                               className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
                             />
                           ) : (
@@ -332,9 +336,12 @@ export default function TownHomePage() {
                       <div className="w-44 h-44 bg-[#FDF6E3] border-2 border-[#E5E5E5] mb-3 p-2 overflow-hidden mx-auto">
                         <div className="w-full h-full bg-white border border-[#E5E5E5] overflow-hidden">
                           {board.photo ? (
-                            <img 
+                            <Image 
                               src={getPhotoUrl(board.photo.storage_path)}
                               alt={board.name}
+                              width={144}
+                              height={144}
+                              sizes="144px"
                               className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
                             />
                           ) : (

@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase'
 import { getPhotoUrl, timeAgo } from '@/lib/utils'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import ShareButton from '@/components/ShareButton'
 import FlagButton from '@/components/FlagButton'
 import ViewTracker from '@/components/ViewTracker'
@@ -78,10 +79,14 @@ export default async function BoardPage({ params }: PageProps) {
       {photo ? (
         <div>
           <div className="bg-white rounded-lg overflow-hidden shadow-sm">
-            <img 
+            <Image 
               src={getPhotoUrl(photo.storage_path)}
               alt={`${location.name} bulletin board`}
-              className="w-full"
+              width={1200}
+              height={900}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 80vw"
+              className="w-full h-auto"
+              priority={true}
             />
           </div>
           <div className="mt-4 flex items-center justify-between text-sm">
