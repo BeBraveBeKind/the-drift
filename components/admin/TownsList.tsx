@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 import { Town } from '@/lib/types'
 import TownForm from './TownForm'
 
@@ -10,7 +10,6 @@ interface TownsListProps {
 }
 
 export default function TownsList({ onTownsUpdated }: TownsListProps) {
-  const supabase = createClient()
   const [towns, setTowns] = useState<Town[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedTown, setSelectedTown] = useState<Town | null>(null)

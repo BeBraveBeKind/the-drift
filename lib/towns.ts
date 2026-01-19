@@ -1,8 +1,7 @@
-import { createClient } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 import { Town } from '@/lib/types'
 
 export async function getTowns(onlyActive = true): Promise<Town[]> {
-  const supabase = createClient()
   
   let query = supabase
     .from('towns')
@@ -23,7 +22,6 @@ export async function getTowns(onlyActive = true): Promise<Town[]> {
 }
 
 export async function getTownBySlug(slug: string): Promise<Town | null> {
-  const supabase = createClient()
   
   const { data, error } = await supabase
     .from('towns')

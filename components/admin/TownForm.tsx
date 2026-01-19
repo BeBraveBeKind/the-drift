@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 import { Town } from '@/lib/types'
 
 interface TownFormProps {
@@ -11,7 +11,6 @@ interface TownFormProps {
 }
 
 export default function TownForm({ town, onSuccess, onCancel }: TownFormProps) {
-  const supabase = createClient()
   const [name, setName] = useState(town?.name || '')
   const [slug, setSlug] = useState(town?.slug || '')
   const [description, setDescription] = useState(town?.description || '')
