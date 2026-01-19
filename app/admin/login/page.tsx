@@ -18,7 +18,8 @@ export default function LoginPage() {
 
     try {
       await signIn(email, password)
-      router.push('/admin')
+      // Force a hard navigation to admin page
+      window.location.href = '/admin'
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
     } finally {

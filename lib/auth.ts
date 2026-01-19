@@ -25,7 +25,8 @@ export async function getSession() {
   const { data, error } = await supabase.auth.getSession()
   
   if (error) {
-    throw new Error(error.message)
+    console.error('Error getting session:', error)
+    return null
   }
   
   return data.session
@@ -35,7 +36,8 @@ export async function getCurrentUser() {
   const { data, error } = await supabase.auth.getUser()
   
   if (error) {
-    throw new Error(error.message)
+    console.error('Error getting user:', error)
+    return null
   }
   
   return data.user
