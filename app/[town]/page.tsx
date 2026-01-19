@@ -106,64 +106,70 @@ export default function TownHomePage() {
     <>
       <Navigation />
       <main className="min-h-screen bg-[#C4A574] relative">
-        {/* Cork Board Texture Overlay - more subtle */}
+        {/* Cork Board Texture Overlay */}
         <div 
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0 opacity-30"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A68B5B' fill-opacity='0.4'%3E%3Ccircle cx='9' cy='9' r='1'/%3E%3Ccircle cx='49' cy='21' r='1'/%3E%3Ccircle cx='19' cy='29' r='1'/%3E%3Ccircle cx='39' cy='41' r='1'/%3E%3Ccircle cx='9' cy='49' r='1'/%3E%3Ccircle cx='29' cy='9' r='1'/%3E%3Ccircle cx='51' cy='51' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           }}
         />
         
-        {/* Simplified Header */}
-        <header className="relative z-10 bg-white shadow-sm border-b border-[#E5E5E5]">
-          <div className="max-w-7xl mx-auto px-4 py-6">
-            <div className="text-center">
-              <h1 className="text-3xl font-bold text-[#2C2C2C] flex items-center justify-center gap-2">
-                <span className="text-[#D94F4F]">📌</span>
-                Switchboard
-              </h1>
-              <p className="text-lg text-[#6B6B6B] mt-1">
-                What's posted in {townName}
-              </p>
+        {/* Header with Cork Board Frame */}
+        <header className="relative z-10 text-center pt-8 pb-6">
+          <div className="max-w-md mx-auto px-4">
+            <div className="relative inline-block">
+              <div className="bg-[#8B7355] p-3 rounded-lg shadow-xl">
+                <div 
+                  className="bg-[#FFFEF9] px-8 py-6 shadow-lg border-2 border-[#6B5A3C] rounded-md"
+                  style={{ 
+                    boxShadow: 'inset 0 0 8px rgba(0,0,0,0.1)'
+                  }}
+                >
+                  <h1 className="text-[36px] font-bold text-[#2C2C2C] leading-[1.2] mb-3">
+                    📌 Switchboard
+                  </h1>
+                  <p className="text-[18px] font-medium text-[#2C2C2C] leading-[1.4]">
+                    What's posted in {townName}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </header>
 
-        {/* Filter Bar - Better Visual Separation */}
-        <div className="sticky top-0 z-20 bg-white shadow-md border-b border-[#E5E5E5]">
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            {/* Discovery Filter */}
-            {allBoards.length > 0 && (
-              <DiscoveryFilter 
-                locations={allBoards} 
-                onFilterChange={handleFilterChange}
-              />
-            )}
-            
-            {/* View Mode Toggle */}
-            <div className="flex justify-center mt-4">
-              <div className="inline-flex bg-[#F5F5F0] rounded-lg p-1">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                    viewMode === 'grid'
-                      ? 'bg-white shadow-sm text-[#2C2C2C]'
-                      : 'text-[#6B6B6B] hover:text-[#2C2C2C]'
-                  }`}
-                >
-                  <span className="mr-2">⚏</span>Grid
-                </button>
-                <button
-                  onClick={() => setViewMode('map')}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                    viewMode === 'map'
-                      ? 'bg-white shadow-sm text-[#2C2C2C]'
-                      : 'text-[#6B6B6B] hover:text-[#2C2C2C]'
-                  }`}
-                >
-                  <span className="mr-2">🗺️</span>Map
-                </button>
-              </div>
+        {/* Filter Bar */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 py-6">
+          {/* Discovery Filter */}
+          {allBoards.length > 0 && (
+            <DiscoveryFilter 
+              locations={allBoards} 
+              onFilterChange={handleFilterChange}
+            />
+          )}
+          
+          {/* View Mode Toggle */}
+          <div className="flex justify-center mt-4">
+            <div className="bg-[#FFFEF9] border-[1px] border-[#2C2C2C] rounded-lg p-1 shadow-sm">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  viewMode === 'grid'
+                    ? 'bg-[#2C2C2C] text-white'
+                    : 'text-[#2C2C2C] hover:bg-[#F5F5F0]'
+                }`}
+              >
+                Grid View
+              </button>
+              <button
+                onClick={() => setViewMode('map')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  viewMode === 'map'
+                    ? 'bg-[#2C2C2C] text-white'
+                    : 'text-[#2C2C2C] hover:bg-[#F5F5F0]'
+                }`}
+              >
+                Map View
+              </button>
             </div>
           </div>
         </div>
@@ -202,8 +208,8 @@ export default function TownHomePage() {
               </div>
             </div>
           ) : (
-            // Grid View - Improved Layout
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            // Grid View - Polaroid Cards
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 max-w-[1400px] mx-auto">
               {filteredBoards.map((board) => {
                 const rotation = getRandomRotation(board.id)
                 const hasImageError = imageLoadErrors.has(board.id)
@@ -215,30 +221,34 @@ export default function TownHomePage() {
                     className="group block"
                   >
                     <div 
-                      className="relative bg-white rounded-sm shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                      className="relative bg-[#FFFEF9] p-2 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
                       style={{ 
                         transform: `rotate(${rotation}deg)`,
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+                        borderRadius: '2px'
                       }}
                     >
-                      {/* Red pushpin for active items */}
-                      {board.photo && !hasImageError && (
-                        <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 z-10">
-                          <div className="w-5 h-5 bg-[#D94F4F] rounded-full shadow-lg">
-                            <div className="w-3 h-3 bg-white/30 rounded-full absolute top-1 left-1" />
-                          </div>
-                        </div>
-                      )}
+                      {/* Pushpin */}
+                      <div 
+                        className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2 z-10"
+                        style={{ backgroundColor: '#2C2C2C' }}
+                      >
+                        <div 
+                          className="w-3 h-3 rounded-full absolute top-1 left-1"
+                          style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+                        />
+                      </div>
                       
-                      {/* Image Container with Fixed Aspect Ratio */}
-                      <div className="aspect-[4/3] bg-[#F5F5F0] overflow-hidden">
+                      {/* Polaroid Photo Container */}
+                      <div className="aspect-square bg-[#FDF6E3] border-2 border-[#E5E5E5] mb-3 p-1 overflow-hidden">
                         {board.photo && !hasImageError ? (
                           <Image 
                             src={getPhotoUrl(board.photo.storage_path)}
                             alt={board.name}
-                            width={400}
-                            height={300}
-                            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            width={200}
+                            height={200}
+                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 200px"
+                            className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
                             onError={() => handleImageError(board.id)}
                           />
                         ) : (
@@ -246,17 +256,14 @@ export default function TownHomePage() {
                         )}
                       </div>
                       
-                      {/* Location Info - Cleaner Design */}
-                      <div className="p-3 bg-white">
-                        <h3 className="font-semibold text-[#2C2C2C] text-sm leading-tight mb-1 line-clamp-1">
+                      {/* Location Label */}
+                      <div className="text-center">
+                        <h3 className="text-[12px] font-semibold text-[#2C2C2C] leading-tight line-clamp-2">
                           {board.name}
                         </h3>
-                        <p className="text-xs text-[#6B6B6B] line-clamp-1">
-                          {board.address || 'View board'}
-                        </p>
                         {board.photo && (
-                          <p className="text-xs text-[#9B9B9B] mt-1">
-                            Updated {new Date(board.photo.created_at).toLocaleDateString()}
+                          <p className="text-[10px] text-[#6B6B6B] mt-1">
+                            {new Date(board.photo.created_at).toLocaleDateString()}
                           </p>
                         )}
                       </div>

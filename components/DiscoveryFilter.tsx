@@ -69,19 +69,19 @@ export default function DiscoveryFilter({ locations, onFilterChange }: Discovery
           }
         `}
         style={{
-          borderTop: activeCategory === 'all' ? '3px solid #D94F4F' : '3px solid transparent',
+          borderTop: activeCategory === 'all' ? '3px solid #2C2C2C' : '3px solid transparent',
         }}
       >
         <span className="flex items-center gap-2">
           <span className="text-lg">{categoryEmojis['all']}</span>
-          <span className={activeCategory === 'all' ? 'text-[#2C2C2C]' : 'text-[#6B6B6B]'}>
+          <span className={activeCategory === 'all' ? 'text-[#000000]' : 'text-[#2C2C2C]'}>
             All
           </span>
           <span className={`
             px-1.5 py-0.5 rounded-full text-xs font-semibold
             ${activeCategory === 'all' 
-              ? 'bg-[#D94F4F] text-white' 
-              : 'bg-[#F5F5F0] text-[#6B6B6B]'
+              ? 'bg-[#2C2C2C] text-white' 
+              : 'bg-[#F5F5F0] text-[#2C2C2C] border border-[#2C2C2C]'
             }
           `}>
             {locations.length}
@@ -91,7 +91,7 @@ export default function DiscoveryFilter({ locations, onFilterChange }: Discovery
         {/* Active indicator - pushpin */}
         {activeCategory === 'all' && (
           <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-            <div className="w-4 h-4 bg-[#D94F4F] rounded-full shadow-sm">
+            <div className="w-4 h-4 bg-[#2C2C2C] rounded-full shadow-sm">
               <div className="w-2 h-2 bg-white/40 rounded-full absolute top-0.5 left-0.5" />
             </div>
           </div>
@@ -120,20 +120,20 @@ export default function DiscoveryFilter({ locations, onFilterChange }: Discovery
               }
             `}
             style={{
-              borderTop: isActive ? '3px solid #D94F4F' : '3px solid transparent',
+              borderTop: isActive ? '3px solid #2C2C2C' : '3px solid transparent',
             }}
           >
             <span className="flex items-center gap-2">
               <span className="text-lg">{categoryEmojis[category] || '📌'}</span>
-              <span className={isActive ? 'text-[#2C2C2C]' : 'text-[#6B6B6B]'}>
+              <span className={isActive ? 'text-[#000000]' : 'text-[#2C2C2C]'}>
                 {DISCOVERY_CATEGORY_LABELS[category]}
               </span>
               {count > 0 && (
                 <span className={`
                   px-1.5 py-0.5 rounded-full text-xs font-semibold
                   ${isActive 
-                    ? 'bg-[#D94F4F] text-white' 
-                    : 'bg-[#F5F5F0] text-[#6B6B6B]'
+                    ? 'bg-[#2C2C2C] text-white' 
+                    : 'bg-[#F5F5F0] text-[#2C2C2C] border border-[#2C2C2C]'
                   }
                 `}>
                   {count}
@@ -144,7 +144,7 @@ export default function DiscoveryFilter({ locations, onFilterChange }: Discovery
             {/* Active indicator - pushpin */}
             {isActive && (
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                <div className="w-4 h-4 bg-[#D94F4F] rounded-full shadow-sm">
+                <div className="w-4 h-4 bg-[#2C2C2C] rounded-full shadow-sm">
                   <div className="w-2 h-2 bg-white/40 rounded-full absolute top-0.5 left-0.5" />
                 </div>
               </div>
