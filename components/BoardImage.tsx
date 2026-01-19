@@ -62,12 +62,12 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
         >
           {/* Pushpin at top */}
           <div 
-            className="absolute -top-2.5 left-1/2 w-5 h-5 rounded-full shadow-md transform -translate-x-1/2 z-20"
+            className="absolute -top-1.5 left-1/2 w-3 h-3 rounded-full shadow-sm transform -translate-x-1/2 z-20"
             style={{ backgroundColor: stableValues.pushpinColor }}
           >
             <div 
-              className="w-3 h-3 rounded-full absolute top-1 left-1"
-              style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+              className="w-1.5 h-1.5 rounded-full absolute top-0.5 left-0.5"
+              style={{ backgroundColor: 'rgba(255,255,255,0.4)' }}
             />
           </div>
           
@@ -108,24 +108,24 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
           </div>
         </div>
         
-        {/* Additional decorative pushpins - smaller on mobile */}
+        {/* Additional decorative pushpins */}
         <div 
-          className="absolute top-4 sm:top-6 right-6 sm:right-8 w-4 h-4 sm:w-5 sm:h-5 rounded-full shadow-md"
+          className="absolute top-5 right-6 w-2.5 h-2.5 rounded-full shadow-sm"
           style={{ backgroundColor: '#D94F4F' }}
         >
           <div 
-            className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full absolute top-0.5 sm:top-1 left-0.5 sm:left-1"
-            style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+            className="w-1 h-1 rounded-full absolute top-0.5 left-0.5"
+            style={{ backgroundColor: 'rgba(255,255,255,0.4)' }}
           />
         </div>
         
         <div 
-          className="absolute bottom-6 sm:bottom-8 left-4 sm:left-6 w-4 h-4 sm:w-5 sm:h-5 rounded-full shadow-md"
+          className="absolute bottom-6 left-5 w-2.5 h-2.5 rounded-full shadow-sm"
           style={{ backgroundColor: '#F4D03F' }}
         >
           <div 
-            className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full absolute top-0.5 sm:top-1 left-0.5 sm:left-1"
-            style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+            className="w-1 h-1 rounded-full absolute top-0.5 left-0.5"
+            style={{ backgroundColor: 'rgba(255,255,255,0.4)' }}
           />
         </div>
       </div>
