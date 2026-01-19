@@ -118,9 +118,9 @@ export default function TownHomePage() {
         <header className="relative z-10 text-center pt-8 pb-6">
           <div className="max-w-md mx-auto px-4">
             <div className="relative inline-block">
-              <div className="bg-[#8B7355] p-3 rounded-lg shadow-xl">
+              <div className="bg-[#8B7355] p-4 rounded-xl shadow-xl">
                 <div 
-                  className="bg-[#FFFEF9] px-8 py-6 shadow-lg border-2 border-[#6B5A3C] rounded-md"
+                  className="bg-[#FFFEF9] px-10 py-8 shadow-lg border-2 border-[#6B5A3C] rounded-lg"
                   style={{ 
                     boxShadow: 'inset 0 0 8px rgba(0,0,0,0.1)'
                   }}
@@ -208,8 +208,8 @@ export default function TownHomePage() {
               </div>
             </div>
           ) : (
-            // Grid View - Polaroid Cards - Show the full array of boards
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 justify-center">
+            // Grid View - Polaroid Cards
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 max-w-7xl mx-auto">
               {filteredBoards.map((board) => {
                 const rotation = getRandomRotation(board.id)
                 const hasImageError = imageLoadErrors.has(board.id)
@@ -221,12 +221,11 @@ export default function TownHomePage() {
                     className="group block"
                   >
                     <div 
-                      className="relative bg-[#FFFEF9] p-1.5 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
+                      className="relative bg-[#FFFEF9] p-2 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
                       style={{ 
                         transform: `rotate(${rotation}deg)`,
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.15)',
-                        borderRadius: '1px',
-                        maxWidth: '180px'
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+                        borderRadius: '2px'
                       }}
                     >
                       {/* Pushpin */}
@@ -259,11 +258,11 @@ export default function TownHomePage() {
                       
                       {/* Location Label */}
                       <div className="text-center px-1">
-                        <h3 className="text-[10px] font-semibold text-[#2C2C2C] leading-tight line-clamp-2">
+                        <h3 className="text-[11px] font-semibold text-[#2C2C2C] leading-tight line-clamp-2">
                           {board.name}
                         </h3>
                         {board.photo && (
-                          <p className="text-[8px] text-[#6B6B6B] mt-0.5">
+                          <p className="text-[9px] text-[#6B6B6B] mt-0.5">
                             {new Date(board.photo.created_at).toLocaleDateString()}
                           </p>
                         )}
