@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Image from 'next/image'
 import ImageViewer from './ImageViewer'
 import type { BoardImageProps } from '@/types'
@@ -13,12 +13,22 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
     setShowViewer(true)
   }
   
-  // Random rotation for photo (subtle)
-  const rotation = Math.random() * 2 - 1 // -1 to 1 degree
-  
-  // Random pushpin color
-  const pushpinColors = ['#D94F4F', '#F4D03F', '#5B9BD5', '#6BBF59']
-  const pushpinColor = pushpinColors[Math.floor(Math.random() * pushpinColors.length)]
+  // Use stable values based on the src URL to avoid hydration mismatches
+  const stableValues = useMemo(() => {
+    // Generate deterministic values from the src string
+    let hash = 0
+    for (let i = 0; i < src.length; i++) {
+      hash = ((hash << 5) - hash) + src.charCodeAt(i)
+      hash = hash & hash // Convert to 32bit integer
+    }
+    
+    // Use the hash to generate consistent values
+    const rotation = ((Math.abs(hash) % 20) - 10) / 10 // -1 to 1 degree
+    const pushpinColors = ['#D94F4F', '#F4D03F', '#5B9BD5', '#6BBF59']
+    const pushpinColor = pushpinColors[Math.abs(hash) % pushpinColors.length]
+    
+    return { rotation, pushpinColor }
+  }, [src])
   
   return (
     <>
@@ -46,14 +56,14 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
         <div 
           className="relative bg-[#FFFEF9] p-2.5 sm:p-3 shadow-xl border border-[#E5E5E5] group cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-0.5"
           style={{ 
-            transform: `rotate(${rotation}deg)`,
+            transform: `rotate(${stableValues.rotation}deg)`,
           }}
           onClick={handleImageClick}
         >
           {/* Pushpin at top */}
           <div 
             className="absolute -top-4 left-1/2 w-8 h-8 rounded-full shadow-lg transform -translate-x-1/2 z-20"
-            style={{ backgroundColor: pushpinColor }}
+            style={{ backgroundColor: stableValues.pushpinColor }}
           >
             <div 
               className="w-5 h-5 rounded-full absolute top-1.5 left-1.5"

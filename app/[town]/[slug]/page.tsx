@@ -92,8 +92,8 @@ export default async function BoardPage({ params }: PageProps) {
           <header>
             <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 mb-2">{location.name}</h1>
             {location.address && (
-              <p className="text-stone-600 text-sm sm:text-base flex items-center gap-2 mb-4">
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <p className="text-stone-500 text-sm flex items-start gap-1.5 mb-4">
+                <svg className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
