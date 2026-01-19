@@ -172,7 +172,7 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
         ref={mapRef}
         {...viewState}
         onMove={evt => setViewState(evt.viewState)}
-        mapStyle="https://api.maptiler.com/maps/dataviz-light/style.json?key=QhsmmJRLuD5p4Hq5uHIS"
+        mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
         style={{ width: '100%', height: '100%' }}
       >
         <NavigationControl position="top-right" />
