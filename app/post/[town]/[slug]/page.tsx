@@ -2,6 +2,7 @@
 
 import { useState, useRef, use } from 'react'
 import { useRouter } from 'next/navigation'
+import { compressImage, formatFileSize } from '@/lib/imageCompression'
 
 interface PageProps {
   params: Promise<{ town: string; slug: string }>
@@ -24,10 +25,22 @@ export default function PostPage({ params }: PageProps) {
     
     // Debug logging
     console.log('Upload starting with params:', { town, slug, hasFile: !!file })
+    console.log('Original file size:', formatFileSize(file.size))
     
     try {
+      // Compress image before upload
+      const compressedBlob = await compressImage(file)
+      const compressedFile = new File(
+        [compressedBlob],
+        file.name.replace(/\.[^/.]+$/, '') + '.jpg',
+        { type: 'image/jpeg' }
+      )
+      
+      console.log('Compressed file size:', formatFileSize(compressedFile.size))
+      console.log('Compression saved:', formatFileSize(file.size - compressedFile.size))
+      
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', compressedFile)
       formData.append('slug', slug)
       formData.append('town', town)
       
