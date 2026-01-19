@@ -64,8 +64,8 @@ export default function DiscoveryFilter({ locations, onFilterChange }: Discovery
         className={`
           relative px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200
           ${activeCategory === 'all' 
-            ? 'bg-white shadow-md transform -translate-y-0.5 scale-105' 
-            : 'bg-white/80 hover:bg-white hover:shadow-sm'
+            ? 'bg-[#2C2C2C] text-white shadow-md' 
+            : 'bg-white border border-[#2C2C2C] text-[#2C2C2C] hover:bg-[#F5F5F0]'
           }
         `}
         style={{
@@ -111,8 +111,8 @@ export default function DiscoveryFilter({ locations, onFilterChange }: Discovery
             className={`
               relative px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200
               ${isActive 
-                ? 'bg-white shadow-md transform -translate-y-0.5 scale-105' 
-                : 'bg-white/80 hover:bg-white hover:shadow-sm'
+                ? 'bg-[#2C2C2C] text-white shadow-md' 
+                : 'bg-white border border-[#2C2C2C] text-[#2C2C2C] hover:bg-[#F5F5F0]'
               }
               ${count === 0 
                 ? 'opacity-50 cursor-not-allowed' 

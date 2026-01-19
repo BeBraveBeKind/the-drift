@@ -118,9 +118,9 @@ export default function TownHomePage() {
         <header className="relative z-10 text-center pt-8 pb-6">
           <div className="max-w-md mx-auto px-4">
             <div className="relative inline-block">
-              <div className="bg-[#8B7355] p-4 rounded-xl shadow-xl">
+              <div className="bg-[#8B7355] p-4 rounded-2xl shadow-xl">
                 <div 
-                  className="bg-[#FFFEF9] px-10 py-8 shadow-lg border-2 border-[#6B5A3C] rounded-lg"
+                  className="bg-[#FFFEF9] px-10 py-8 shadow-lg border-2 border-[#6B5A3C] rounded-xl"
                   style={{ 
                     boxShadow: 'inset 0 0 8px rgba(0,0,0,0.1)'
                   }}
@@ -149,13 +149,13 @@ export default function TownHomePage() {
           
           {/* View Mode Toggle */}
           <div className="flex justify-center mt-4">
-            <div className="bg-[#FFFEF9] border-2 border-[#2C2C2C] rounded-lg p-1 shadow-md">
+            <div className="bg-white border-2 border-[#2C2C2C] rounded-lg p-1 shadow-md">
               <button
                 onClick={() => setViewMode('grid')}
                 className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${
                   viewMode === 'grid'
                     ? 'bg-[#2C2C2C] text-white'
-                    : 'text-[#2C2C2C] bg-white hover:bg-[#F5F5F0]'
+                    : 'text-[#2C2C2C] bg-[#F5F5F0] hover:bg-[#E5E5E5]'
                 }`}
               >
                 Grid View
@@ -165,7 +165,7 @@ export default function TownHomePage() {
                 className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${
                   viewMode === 'map'
                     ? 'bg-[#2C2C2C] text-white'
-                    : 'text-[#2C2C2C] bg-white hover:bg-[#F5F5F0]'
+                    : 'text-[#2C2C2C] bg-[#F5F5F0] hover:bg-[#E5E5E5]'
                 }`}
               >
                 Map View
@@ -209,7 +209,7 @@ export default function TownHomePage() {
             </div>
           ) : (
             // Grid View - Polaroid Cards
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 max-w-7xl mx-auto">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 max-w-6xl mx-auto justify-items-center">
               {filteredBoards.map((board) => {
                 const rotation = getRandomRotation(board.id)
                 const hasImageError = imageLoadErrors.has(board.id)
