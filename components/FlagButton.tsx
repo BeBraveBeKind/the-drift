@@ -29,7 +29,7 @@ export default function FlagButton({ photoId }: { photoId: string }) {
     <button
       onClick={handleFlag}
       disabled={flagged || loading}
-      className="text-stone-300 hover:text-red-400 text-sm disabled:cursor-default"
+      className="text-stone-300 hover:text-orange-500 text-sm disabled:cursor-default"
     >
       {flagged ? 'Flagged' : 'Flag'}
     </button>

@@ -92,7 +92,7 @@ export default async function BoardPage({ params }: PageProps) {
           
           {/* Business Header */}
           <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden mb-8">
-            <div className="px-8 py-8">
+            <div className="px-10 sm:px-12 py-10">
               <h1 className="text-3xl font-bold text-stone-900 mb-2">{location.name}</h1>
               {location.address && (
                 <p className="text-stone-500 text-base mb-6">
@@ -133,7 +133,7 @@ export default async function BoardPage({ params }: PageProps) {
               
               {/* How to Post Section */}
               <div className="mt-12 bg-white rounded-xl border border-stone-200 overflow-hidden">
-                <div className="px-8 py-8">
+                <div className="px-10 sm:px-12 py-10">
                   <h3 className="font-bold text-lg text-stone-900 mb-3">
                     Want to update this board?
                   </h3>
@@ -143,7 +143,7 @@ export default async function BoardPage({ params }: PageProps) {
                   </p>
                   <Link 
                     href="/how-to-post" 
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-stone-800 text-white rounded-lg hover:bg-stone-900 transition-colors font-medium"
+                    className="inline-flex items-center gap-2 px-8 py-4 bg-stone-800 text-white rounded-lg hover:bg-stone-900 transition-colors font-medium"
                   >
                     Learn How to Post
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,7 +169,7 @@ export default async function BoardPage({ params }: PageProps) {
                 </p>
                 <Link 
                   href="/how-to-post" 
-                  className="inline-flex items-center gap-2 bg-stone-800 text-white px-6 py-3 rounded-lg font-medium hover:bg-stone-900 transition-colors"
+                  className="inline-flex items-center gap-2 bg-stone-800 text-white px-8 py-4 rounded-lg font-medium hover:bg-stone-900 transition-colors"
                 >
                   <span>📸</span>
                   Learn How to Post
@@ -180,7 +180,7 @@ export default async function BoardPage({ params }: PageProps) {
           
           {/* Get Listed CTA */}
           <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 overflow-hidden">
-            <div className="px-8 py-8">
+            <div className="px-10 sm:px-12 py-10">
               <h3 className="font-bold text-lg text-blue-900 mb-3">
                 Own a business in {townName}?
               </h3>
@@ -190,13 +190,13 @@ export default async function BoardPage({ params }: PageProps) {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link 
                   href="/get-listed" 
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                 >
                   Get Your Business Listed
                 </Link>
                 <Link 
                   href="/start-town" 
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-600 border-2 border-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-blue-600 border-2 border-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
                 >
                   Start a New Town
                 </Link>

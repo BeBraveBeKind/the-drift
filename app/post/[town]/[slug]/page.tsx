@@ -116,7 +116,7 @@ export default function PostPage({ params }: PageProps) {
         </button>
         
         {error && (
-          <p className="mt-4 text-red-600 text-sm">{error}</p>
+          <p className="mt-4 text-orange-600 text-sm">{error}</p>
         )}
         
         <p className="mt-8 text-xs text-stone-400">

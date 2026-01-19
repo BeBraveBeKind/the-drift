@@ -18,24 +18,24 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
             <Link 
               href="/about" 
-              className="text-stone-600 hover:text-stone-900 transition-colors"
+              className="text-stone-700 hover:text-stone-900 transition-colors font-medium"
             >
               About
             </Link>
             <Link 
               href="/how-to-post" 
-              className="text-stone-600 hover:text-stone-900 transition-colors"
+              className="text-stone-700 hover:text-stone-900 transition-colors font-medium"
             >
               How to Post
             </Link>
             <Link 
               href="/get-listed" 
-              className="text-stone-600 hover:text-stone-900 transition-colors font-medium"
+              className="text-stone-700 hover:text-stone-900 transition-colors font-medium"
             >
-              Get Your Business Listed
+              Get Listed
             </Link>
             <Link 
               href="/start-town" 
@@ -67,21 +67,21 @@ export default function Navigation() {
             <div className="flex flex-col gap-4">
               <Link 
                 href="/about" 
-                className="text-stone-600 hover:text-stone-900 transition-colors"
+                className="text-stone-700 hover:text-stone-900 transition-colors font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 About
               </Link>
               <Link 
                 href="/how-to-post" 
-                className="text-stone-600 hover:text-stone-900 transition-colors"
+                className="text-stone-700 hover:text-stone-900 transition-colors font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 How to Post
               </Link>
               <Link 
                 href="/get-listed" 
-                className="text-stone-600 hover:text-stone-900 transition-colors font-medium"
+                className="text-stone-700 hover:text-stone-900 transition-colors font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Get Your Business Listed

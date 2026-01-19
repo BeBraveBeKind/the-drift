@@ -8,6 +8,7 @@ import { useParams, notFound } from 'next/navigation'
 import { useLocations } from '@/hooks/useLocations'
 import DiscoveryFilter from '@/components/DiscoveryFilter'
 import MapView from '@/components/MapView'
+import Navigation from '@/components/Navigation'
 import type { LocationWithPhoto } from '@/types'
 import type { DiscoveryCategory } from '@/lib/businessProfiles'
 
@@ -83,11 +84,18 @@ export default function TownHomePage() {
   }, [error])
   
   if (!mounted) {
-    return <div className="min-h-screen bg-[#C4A574]" />
+    return (
+      <>
+        <Navigation />
+        <div className="min-h-screen bg-[#C4A574]" />
+      </>
+    )
   }
 
   return (
-    <main className="min-h-screen bg-[#C4A574] relative">
+    <>
+      <Navigation />
+      <main className="min-h-screen bg-[#C4A574] relative">
       {/* Cork Board Texture Overlay */}
       <div 
         className="absolute inset-0 opacity-30"
@@ -96,68 +104,30 @@ export default function TownHomePage() {
         }}
       />
       
-      {/* Header - Pinned Note Style */}
-      <header className="relative z-10 text-center pt-8 pb-4">
-        <div className="max-w-md mx-auto">
-          {/* Main Title on Paper */}
+      {/* Header - Cork Board Frame Style */}
+      <header className="relative z-10 text-center pt-8 pb-6">
+        <div className="max-w-md mx-auto px-4">
+          {/* Cork Board Frame with Title */}
           <div className="relative inline-block">
-            <div 
-              className="bg-[#FFFEF9] p-6 shadow-lg border-[1px] border-[#E5E5E5] relative"
-              style={{ 
-                transform: `rotate(${getRandomRotation()}deg)`,
-                boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
-              }}
-            >
-              <h1 className="text-[32px] font-bold text-[#2C2C2C] leading-[1.2] mb-2">
-                Switchboard
-              </h1>
-              <p className="text-[16px] font-medium text-[#6B6B6B] leading-[1.4]">
-                What's posted in {townName}
-              </p>
-              
-              {/* Pushpin at top */}
+            <div className="bg-[#8B6930] p-3 rounded-lg shadow-xl">
               <div 
-                className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2"
-                style={{ backgroundColor: getRandomPushpinColor() }}
+                className="bg-[#FFFEF9] px-8 py-6 shadow-lg border-2 border-[#6B5A3C] relative"
+                style={{ 
+                  boxShadow: 'inset 0 0 8px rgba(0,0,0,0.1)'
+                }}
               >
-                <div 
-                  className="w-3 h-3 rounded-full absolute top-1 left-1"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
-                />
+                <h1 className="text-[36px] font-bold text-[#2C2C2C] leading-[1.2] mb-3">
+                  📌 Switchboard
+                </h1>
+                <p className="text-[18px] font-medium text-[#6B6B6B] leading-[1.4]">
+                  What's posted in {townName}
+                </p>
               </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* What Is This Callout */}
-      <div className="relative z-10 text-center mb-6">
-        <Link href="/about" className="inline-block group">
-          <div 
-            className="bg-[#F4D03F] p-3 px-6 shadow-lg border-[1px] border-[#E5E5E5] relative mx-auto"
-            style={{ 
-              transform: `rotate(${getRandomRotation()}deg)`,
-              boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
-              borderRadius: '2px'
-            }}
-          >
-            <div className="text-[14px] font-semibold text-[#2C2C2C] group-hover:text-[#1a1a1a] transition-colors">
-              👁️ WHAT IS THIS?
-            </div>
-            
-            {/* Pushpin */}
-            <div 
-              className="absolute -top-2 left-1/2 w-4 h-4 rounded-full shadow-sm transform -translate-x-1/2"
-              style={{ backgroundColor: '#D94F4F' }}
-            >
-              <div 
-                className="w-2.5 h-2.5 rounded-full absolute top-0.5 left-0.5"
-                style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
-              />
-            </div>
-          </div>
-        </Link>
-      </div>
 
       {/* Discovery Filter */}
       {allBoards.length > 0 && (
@@ -179,7 +149,7 @@ export default function TownHomePage() {
                   : 'text-[#6B6B6B] hover:text-[#2C2C2C]'
               }`}
             >
-              📌 Grid
+              <span className="mr-1">🗺️</span> Grid
             </button>
             <button
               onClick={() => setViewMode('map')}
@@ -398,10 +368,44 @@ export default function TownHomePage() {
         )}
       </section>
       
-      <footer className="mt-16 py-8 border-t border-stone-200 text-center text-sm text-stone-400">
-        <p>The local news nobody's covering.</p>
-        <p className="mt-1">Built by Rise Above Partners with support from Ofigona, LLC</p>
+      <footer className="relative z-10 mt-16 py-12 bg-stone-100 border-t border-stone-300">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-8">
+            <p className="text-lg font-medium text-stone-700 mb-2">The local news nobody's covering.</p>
+            <p className="text-sm text-stone-600">Built by Rise Above Partners with support from Ofigona, LLC</p>
+          </div>
+          
+          <div className="border-t border-stone-300 pt-8">
+            <div className="flex flex-wrap justify-center gap-6 text-sm">
+              <Link href="/about" className="text-stone-700 hover:text-stone-900 font-medium transition-colors">
+                About Switchboard
+              </Link>
+              <Link href="/how-to-post" className="text-stone-700 hover:text-stone-900 font-medium transition-colors">
+                How to Post
+              </Link>
+              <Link href="/get-listed" className="text-stone-700 hover:text-stone-900 font-medium transition-colors">
+                Get Your Business Listed
+              </Link>
+              <Link href="/start-town" className="text-stone-700 hover:text-stone-900 font-medium transition-colors">
+                Start a Town
+              </Link>
+            </div>
+            
+            <div className="mt-6 text-center">
+              <a 
+                href="mailto:hello@rise-above.net" 
+                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                hello@rise-above.net
+              </a>
+            </div>
+          </div>
+        </div>
       </footer>
-    </main>
+      </main>
+    </>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Navigation from '@/components/Navigation'
 
 // Random rotation for elements
 function getRandomRotation() {
@@ -28,11 +29,18 @@ export default function AboutPage() {
   }, [])
 
   if (!mounted) {
-    return <div className="min-h-screen bg-[#C4A574]" />
+    return (
+      <>
+        <Navigation />
+        <div className="min-h-screen bg-[#C4A574]" />
+      </>
+    )
   }
 
   return (
-    <main className="min-h-screen bg-[#C4A574] relative">
+    <>
+      <Navigation />
+      <main className="min-h-screen bg-[#C4A574] relative">
       {/* Cork Board Texture Overlay */}
       <div 
         className="absolute inset-0 opacity-30"
@@ -331,5 +339,6 @@ export default function AboutPage() {
         <p className="mt-1">Built by Rise Above Partners with support from Ofigona, LLC</p>
       </footer>
     </main>
+    </>
   )
 }
