@@ -55,7 +55,7 @@ function CardSkeleton() {
   )
 }
 
-export default function TownHomePage() {
+export default function TownHomePageImproved() {
   const params = useParams()
   const townSlug = params.town as string
   const [mounted, setMounted] = useState(false)
