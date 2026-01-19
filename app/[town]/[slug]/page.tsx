@@ -114,55 +114,41 @@ export default async function BoardPage({ params }: PageProps) {
               alt={`${location.name} bulletin board`}
             />
             
-            {/* Metadata Card - Separated from image */}
-            <div className="mt-6 bg-white rounded-lg border border-stone-200 p-4">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div className="flex items-center gap-4 text-sm">
-                  <span className="flex items-center gap-1.5 text-stone-600">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Updated {timeAgo(photo.created_at)}
-                  </span>
-                  <span className="text-stone-400">·</span>
-                  <span className="flex items-center gap-1.5 text-stone-600">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    {location.view_count} looks
-                  </span>
+            {/* Photo Metadata - Clean and Simple */}
+            <div className="mt-8 space-y-6">
+              {/* Stats Bar */}
+              <div className="flex items-center justify-between text-sm text-stone-600">
+                <div className="flex items-center gap-6">
+                  <span>Updated {timeAgo(photo.created_at)}</span>
+                  <span>{location.view_count.toLocaleString()} views</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <ShareButton town={town} slug={location.slug} name={location.name} />
                   <FlagButton photoId={photo.id} />
                 </div>
               </div>
+              
+              {/* Divider */}
+              <div className="border-t border-stone-200"></div>
             </div>
             
-            {/* How to Post Card - Enhanced */}
-            <div className="mt-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border-2 border-amber-200 overflow-hidden">
-              <div className="p-5">
-                <div className="flex items-start sm:items-center justify-between gap-4 flex-col sm:flex-row">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl mt-0.5">📸</span>
-                    <div>
-                      <p className="font-semibold text-amber-900">
-                        Want to update this board?
-                      </p>
-                      <p className="text-sm text-amber-700 mt-1">
-                        Use the QR code at this location to post a fresh photo
-                      </p>
-                    </div>
+            {/* How to Post - Streamlined */}
+            <div className="mt-8">
+              <div className="bg-stone-50 rounded-lg p-6 border border-stone-200">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <h3 className="font-semibold text-stone-900 mb-1">
+                      Want to update this board?
+                    </h3>
+                    <p className="text-sm text-stone-600">
+                      Visit this location and scan the QR code to post a fresh photo
+                    </p>
                   </div>
                   <Link 
                     href="/how-to-post" 
-                    className="inline-flex items-center gap-2 bg-amber-600 text-white px-4 py-2.5 rounded-lg font-medium text-sm hover:bg-amber-700 transition-colors shadow-sm whitespace-nowrap"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-stone-800 text-white rounded-lg hover:bg-stone-900 transition-colors text-sm font-medium whitespace-nowrap"
                   >
-                    Learn How
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    How it works
                   </Link>
                 </div>
               </div>

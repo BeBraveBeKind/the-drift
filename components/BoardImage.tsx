@@ -103,8 +103,8 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
           </div>
           
           {/* Photo caption area (like polaroid bottom) */}
-          <div className="pt-2.5 pb-1 text-center">
-            <p className="text-[11px] sm:text-xs text-gray-500 font-medium uppercase tracking-wide">Click to Examine</p>
+          <div className="pt-2 pb-0.5 text-center">
+            <p className="text-[10px] text-gray-400 uppercase tracking-wider opacity-70">Click to View</p>
           </div>
         </div>
         
