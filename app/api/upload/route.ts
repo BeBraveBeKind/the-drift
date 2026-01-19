@@ -83,6 +83,7 @@ export async function POST(request: NextRequest) {
       
       // Process with sharp for final optimization
       processedBuffer = await sharp(imageBuffer)
+        .rotate() // Auto-rotate based on EXIF orientation
         .jpeg({ 
           quality: 85, // Good quality with compression
           progressive: true // Better web loading
