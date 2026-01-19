@@ -38,6 +38,9 @@ export function useLocations(townSlug: string): UseLocationsResult {
           town_id,
           view_count,
           updated_at,
+          business_category,
+          business_tags,
+          profile_completed,
           photos!inner(
             id,
             storage_path,
@@ -57,7 +60,7 @@ export function useLocations(townSlug: string): UseLocationsResult {
       // Also get locations without photos
       const { data: locationsWithoutPhotos, error: noPhotosError } = await supabase
         .from('locations')
-        .select('id, name, slug, address, town, town_id, view_count, updated_at')
+        .select('id, name, slug, address, town, town_id, view_count, updated_at, business_category, business_tags, profile_completed')
         .eq('is_active', true)
         .eq('town_id', townData.id)
         .not('id', 'in', `(${(locationsData || []).map(l => l.id).join(',') || 'null'})`)

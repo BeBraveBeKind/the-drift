@@ -6,6 +6,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useParams, notFound } from 'next/navigation'
 import { useLocations } from '@/hooks/useLocations'
+import DiscoveryFilter from '@/components/DiscoveryFilter'
+import type { LocationWithPhoto } from '@/types'
+import type { DiscoveryCategory } from '@/lib/businessProfiles'
 
 // Random rotation for cards
 function getRandomRotation() {
@@ -34,11 +37,25 @@ export default function TownHomePage() {
   const townSlug = params.town as string
   const [mounted, setMounted] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid')
+  const [filteredBoards, setFilteredBoards] = useState<LocationWithPhoto[]>([])
+  const [activeCategory, setActiveCategory] = useState<DiscoveryCategory | 'all'>('all')
 
-  const { locations: boards, loading, error } = useLocations(townSlug)
+  const { locations: allBoards, loading, error } = useLocations(townSlug)
   
   // Use formatted town name from townSlug as fallback
   const townName = formatTownName(townSlug)
+
+  // Initialize filtered boards when data loads
+  useEffect(() => {
+    if (allBoards.length > 0) {
+      setFilteredBoards(allBoards)
+    }
+  }, [allBoards])
+
+  const handleFilterChange = (filtered: LocationWithPhoto[], category: DiscoveryCategory | 'all') => {
+    setFilteredBoards(filtered)
+    setActiveCategory(category)
+  }
 
   useEffect(() => {
     setMounted(true)
@@ -127,6 +144,14 @@ export default function TownHomePage() {
         </Link>
       </div>
 
+      {/* Discovery Filter */}
+      {allBoards.length > 0 && (
+        <DiscoveryFilter 
+          locations={allBoards} 
+          onFilterChange={handleFilterChange}
+        />
+      )}
+
       {/* View Mode Toggle */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 mb-6">
         <div className="flex justify-center">
@@ -162,10 +187,42 @@ export default function TownHomePage() {
             <div className="text-[#2C2C2C] font-medium">Loading boards...</div>
           </div>
         ) : viewMode === 'grid' ? (
+          filteredBoards.length === 0 && allBoards.length > 0 ? (
+            <div className="text-center py-20">
+              <div className="relative inline-block">
+                <div 
+                  className="bg-[#FFFEF9] p-8 shadow-lg border-[1px] border-[#E5E5E5] relative mx-auto"
+                  style={{ 
+                    transform: `rotate(${getRandomRotation()}deg)`,
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+                    borderRadius: '2px'
+                  }}
+                >
+                  <h3 className="text-[20px] font-bold text-[#2C2C2C] leading-[1.3] mb-3">
+                    🔍 No boards found
+                  </h3>
+                  <p className="text-[14px] text-[#2C2C2C] leading-[1.4] max-w-sm">
+                    No bulletin boards match this category in {townName}. Try selecting "All" to see all boards.
+                  </p>
+                  
+                  {/* Pushpin */}
+                  <div 
+                    className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2"
+                    style={{ backgroundColor: '#D94F4F' }}
+                  >
+                    <div 
+                      className="w-3 h-3 rounded-full absolute top-1 left-1"
+                      style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
           <div className="max-w-[1200px] mx-auto">
             {/* Mobile: Fixed 2-column grid with exact card widths */}
             <div className="md:hidden grid gap-4 justify-center" style={{ gridTemplateColumns: 'repeat(auto-fill, 160px)' }}>
-              {boards.map((board, index) => {
+              {filteredBoards.map((board, index) => {
                 const rotation = getRandomRotation()
                 const pushpinColor = getRandomPushpinColor()
                 
@@ -241,7 +298,7 @@ export default function TownHomePage() {
                 gridTemplateColumns: 'repeat(auto-fill, 200px)'
               }}
             >
-              {boards.map((board, index) => {
+              {filteredBoards.map((board, index) => {
                 const rotation = getRandomRotation()
                 const pushpinColor = getRandomPushpinColor()
                 
@@ -310,6 +367,7 @@ export default function TownHomePage() {
               })}
             </div>
           </div>
+          )
         ) : (
           <div className="text-center py-20">
             <div className="relative inline-block">

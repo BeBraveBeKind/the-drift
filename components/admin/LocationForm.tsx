@@ -1,6 +1,8 @@
 'use client'
 
-import type { LocationFormData, Town } from '@/types'
+import { useState } from 'react'
+import type { LocationFormData, Town, BusinessProfileFormData } from '@/types'
+import BusinessProfileForm from './BusinessProfileForm'
 
 interface LocationFormProps {
   form: LocationFormData
@@ -21,6 +23,7 @@ export default function LocationForm({
   onCancel,
   disabled = false
 }: LocationFormProps) {
+  const [showProfileForm, setShowProfileForm] = useState(false)
   const generateSlug = (name: string) => {
     return name
       .toLowerCase()
@@ -38,7 +41,17 @@ export default function LocationForm({
     })
   }
 
+  const handleProfileSubmit = (profileData: BusinessProfileFormData) => {
+    onFormChange({
+      ...form,
+      business_category: profileData.business_category,
+      business_tags: profileData.business_tags
+    })
+    setShowProfileForm(false)
+  }
+
   const isSubmitDisabled = !form.name.trim() || !form.slug.trim() || !form.town_id || disabled
+  const hasProfile = form.business_category && form.business_tags && form.business_tags.length > 0
 
   return (
     <div className="bg-[#FFFEF9] p-6 rounded-lg border border-[#E5E5E5] shadow-sm">
@@ -118,6 +131,71 @@ export default function LocationForm({
             disabled={disabled}
           />
         </div>
+      </div>
+
+      {/* Business Profile Section */}
+      <div className="mt-6 pt-6 border-t border-[#E5E5E5]">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="text-[16px] font-medium text-[#2C2C2C]">Business Profile</h3>
+            <p className="text-[12px] text-[#6B6B6B] mt-1">
+              Help visitors discover this location by category and content
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowProfileForm(!showProfileForm)}
+            className="bg-[#5B9BD5] text-white px-4 py-2 rounded-md text-[14px] hover:bg-[#4a8bc2] transition-colors"
+            disabled={disabled}
+          >
+            {hasProfile ? 'Edit Profile' : 'Setup Profile'}
+          </button>
+        </div>
+
+        {hasProfile && !showProfileForm && (
+          <div className="bg-[#F8F9FA] p-4 rounded-lg border border-[#E5E5E5]">
+            <div className="flex items-center gap-3">
+              <span className="bg-[#6BBF59] text-white px-2 py-1 rounded text-[12px] font-medium">
+                {form.business_category?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+              </span>
+              <div className="flex flex-wrap gap-1">
+                {form.business_tags?.slice(0, 5).map(tag => (
+                  <span key={tag} className="bg-[#E5E5E5] text-[#2C2C2C] px-2 py-1 rounded-full text-[11px]">
+                    {tag}
+                  </span>
+                ))}
+                {form.business_tags && form.business_tags.length > 5 && (
+                  <span className="text-[#6B6B6B] text-[11px]">
+                    +{form.business_tags.length - 5} more
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showProfileForm && (
+          <div className="mt-4">
+            <BusinessProfileForm
+              initialData={{
+                business_category: form.business_category,
+                business_tags: form.business_tags || []
+              }}
+              onSubmit={handleProfileSubmit}
+              onCancel={() => setShowProfileForm(false)}
+              isEditing={hasProfile}
+              disabled={disabled}
+            />
+          </div>
+        )}
+
+        {!hasProfile && !showProfileForm && (
+          <div className="bg-[#FFF3CD] border border-[#FFEAA7] rounded-lg p-3">
+            <p className="text-[#856404] text-[14px]">
+              ⚠️ Profile not completed. This location won't appear in category filters until the business profile is set up.
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="flex gap-3 mt-4">

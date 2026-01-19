@@ -21,6 +21,11 @@ export interface Location {
   is_active: boolean
   created_at: string
   updated_at: string
+  // Business profile fields
+  business_category?: string | null
+  business_tags: string[]
+  profile_completed: boolean
+  profile_completed_at?: string | null
 }
 
 export interface Photo {
@@ -42,6 +47,10 @@ export interface LocationWithPhoto {
   town_id: string
   view_count: number
   updated_at: string
+  // Business profile fields
+  business_category?: string | null
+  business_tags?: string[]
+  profile_completed?: boolean
   photo: {
     id: string
     storage_path: string
@@ -56,12 +65,20 @@ export interface LocationFormData {
   town_id: string
   address: string
   description: string
+  // Business profile fields
+  business_category?: string
+  business_tags: string[]
 }
 
 export interface TownFormData {
   name: string
   slug: string
   description: string
+}
+
+export interface BusinessProfileFormData {
+  business_category: string
+  business_tags: string[]
 }
 
 // Hook result types

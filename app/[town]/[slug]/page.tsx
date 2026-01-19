@@ -7,6 +7,7 @@ import ShareButton from '@/components/ShareButton'
 import FlagButton from '@/components/FlagButton'
 import ViewTracker from '@/components/ViewTracker'
 import BoardImage from '@/components/BoardImage'
+import BusinessProfileDisplay from '@/components/BusinessProfileDisplay'
 
 export const revalidate = 60
 
@@ -28,7 +29,7 @@ async function getBoard(townSlug: string, slug: string) {
   
   const { data: location } = await supabase
     .from('locations')
-    .select('*')
+    .select('*, business_category, business_tags, profile_completed')
     .eq('slug', slug)
     .eq('town_id', townData.id)
     .eq('is_active', true)
@@ -75,6 +76,13 @@ export default async function BoardPage({ params }: PageProps) {
         {location.address && (
           <p className="text-stone-500 text-sm mt-1">{location.address}</p>
         )}
+        
+        {/* Business Profile */}
+        <BusinessProfileDisplay 
+          businessCategory={location.business_category}
+          businessTags={location.business_tags}
+          className="mt-4"
+        />
       </header>
       
       {photo ? (

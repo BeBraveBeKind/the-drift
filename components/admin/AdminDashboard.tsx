@@ -39,7 +39,9 @@ export default function AdminDashboard() {
     slug: '',
     town_id: '',
     address: '',
-    description: ''
+    description: '',
+    business_category: '',
+    business_tags: []
   })
 
   useEffect(() => {
@@ -288,6 +290,14 @@ export default function AdminDashboard() {
           </div>
 
           <div className="flex gap-4">
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#5B9BD5] text-white px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#4a8bc2] transition-colors"
+            >
+              View Site ↗
+            </a>
             <button
               onClick={() => setShowTownsSection(!showTownsSection)}
               className="bg-[#F4D03F] text-[#2C2C2C] px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#e6c337] transition-colors"
