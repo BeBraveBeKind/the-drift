@@ -6,6 +6,7 @@ import Image from 'next/image'
 import ShareButton from '@/components/ShareButton'
 import FlagButton from '@/components/FlagButton'
 import ViewTracker from '@/components/ViewTracker'
+import BoardImage from '@/components/BoardImage'
 
 export const revalidate = 60
 
@@ -78,25 +79,10 @@ export default async function BoardPage({ params }: PageProps) {
       
       {photo ? (
         <div>
-          <div className="bg-white rounded-lg overflow-hidden shadow-sm">
-            <div className="relative group">
-              <Image 
-                src={getPhotoUrl(photo.storage_path)}
-                alt={`${location.name} bulletin board`}
-                width={1200}
-                height={900}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 80vw"
-                className="w-full h-auto cursor-zoom-in"
-                priority={true}
-                onClick={() => window.open(getPhotoUrl(photo.storage_path), '_blank')}
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all pointer-events-none flex items-center justify-center">
-                <div className="bg-white px-3 py-1 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-sm font-medium">Click to zoom</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <BoardImage
+            src={getPhotoUrl(photo.storage_path)}
+            alt={`${location.name} bulletin board`}
+          />
           <div className="mt-4 flex items-center justify-between text-sm">
             <span className="text-stone-400">
               Updated {timeAgo(photo.created_at)} · {location.view_count} looks
