@@ -62,11 +62,11 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
         >
           {/* Pushpin at top */}
           <div 
-            className="absolute -top-4 left-1/2 w-8 h-8 rounded-full shadow-lg transform -translate-x-1/2 z-20"
+            className="absolute -top-2.5 left-1/2 w-5 h-5 rounded-full shadow-md transform -translate-x-1/2 z-20"
             style={{ backgroundColor: stableValues.pushpinColor }}
           >
             <div 
-              className="w-5 h-5 rounded-full absolute top-1.5 left-1.5"
+              className="w-3 h-3 rounded-full absolute top-1 left-1"
               style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
             />
           </div>
