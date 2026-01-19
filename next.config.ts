@@ -15,7 +15,6 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60,
   },
   // Performance optimizations
-  swcMinify: true,
   compress: true,
   poweredByHeader: false,
   // Optimize production builds
