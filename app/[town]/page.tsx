@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { getPhotoUrl, timeAgo } from '@/lib/utils'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, notFound } from 'next/navigation'
 
 interface Board {
   id: string
@@ -12,6 +12,7 @@ interface Board {
   slug: string
   address: string
   town: string
+  town_id: string
   view_count: number
   updated_at: string
   photo: {
@@ -45,8 +46,8 @@ function formatTownName(town: string) {
 
 export default function TownHomePage() {
   const params = useParams()
-  const town = params.town as string
-  const townName = formatTownName(town)
+  const townSlug = params.town as string
+  const [townName, setTownName] = useState(formatTownName(townSlug))
   
   const [boards, setBoards] = useState<Board[]>([])
   const [loading, setLoading] = useState(true)
@@ -56,14 +57,30 @@ export default function TownHomePage() {
   useEffect(() => {
     setMounted(true)
     loadBoards()
-  }, [town])
+  }, [townSlug])
 
   async function loadBoards() {
+    // First get the town by slug to get its ID
+    const { data: townData } = await supabase
+      .from('towns')
+      .select('id, name, slug')
+      .eq('slug', townSlug)
+      .eq('is_active', true)
+      .single()
+    
+    if (!townData) {
+      setLoading(false)
+      notFound()
+      return
+    }
+    
+    setTownName(townData.name)
+    
     const { data: locations } = await supabase
       .from('locations')
-      .select('id, name, slug, address, town, view_count, updated_at')
+      .select('id, name, slug, address, town, town_id, view_count, updated_at')
       .eq('is_active', true)
-      .eq('town', town)
+      .eq('town_id', townData.id)
       .order('updated_at', { ascending: false })
     
     if (!locations) {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import sharp from 'sharp'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -18,12 +19,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing file, location, or town' }, { status: 400 })
     }
     
-    // Get location
+    // First get town to get its ID
+    const { data: townData } = await supabaseAdmin
+      .from('towns')
+      .select('id')
+      .eq('slug', town)
+      .eq('is_active', true)
+      .single()
+    
+    if (!townData) {
+      return NextResponse.json({ error: 'Town not found' }, { status: 404 })
+    }
+    
+    // Get location using town_id
     const { data: location } = await supabaseAdmin
       .from('locations')
       .select('id')
       .eq('slug', slug)
-      .eq('town', town)
+      .eq('town_id', townData.id)
       .eq('is_active', true)
       .single()
     
@@ -31,14 +44,40 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Location not found' }, { status: 404 })
     }
     
-    // Upload
+    // Process and convert image
     const timestamp = Date.now()
-    const ext = file.name.split('.').pop() || 'jpg'
-    const storagePath = `${location.id}/${timestamp}.${ext}`
+    
+    try {
+      const buffer = await file.arrayBuffer()
+      
+      // Convert to JPEG with compression (handles HEIC, PNG, etc.)
+      const convertedBuffer = await sharp(Buffer.from(buffer))
+        .jpeg({ 
+          quality: 85, // Good quality with compression
+          progressive: true // Better web loading
+        })
+        .resize(2048, 2048, { // Max 2048px on longest side
+          fit: 'inside',
+          withoutEnlargement: true
+        })
+        .toBuffer()
+      
+      console.log(`Image converted: ${file.name} (${file.type}) -> JPEG (${convertedBuffer.length} bytes)`)
+      
+      var processedBuffer = convertedBuffer
+    } catch (conversionError) {
+      console.error('Image conversion failed:', conversionError)
+      return NextResponse.json({ error: 'Image format not supported or corrupted' }, { status: 400 })
+    }
+    
+    const storagePath = `${location.id}/${timestamp}.jpg` // Always save as JPEG
     
     const { error: uploadError } = await supabaseAdmin.storage
       .from('board-photos')
-      .upload(storagePath, file, { contentType: file.type })
+      .upload(storagePath, processedBuffer, { 
+        contentType: 'image/jpeg',
+        cacheControl: '3600'
+      })
     
     if (uploadError) {
       console.error('Storage upload failed:', uploadError)

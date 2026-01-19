@@ -13,12 +13,22 @@ function formatTownName(town: string) {
   return town.charAt(0).toUpperCase() + town.slice(1)
 }
 
-async function getBoard(town: string, slug: string) {
+async function getBoard(townSlug: string, slug: string) {
+  // First get the town by slug to get its ID
+  const { data: townData } = await supabase
+    .from('towns')
+    .select('id, name')
+    .eq('slug', townSlug)
+    .eq('is_active', true)
+    .single()
+  
+  if (!townData) return null
+  
   const { data: location } = await supabase
     .from('locations')
     .select('*')
     .eq('slug', slug)
-    .eq('town', town)
+    .eq('town_id', townData.id)
     .eq('is_active', true)
     .single()
   

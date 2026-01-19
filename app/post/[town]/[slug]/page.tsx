@@ -87,7 +87,7 @@ export default function PostPage({ params }: PageProps) {
         <input
           ref={fileInputRef}
           type="file"
-          accept="image/*,.heic,.HEIC"
+          accept="image/*,.heic,.HEIC,.heif,.HEIF"
           capture="environment"
           onChange={handleFile}
           className="hidden"
