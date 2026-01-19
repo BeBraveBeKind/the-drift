@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import Map, { Marker, Popup, NavigationControl, GeolocateControl } from 'react-map-gl'
+import Map, { Marker, Popup, NavigationControl, GeolocateControl } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { LocationWithPhoto } from '@/types'
 import { getPhotoUrl } from '@/lib/utils'
@@ -172,7 +172,6 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
         ref={mapRef}
         {...viewState}
         onMove={evt => setViewState(evt.viewState)}
-        mapLib={import('maplibre-gl')}
         mapStyle="https://api.maptiler.com/maps/dataviz-light/style.json?key=QhsmmJRLuD5p4Hq5uHIS"
         style={{ width: '100%', height: '100%' }}
       >
