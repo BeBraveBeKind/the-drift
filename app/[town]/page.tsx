@@ -229,7 +229,7 @@ export default function TownHomePage() {
           <div className="max-w-[1200px] mx-auto">
             {/* Mobile: Fixed 2-column grid with exact card widths */}
             <div className="md:hidden grid gap-4 justify-center" style={{ gridTemplateColumns: 'repeat(auto-fill, 160px)' }}>
-              {boards.map((board) => {
+              {boards.map((board, index) => {
                 const rotation = getRandomRotation()
                 const pushpinColor = getRandomPushpinColor()
                 
@@ -269,6 +269,8 @@ export default function TownHomePage() {
                               height={144}
                               sizes="144px"
                               className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
+                              priority={index < 4}
+                              loading={index < 4 ? "eager" : "lazy"}
                             />
                           ) : (
                             <div className="w-full h-full bg-[#FDF6E3] flex items-center justify-center">
@@ -303,7 +305,7 @@ export default function TownHomePage() {
                 gridTemplateColumns: 'repeat(auto-fill, 200px)'
               }}
             >
-              {boards.map((board) => {
+              {boards.map((board, index) => {
                 const rotation = getRandomRotation()
                 const pushpinColor = getRandomPushpinColor()
                 
@@ -343,6 +345,8 @@ export default function TownHomePage() {
                               height={144}
                               sizes="144px"
                               className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
+                              priority={index < 4}
+                              loading={index < 4 ? "eager" : "lazy"}
                             />
                           ) : (
                             <div className="w-full h-full bg-[#FDF6E3] flex items-center justify-center">
