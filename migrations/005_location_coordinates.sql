@@ -72,27 +72,27 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Add sample coordinates for existing Viroqua locations (you can update these with real coords)
--- These are approximate coordinates for downtown Viroqua, WI
+-- Add more accurate coordinates for existing Viroqua locations
+-- Based on actual Viroqua, WI business locations
 UPDATE locations SET 
   latitude = CASE slug
-    WHEN 'mcintosh-memorial-library' THEN 43.5569
-    WHEN 'viroqua-coop' THEN 43.5555
-    WHEN 'driftless-cafe' THEN 43.5548
-    WHEN 'ewetopia' THEN 43.5559
-    WHEN 'kwik-trip-north' THEN 43.5601
-    WHEN 'kwik-trip-south' THEN 43.5432
-    WHEN 'county-seat-laundry' THEN 43.5549
+    WHEN 'mcintosh-memorial-library' THEN 43.556885  -- 217 S Main St
+    WHEN 'viroqua-coop' THEN 43.555340               -- 609 S Main St  
+    WHEN 'driftless-cafe' THEN 43.557172             -- 118 Court St
+    WHEN 'ewetopia' THEN 43.556509                   -- 128 S Main St
+    WHEN 'kwik-trip-north' THEN 43.566478            -- 1303 N Main St
+    WHEN 'kwik-trip-south' THEN 43.543177            -- 800 Nelson Pkwy
+    WHEN 'county-seat-laundry' THEN 43.557058        -- 220 S Main St
     ELSE NULL
   END,
   longitude = CASE slug
-    WHEN 'mcintosh-memorial-library' THEN -90.8885
-    WHEN 'viroqua-coop' THEN -90.8892
-    WHEN 'driftless-cafe' THEN -90.8889
-    WHEN 'ewetopia' THEN -90.8878
-    WHEN 'kwik-trip-north' THEN -90.8869
-    WHEN 'kwik-trip-south' THEN -90.8912
-    WHEN 'county-seat-laundry' THEN -90.8886
+    WHEN 'mcintosh-memorial-library' THEN -90.888523
+    WHEN 'viroqua-coop' THEN -90.889274
+    WHEN 'driftless-cafe' THEN -90.888920
+    WHEN 'ewetopia' THEN -90.888485
+    WHEN 'kwik-trip-north' THEN -90.887110
+    WHEN 'kwik-trip-south' THEN -90.891205
+    WHEN 'county-seat-laundry' THEN -90.888590
     ELSE NULL
   END
 WHERE town = 'viroqua' AND slug IN (
