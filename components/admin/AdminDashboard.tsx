@@ -171,7 +171,9 @@ export default function AdminDashboard() {
       slug: '',
       town_id: towns[0]?.id || '',
       address: '',
-      description: ''
+      description: '',
+      business_category: '',
+      business_tags: []
     })
   }
 
@@ -181,7 +183,9 @@ export default function AdminDashboard() {
       slug: location.slug,
       town_id: location.town_id,
       address: location.address || '',
-      description: location.description || ''
+      description: location.description || '',
+      business_category: location.business_category || '',
+      business_tags: location.business_tags || []
     })
     setEditingId(location.id)
   }
