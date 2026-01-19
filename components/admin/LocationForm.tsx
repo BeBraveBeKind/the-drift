@@ -51,7 +51,7 @@ export default function LocationForm({
   }
 
   const isSubmitDisabled = !form.name.trim() || !form.slug.trim() || !form.town_id || disabled
-  const hasProfile = form.business_category && form.business_tags && form.business_tags.length > 0
+  const hasProfile = !!(form.business_category && form.business_tags && form.business_tags.length > 0)
 
   return (
     <div className="bg-[#FFFEF9] p-6 rounded-lg border border-[#E5E5E5] shadow-sm">
