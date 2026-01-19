@@ -23,22 +23,17 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
   return (
     <>
       {/* Info card above the frame */}
-      <div className="mb-6 bg-amber-50 border-2 border-amber-200 rounded-lg p-4">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">💡</span>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-amber-900 mb-1">
-              Pro Tip: Click the photo to zoom in!
-            </p>
-            <p className="text-xs text-amber-700">
-              You can pan around when zoomed, and click multiple times for different zoom levels.
-            </p>
-          </div>
+      <div className="mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3.5">
+        <div className="flex items-center gap-2">
+          <span className="text-lg">🔍</span>
+          <p className="text-sm text-blue-900">
+            <span className="font-semibold">Click the photo</span> to zoom in and explore details
+          </p>
         </div>
       </div>
       
       {/* Cork Board Style Frame */}
-      <div className="relative bg-[#C4A574] p-8 rounded-lg shadow-2xl">
+      <div className="relative bg-[#C4A574] p-6 sm:p-8 rounded-xl shadow-xl">
         {/* Cork texture overlay */}
         <div 
           className="absolute inset-0 opacity-30 rounded-lg"
@@ -49,7 +44,7 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
         
         {/* Polaroid-style photo container */}
         <div 
-          className="relative bg-[#FFFEF9] p-3 shadow-xl border border-[#E5E5E5] group cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+          className="relative bg-[#FFFEF9] p-2.5 sm:p-3 shadow-xl border border-[#E5E5E5] group cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-0.5"
           style={{ 
             transform: `rotate(${rotation}deg)`,
           }}
@@ -98,28 +93,28 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
           </div>
           
           {/* Photo caption area (like polaroid bottom) */}
-          <div className="pt-3 pb-1 text-center">
-            <p className="text-xs text-gray-500 font-medium">📸 Tap to zoom & explore</p>
+          <div className="pt-2.5 pb-1 text-center">
+            <p className="text-[11px] sm:text-xs text-gray-500 font-medium uppercase tracking-wide">Click to Examine</p>
           </div>
         </div>
         
-        {/* Additional decorative pushpins */}
+        {/* Additional decorative pushpins - smaller on mobile */}
         <div 
-          className="absolute top-6 right-8 w-5 h-5 rounded-full shadow-md"
+          className="absolute top-4 sm:top-6 right-6 sm:right-8 w-4 h-4 sm:w-5 sm:h-5 rounded-full shadow-md"
           style={{ backgroundColor: '#D94F4F' }}
         >
           <div 
-            className="w-3 h-3 rounded-full absolute top-1 left-1"
+            className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full absolute top-0.5 sm:top-1 left-0.5 sm:left-1"
             style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
           />
         </div>
         
         <div 
-          className="absolute bottom-8 left-6 w-5 h-5 rounded-full shadow-md"
+          className="absolute bottom-6 sm:bottom-8 left-4 sm:left-6 w-4 h-4 sm:w-5 sm:h-5 rounded-full shadow-md"
           style={{ backgroundColor: '#F4D03F' }}
         >
           <div 
-            className="w-3 h-3 rounded-full absolute top-1 left-1"
+            className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full absolute top-0.5 sm:top-1 left-0.5 sm:left-1"
             style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
           />
         </div>
