@@ -149,23 +149,23 @@ export default function TownHomePage() {
           
           {/* View Mode Toggle */}
           <div className="flex justify-center mt-4">
-            <div className="bg-[#FFFEF9] border-[1px] border-[#2C2C2C] rounded-lg p-1 shadow-sm">
+            <div className="bg-[#FFFEF9] border-2 border-[#2C2C2C] rounded-lg p-1 shadow-md">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${
                   viewMode === 'grid'
                     ? 'bg-[#2C2C2C] text-white'
-                    : 'text-[#2C2C2C] hover:bg-[#F5F5F0]'
+                    : 'text-[#2C2C2C] bg-white hover:bg-[#F5F5F0]'
                 }`}
               >
                 Grid View
               </button>
               <button
                 onClick={() => setViewMode('map')}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${
                   viewMode === 'map'
                     ? 'bg-[#2C2C2C] text-white'
-                    : 'text-[#2C2C2C] hover:bg-[#F5F5F0]'
+                    : 'text-[#2C2C2C] bg-white hover:bg-[#F5F5F0]'
                 }`}
               >
                 Map View
@@ -209,7 +209,7 @@ export default function TownHomePage() {
             </div>
           ) : (
             // Grid View - Polaroid Cards
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 max-w-7xl mx-auto">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 max-w-7xl mx-auto">
               {filteredBoards.map((board) => {
                 const rotation = getRandomRotation(board.id)
                 const hasImageError = imageLoadErrors.has(board.id)
@@ -221,7 +221,7 @@ export default function TownHomePage() {
                     className="group block"
                   >
                     <div 
-                      className="relative bg-[#FFFEF9] p-2 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
+                      className="relative bg-[#FFFEF9] p-2 border-[1px] border-[#E5E5E5] hover:shadow-xl transition-all duration-200 hover:-translate-y-1 w-full max-w-[160px] mx-auto"
                       style={{ 
                         transform: `rotate(${rotation}deg)`,
                         boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
@@ -257,12 +257,12 @@ export default function TownHomePage() {
                       </div>
                       
                       {/* Location Label */}
-                      <div className="text-center px-1">
-                        <h3 className="text-[11px] font-semibold text-[#2C2C2C] leading-tight line-clamp-2">
+                      <div className="text-center">
+                        <h3 className="text-[12px] font-semibold text-[#2C2C2C] leading-tight line-clamp-1">
                           {board.name}
                         </h3>
                         {board.photo && (
-                          <p className="text-[9px] text-[#6B6B6B] mt-0.5">
+                          <p className="text-[10px] text-[#6B6B6B] mt-0.5">
                             {new Date(board.photo.created_at).toLocaleDateString()}
                           </p>
                         )}
