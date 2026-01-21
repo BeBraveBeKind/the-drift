@@ -3,17 +3,36 @@ import { createClient } from '@supabase/supabase-js'
 import sharp from 'sharp'
 import convert from 'heic-convert'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+// Add CORS headers to response
+function corsResponse(response: NextResponse) {
+  response.headers.set('Access-Control-Allow-Origin', '*')
+  response.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS')
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type')
+  return response
+}
+
+export async function OPTIONS() {
+  return corsResponse(new NextResponse(null, { status: 200 }))
+}
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Upload API called')
+    console.log('Upload API called at:', new Date().toISOString())
     
-    // Verify service role key exists
-    if (!supabaseServiceKey) {
-      console.error('SUPABASE_SERVICE_ROLE_KEY is not configured')
-      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
+    // Verify environment variables
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error('Missing environment variables:', {
+        hasUrl: !!supabaseUrl,
+        hasServiceKey: !!supabaseServiceKey
+      })
+      return corsResponse(
+        NextResponse.json({ 
+          error: 'Server configuration error - missing environment variables' 
+        }, { status: 500 })
+      )
     }
     
     // Create admin client for this request
@@ -26,7 +45,9 @@ export async function POST(request: NextRequest) {
     
     if (!file || !slug || !town) {
       console.error('Missing required fields:', { hasFile: !!file, slug, town })
-      return NextResponse.json({ error: 'Missing file, location, or town' }, { status: 400 })
+      return corsResponse(
+        NextResponse.json({ error: 'Missing file, location, or town' }, { status: 400 })
+      )
     }
     
     console.log('Processing upload:', { 
@@ -60,7 +81,9 @@ export async function POST(request: NextRequest) {
       
       if (createError) {
         console.error('Failed to create town:', createError)
-        return NextResponse.json({ error: `Town '${town}' not found and could not be created` }, { status: 404 })
+        return corsResponse(
+          NextResponse.json({ error: `Town '${town}' not found and could not be created` }, { status: 404 })
+        )
       }
       
       townData = newTown
@@ -79,7 +102,9 @@ export async function POST(request: NextRequest) {
     
     if (!location) {
       console.error('Location not found:', { slug, townId: townData.id })
-      return NextResponse.json({ error: `Location '${slug}' not found in town '${town}' or is inactive` }, { status: 404 })
+      return corsResponse(
+        NextResponse.json({ error: `Location '${slug}' not found in town '${town}' or is inactive` }, { status: 404 })
+      )
     }
     
     console.log('Found location:', { slug, locationId: location.id })
@@ -195,10 +220,16 @@ export async function POST(request: NextRequest) {
       .eq('id', location.id)
     
     console.log('Upload completed successfully for location:', location.id)
-    return NextResponse.json({ success: true, locationId: location.id })
+    return corsResponse(
+      NextResponse.json({ success: true, locationId: location.id })
+    )
     
   } catch (error) {
     console.error('Upload error:', error)
-    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+    return corsResponse(
+      NextResponse.json({ 
+        error: error instanceof Error ? error.message : 'Internal error' 
+      }, { status: 500 })
+    )
   }
 }
