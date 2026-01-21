@@ -94,13 +94,26 @@ export default function AdminDashboard() {
 
 
   const toggleActive = async (id: string, currentStatus: boolean) => {
-    const { error } = await supabase.rpc('admin_toggle_location_active', {
-      p_id: id,
-      p_is_active: !currentStatus
-    })
-    
-    if (!error) {
-      loadLocations()
+    try {
+      console.log('Toggling active status:', { id, currentStatus, newStatus: !currentStatus })
+      
+      const { data, error } = await supabase.rpc('admin_toggle_location_active', {
+        p_id: id,
+        p_is_active: !currentStatus
+      })
+      
+      console.log('Toggle response:', { data, error })
+      
+      if (error) {
+        console.error('Toggle error:', error)
+        alert(`Failed to toggle status: ${error.message}`)
+        return
+      }
+      
+      await loadLocations()
+    } catch (err) {
+      console.error('Unexpected error toggling status:', err)
+      alert(`Unexpected error: ${err instanceof Error ? err.message : 'Unknown error'}`)
     }
   }
 
@@ -109,15 +122,26 @@ export default function AdminDashboard() {
       return
     }
 
-    const { error } = await supabase.rpc('admin_remove_location', {
-      p_id: id
-    })
-    
-    if (!error) {
-      loadLocations()
+    try {
+      console.log('Attempting to remove location:', { id, name })
+      
+      const { data, error } = await supabase.rpc('admin_remove_location', {
+        p_id: id
+      })
+      
+      console.log('Remove location response:', { data, error })
+      
+      if (error) {
+        console.error('Remove location error:', error)
+        alert(`Failed to remove location: ${error.message}\n\nDetails: ${JSON.stringify(error, null, 2)}`)
+        return
+      }
+      
+      await loadLocations()
       alert(`Location "${name}" has been removed successfully.`)
-    } else {
-      alert(`Failed to remove location: ${error.message || 'Unknown error'}`)
+    } catch (err) {
+      console.error('Unexpected error removing location:', err)
+      alert(`Unexpected error: ${err instanceof Error ? err.message : 'Unknown error'}`)
     }
   }
 
@@ -249,6 +273,15 @@ export default function AdminDashboard() {
       setUploadingPhoto(location.slug)
       
       try {
+        console.log('Uploading photo for location:', {
+          name: location.name,
+          slug: location.slug,
+          town: location.town,
+          fileName: file.name,
+          fileSize: file.size,
+          fileType: file.type
+        })
+        
         const formData = new FormData()
         formData.append('file', file)
         formData.append('slug', location.slug)
@@ -259,15 +292,25 @@ export default function AdminDashboard() {
           body: formData
         })
         
+        const responseText = await response.text()
+        console.log('Upload response:', { status: response.status, text: responseText })
+        
         if (response.ok) {
           alert('Photo uploaded successfully!')
-          loadLocations()
+          await loadLocations()
         } else {
-          const error = await response.text()
-          alert(`Upload failed: ${error}`)
+          let errorMessage = responseText
+          try {
+            const errorJson = JSON.parse(responseText)
+            errorMessage = errorJson.error || responseText
+          } catch {}
+          
+          console.error('Upload failed:', errorMessage)
+          alert(`Upload failed: ${errorMessage}`)
         }
       } catch (error) {
-        alert('Upload failed: Network error')
+        console.error('Upload error:', error)
+        alert(`Upload failed: ${error instanceof Error ? error.message : 'Network error'}`)
       } finally {
         setUploadingPhoto(null)
       }
