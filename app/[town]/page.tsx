@@ -1,18 +1,20 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense, lazy } from 'react'
 import { getPhotoUrl } from '@/lib/utils'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useParams, notFound } from 'next/navigation'
 import { useLocations } from '@/hooks/useLocations'
-import DiscoveryFilter from '@/components/DiscoveryFilter'
-import MapView from '@/components/MapView'
 import Navigation from '@/components/Navigation'
-import Footer from '@/components/Footer'
 import BoardCard from '@/components/BoardCard'
 import type { LocationWithPhoto } from '@/types'
 import type { DiscoveryCategory } from '@/lib/businessProfiles'
+
+// Lazy load heavy components
+const DiscoveryFilter = lazy(() => import('@/components/DiscoveryFilter'))
+const MapView = lazy(() => import('@/components/MapView'))
+const Footer = lazy(() => import('@/components/Footer'))
 
 // Clean, simple design - no unnecessary decorations
 // Removed: cardRotations, cardPushpinColors, getRandomRotation, getRandomPushpinColor
@@ -61,7 +63,20 @@ export default function TownHomePage() {
     return (
       <>
         <Navigation />
-        <div className="min-h-screen bg-[#C4A574]" />
+        <div className="min-h-screen bg-[#C4A574]">
+          {/* Loading skeleton to prevent CLS */}
+          <div className="text-center pt-6 pb-4">
+            <div className="max-w-md mx-auto px-4">
+              <div className="h-12 bg-gray-300 rounded animate-pulse mb-2" />
+              <div className="h-6 bg-gray-300 rounded animate-pulse w-3/4 mx-auto" />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+            {[1,2,3,4,5,6].map(i => (
+              <div key={i} className="h-64 bg-gray-300 rounded animate-pulse" />
+            ))}
+          </div>
+        </div>
       </>
     )
   }
@@ -152,16 +167,20 @@ export default function TownHomePage() {
           )
         ) : (
           <div className="max-w-6xl mx-auto">
-            <MapView 
-              locations={filteredBoards}
-              townSlug={townSlug}
-              activeFilter={activeCategory}
-            />
+            <Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse rounded" />}>
+              <MapView 
+                locations={filteredBoards}
+                townSlug={townSlug}
+                activeFilter={activeCategory}
+              />
+            </Suspense>
           </div>
         )}
       </section>
       
-      <Footer />
+      <Suspense fallback={<div className="h-64 bg-gray-100" />}>
+        <Footer />
+      </Suspense>
       </main>
     </>
   )

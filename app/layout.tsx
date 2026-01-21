@@ -101,21 +101,34 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
         
-        {/* Preconnect to external domains for faster resource loading */}
+        {/* Critical preconnects with dns-prefetch fallback */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
         {process.env.NEXT_PUBLIC_SUPABASE_URL && (
-          <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+          <>
+            <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+            <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+          </>
         )}
         
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         
-        {/* Load fonts with optimized display */}
+        {/* Preload critical font weights to prevent CLS */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap"
+          rel="preload"
+          href="https://fonts.gstatic.com/s/quicksand/v31/6xKtdSZaM9iE8KbpRA_hK1QNYuDyPw.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        
+        {/* Load fonts with optional display to reduce blocking */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=optional"
           rel="stylesheet"
         />
       </head>
