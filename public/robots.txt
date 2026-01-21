@@ -1,0 +1,13 @@
+# Robots.txt for Switchboard
+# Allow all crawlers
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Sitemap location
+Sitemap: https://switchboard.community/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
