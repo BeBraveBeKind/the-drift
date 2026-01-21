@@ -46,7 +46,7 @@ export default function BoardCard({ board, townSlug, index }: BoardCardProps) {
             {board.name}
           </h3>
           {/* Business category and tags */}
-          {(board.business_category || board.business_tags?.length > 0) && (
+          {(board.business_category || (board.business_tags && board.business_tags.length > 0)) && (
             <p className="board-card-polaroid__category">
               {[board.business_category, ...(board.business_tags || [])]
                 .filter(Boolean)
