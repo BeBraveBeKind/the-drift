@@ -1,4 +1,5 @@
 import Navigation from '@/components/Navigation'
+import Footer from '@/components/Footer'
 import Link from 'next/link'
 
 export default function PrivacyPage() {
@@ -130,6 +131,7 @@ export default function PrivacyPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   )
 }

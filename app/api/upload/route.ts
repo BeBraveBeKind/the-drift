@@ -8,6 +8,14 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('Upload API called')
+    
+    // Verify service role key exists
+    if (!supabaseServiceKey) {
+      console.error('SUPABASE_SERVICE_ROLE_KEY is not configured')
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
+    }
+    
     // Create admin client for this request
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
     
@@ -17,8 +25,17 @@ export async function POST(request: NextRequest) {
     const town = formData.get('town') as string
     
     if (!file || !slug || !town) {
+      console.error('Missing required fields:', { hasFile: !!file, slug, town })
       return NextResponse.json({ error: 'Missing file, location, or town' }, { status: 400 })
     }
+    
+    console.log('Processing upload:', { 
+      fileName: file.name, 
+      fileSize: file.size, 
+      fileType: file.type,
+      slug,
+      town 
+    })
     
     // First get town to get its ID
     const { data: townData } = await supabaseAdmin
@@ -29,8 +46,11 @@ export async function POST(request: NextRequest) {
       .single()
     
     if (!townData) {
-      return NextResponse.json({ error: 'Town not found' }, { status: 404 })
+      console.error('Town not found:', town)
+      return NextResponse.json({ error: `Town '${town}' not found or inactive` }, { status: 404 })
     }
+    
+    console.log('Found town:', { town, townId: townData.id })
     
     // Get location using town_id
     const { data: location } = await supabaseAdmin
@@ -42,8 +62,11 @@ export async function POST(request: NextRequest) {
       .single()
     
     if (!location) {
-      return NextResponse.json({ error: 'Location not found' }, { status: 404 })
+      console.error('Location not found:', { slug, townId: townData.id })
+      return NextResponse.json({ error: `Location '${slug}' not found in town '${town}' or is inactive` }, { status: 404 })
     }
+    
+    console.log('Found location:', { slug, locationId: location.id })
     
     // Process and convert image
     const timestamp = Date.now()
@@ -112,8 +135,12 @@ export async function POST(request: NextRequest) {
     
     if (uploadError) {
       console.error('Storage upload failed:', uploadError)
-      return NextResponse.json({ error: 'Upload failed' }, { status: 500 })
+      return NextResponse.json({ 
+        error: `Storage upload failed: ${uploadError.message || 'Unknown error'}` 
+      }, { status: 500 })
     }
+    
+    console.log('File uploaded to storage:', storagePath)
     
     // Mark existing photos as not current
     await supabaseAdmin
@@ -132,8 +159,18 @@ export async function POST(request: NextRequest) {
     
     if (photoError) {
       console.error('Photo record creation failed:', photoError)
-      return NextResponse.json({ error: 'Photo record creation failed' }, { status: 500 })
+      
+      // Try to clean up the uploaded file
+      await supabaseAdmin.storage
+        .from('board-photos')
+        .remove([storagePath])
+      
+      return NextResponse.json({ 
+        error: `Database error: ${photoError.message || 'Failed to save photo record'}` 
+      }, { status: 500 })
     }
+    
+    console.log('Photo record created successfully')
     
     // Update location timestamp
     await supabaseAdmin
@@ -141,7 +178,8 @@ export async function POST(request: NextRequest) {
       .update({ updated_at: new Date().toISOString() })
       .eq('id', location.id)
     
-    return NextResponse.json({ success: true })
+    console.log('Upload completed successfully for location:', location.id)
+    return NextResponse.json({ success: true, locationId: location.id })
     
   } catch (error) {
     console.error('Upload error:', error)
