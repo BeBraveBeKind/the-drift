@@ -9,6 +9,7 @@ import ViewTracker from '@/components/ViewTracker'
 import BoardImage from '@/components/BoardImage'
 import BusinessProfileDisplay from '@/components/BusinessProfileDisplay'
 import Navigation from '@/components/Navigation'
+import Footer from '@/components/Footer'
 
 export const revalidate = 60
 
@@ -204,16 +205,7 @@ export default async function BoardPage({ params }: PageProps) {
             </div>
           </div>
           
-          {/* Footer */}
-          <footer className="mt-16 pt-8 border-t border-stone-200 text-center text-sm text-stone-500">
-            <p className="mb-4">The local news nobody's covering.</p>
-            <div className="flex items-center justify-center gap-6 flex-wrap">
-              <Link href="/about" className="hover:text-stone-700 transition-colors">About</Link>
-              <Link href="/how-to-post" className="hover:text-stone-700 transition-colors">How to Post</Link>
-              <Link href="/get-listed" className="hover:text-stone-700 transition-colors">Get Listed</Link>
-              <Link href="/start-town" className="hover:text-stone-700 transition-colors">Start a Town</Link>
-            </div>
-          </footer>
+          <Footer />
         </div>
       </main>
     </>

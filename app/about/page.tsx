@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Navigation from '@/components/Navigation'
+import Footer from '@/components/Footer'
 
 // Random rotation for elements
 function getRandomRotation() {
@@ -312,10 +313,10 @@ export default function AboutPage() {
                 Want your community board featured on Switchboard?
               </p>
               <a 
-                href="mailto:michael@rise-above.net?subject=Community Board Request"
+                href="mailto:Hello@rise-above.net?subject=Community Board Request"
                 className="inline-block bg-[#D94F4F] text-white px-4 py-2 rounded-md text-[14px] font-semibold hover:bg-[#c44343] transition-colors"
               >
-                Email michael@rise-above.net
+                Email Hello@rise-above.net
               </a>
               
               {/* Pushpin */}
@@ -334,10 +335,7 @@ export default function AboutPage() {
 
       </div>
       
-      <footer className="mt-16 py-8 border-t border-stone-200 text-center text-sm text-stone-400">
-        <p>The local news nobody's covering.</p>
-        <p className="mt-1">Built by Rise Above Partners with support from Ofigona, LLC</p>
-      </footer>
+      <Footer />
     </main>
     </>
   )

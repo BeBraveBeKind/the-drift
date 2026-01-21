@@ -57,9 +57,9 @@ interface PointFeature {
 
 export default function MapView({ locations, townSlug, activeFilter = 'all' }: MapViewProps) {
   const [viewState, setViewState] = useState({
-    latitude: 43.5548,  // Default to Viroqua center
+    latitude: 43.5548,  // Downtown Viroqua
     longitude: -90.8886,
-    zoom: 14
+    zoom: 15.5  // Closer zoom to see downtown detail
   })
   const [selectedLocation, setSelectedLocation] = useState<LocationWithPhoto | null>(null)
   const [clusters, setClusters] = useState<any[]>([])
@@ -104,9 +104,9 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
   // Initialize supercluster
   useEffect(() => {
     superclusterRef.current = new Supercluster({
-      radius: 40,
-      maxZoom: 16,
-      minPoints: 2
+      radius: 60,  // Increased for better clustering at street level
+      maxZoom: 18,
+      minPoints: 3  // Require more pins before clustering
     })
     superclusterRef.current.load(points)
   }, [points])
@@ -123,33 +123,38 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
     setClusters(newClusters)
   }, [viewState, points])
 
-  // Center map on all locations initially
+  // Initial load - set clusters after map is ready
   useEffect(() => {
-    if (filteredLocations.length === 0) return
-
-    const bounds = filteredLocations.reduce((acc, loc) => {
-      return {
-        minLat: Math.min(acc.minLat, loc.latitude!),
-        maxLat: Math.max(acc.maxLat, loc.latitude!),
-        minLng: Math.min(acc.minLng, loc.longitude!),
-        maxLng: Math.max(acc.maxLng, loc.longitude!)
+    if (!superclusterRef.current || points.length === 0) return
+    
+    // Use a timeout to ensure map is fully initialized
+    const timeout = setTimeout(() => {
+      // Get initial clusters for Viroqua area
+      const initialBounds: [number, number, number, number] = [
+        -90.95, // west
+        43.50,  // south  
+        -90.82, // east
+        43.60   // north
+      ]
+      const initialClusters = superclusterRef.current!.getClusters(initialBounds, 15)
+      if (initialClusters.length > 0) {
+        setClusters(initialClusters)
       }
-    }, {
-      minLat: filteredLocations[0].latitude!,
-      maxLat: filteredLocations[0].latitude!,
-      minLng: filteredLocations[0].longitude!,
-      maxLng: filteredLocations[0].longitude!
-    })
+    }, 100)
 
-    const centerLat = (bounds.minLat + bounds.maxLat) / 2
-    const centerLng = (bounds.minLng + bounds.maxLng) / 2
+    return () => clearTimeout(timeout)
+  }, [points])
 
+  // Keep map centered on downtown Viroqua
+  // Don't auto-adjust based on locations
+  useEffect(() => {
+    // Always start with downtown view
     setViewState({
-      latitude: centerLat,
-      longitude: centerLng,
-      zoom: 14
+      latitude: 43.5548,  // Downtown Viroqua
+      longitude: -90.8886,
+      zoom: 15.5
     })
-  }, [filteredLocations])
+  }, [townSlug])  // Only reset when changing towns
 
   const handleClusterClick = (cluster: PointFeature) => {
     if (!superclusterRef.current || !mapRef.current) return
@@ -172,6 +177,16 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
         ref={mapRef}
         {...viewState}
         onMove={evt => setViewState(evt.viewState)}
+        onLoad={() => {
+          // Force cluster update when map loads
+          if (superclusterRef.current && mapRef.current) {
+            const map = mapRef.current.getMap()
+            const bounds = map.getBounds().toArray().flat() as [number, number, number, number]
+            const zoom = Math.floor(map.getZoom())
+            const initialClusters = superclusterRef.current.getClusters(bounds, zoom)
+            setClusters(initialClusters)
+          }
+        }}
         mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
         style={{ width: '100%', height: '100%' }}
       >
