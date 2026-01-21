@@ -290,12 +290,17 @@ export default function AdminDashboard() {
         formData.append('slug', location.slug)
         formData.append('town', townSlug)
         
+        // Create timeout (AbortSignal.timeout not supported in all browsers)
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 30000)
+        
         const response = await fetch('/api/upload', {
           method: 'POST',
           body: formData,
-          // Add timeout to prevent hanging requests
-          signal: AbortSignal.timeout(30000)
+          signal: controller.signal
         })
+        
+        clearTimeout(timeoutId)
         
         const responseText = await response.text()
         console.log('Upload response:', { status: response.status, text: responseText })
