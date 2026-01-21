@@ -137,12 +137,14 @@ export default function AdminDashboard() {
         p_description: form.description || null
       })
       
-      // Also update coordinates separately since RPC might not handle them
+      // Also update coordinates and business profile fields separately since RPC might not handle them
       const { error: coordError } = await supabase
         .from('locations')
         .update({
           latitude: form.latitude,
-          longitude: form.longitude
+          longitude: form.longitude,
+          business_category: form.business_category || null,
+          business_tags: form.business_tags || []
         })
         .eq('id', editingId)
       
@@ -163,6 +165,8 @@ export default function AdminDashboard() {
           town_id: form.town_id,
           address: form.address || null,
           description: form.description || null,
+          business_category: form.business_category || null,
+          business_tags: form.business_tags || [],
           latitude: form.latitude,
           longitude: form.longitude,
           is_active: true
