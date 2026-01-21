@@ -70,7 +70,7 @@ export default function AdminDashboard() {
     
     const transformedData = data?.map(loc => ({
       ...loc,
-      town: loc.towns?.slug || 'viroqua',
+      town: loc.town || loc.towns?.slug || 'viroqua',
       town_id: loc.town_id || loc.towns?.id
     })) || []
     
@@ -273,10 +273,13 @@ export default function AdminDashboard() {
       setUploadingPhoto(location.slug)
       
       try {
+        // Ensure we have a valid town value
+        const townSlug = location.town || 'viroqua'
+        
         console.log('Uploading photo for location:', {
           name: location.name,
           slug: location.slug,
-          town: location.town,
+          town: townSlug,
           fileName: file.name,
           fileSize: file.size,
           fileType: file.type
@@ -285,11 +288,13 @@ export default function AdminDashboard() {
         const formData = new FormData()
         formData.append('file', file)
         formData.append('slug', location.slug)
-        formData.append('town', location.town)
+        formData.append('town', townSlug)
         
         const response = await fetch('/api/upload', {
           method: 'POST',
-          body: formData
+          body: formData,
+          // Add timeout to prevent hanging requests
+          signal: AbortSignal.timeout(30000)
         })
         
         const responseText = await response.text()
@@ -310,7 +315,19 @@ export default function AdminDashboard() {
         }
       } catch (error) {
         console.error('Upload error:', error)
-        alert(`Upload failed: ${error instanceof Error ? error.message : 'Network error'}`)
+        let errorMessage = 'Network error'
+        
+        if (error instanceof Error) {
+          if (error.name === 'AbortError') {
+            errorMessage = 'Upload timed out - please check your connection and try again'
+          } else if (error.message.includes('fetch')) {
+            errorMessage = 'Network error - please check your internet connection'
+          } else {
+            errorMessage = error.message
+          }
+        }
+        
+        alert(`Upload failed: ${errorMessage}\n\nPlease try:\n1. Check your internet connection\n2. Ensure the file is an image\n3. Try a smaller image file\n4. Refresh the page and try again`)
       } finally {
         setUploadingPhoto(null)
       }

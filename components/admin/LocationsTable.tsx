@@ -69,10 +69,13 @@ export default function LocationsTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {locations.map((location) => {
+            {locations.map((location, index) => {
               const town = towns.find(t => t.id === location.town_id)
               return (
-                <tr key={location.id} className="hover:bg-gray-50">
+                <tr 
+                  key={location.id} 
+                  className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'} hover:bg-blue-50 transition-colors`}
+                >
                   <td className="px-4 py-3 text-[14px] text-[#2C2C2C] font-medium">
                     {location.name}
                   </td>
