@@ -74,7 +74,7 @@ export default function LocationsTable({
               return (
                 <tr 
                   key={location.id} 
-                  className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'} hover:bg-blue-50 transition-colors`}
+                  className={`${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'} hover:bg-blue-100 transition-colors`}
                 >
                   <td className="px-4 py-3 text-[14px] text-[#2C2C2C] font-medium">
                     {location.name}
