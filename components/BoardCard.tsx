@@ -45,9 +45,18 @@ export default function BoardCard({ board, townSlug, index }: BoardCardProps) {
           <h3 className="board-card-polaroid__title">
             {board.name}
           </h3>
+          {/* Business category and tags */}
+          {(board.business_category || board.business_tags?.length > 0) && (
+            <p className="board-card-polaroid__category">
+              {[board.business_category, ...(board.business_tags || [])]
+                .filter(Boolean)
+                .slice(0, 2)
+                .join(' • ')}
+            </p>
+          )}
           <p className="board-card-polaroid__meta">
             {board.photo 
-              ? `${new Date(board.photo.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+              ? `Updated ${new Date(board.photo.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
               : 'No photo yet'
             }
           </p>
