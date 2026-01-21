@@ -24,7 +24,6 @@ async function getBoard(townSlug: string, slug: string) {
     .from('towns')
     .select('id, name')
     .eq('slug', townSlug)
-    .eq('is_active', true)
     .single()
   
   if (!townData) return null
@@ -34,7 +33,6 @@ async function getBoard(townSlug: string, slug: string) {
     .select('*, business_category, business_tags, profile_completed')
     .eq('slug', slug)
     .eq('town_id', townData.id)
-    .eq('is_active', true)
     .single()
   
   if (!location) return null
