@@ -37,27 +37,43 @@ export async function POST(request: NextRequest) {
       town 
     })
     
-    // First get town to get its ID
-    const { data: townData } = await supabaseAdmin
+    // First try to get town by slug
+    let { data: townData } = await supabaseAdmin
       .from('towns')
       .select('id')
       .eq('slug', town)
-      .eq('is_active', true)
       .single()
     
+    // If town doesn't exist, create it (for MVP, auto-create towns)
     if (!townData) {
-      console.error('Town not found:', town)
-      return NextResponse.json({ error: `Town '${town}' not found or inactive` }, { status: 404 })
+      console.log(`Town '${town}' not found, creating it...`)
+      
+      const { data: newTown, error: createError } = await supabaseAdmin
+        .from('towns')
+        .insert({
+          name: town.charAt(0).toUpperCase() + town.slice(1),
+          slug: town,
+          is_active: true
+        })
+        .select('id')
+        .single()
+      
+      if (createError) {
+        console.error('Failed to create town:', createError)
+        return NextResponse.json({ error: `Town '${town}' not found and could not be created` }, { status: 404 })
+      }
+      
+      townData = newTown
     }
     
-    console.log('Found town:', { town, townId: townData.id })
+    console.log('Using town:', { town, townId: townData.id })
     
-    // Get location using town_id
+    // Get location using town_id OR town field (for backwards compatibility)
     const { data: location } = await supabaseAdmin
       .from('locations')
       .select('id')
       .eq('slug', slug)
-      .eq('town_id', townData.id)
+      .or(`town_id.eq.${townData.id},town.eq.${town}`)
       .eq('is_active', true)
       .single()
     
