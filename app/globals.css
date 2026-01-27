@@ -105,6 +105,22 @@
     -moz-osx-font-smoothing: grayscale;
   }
   
+  /* Prevent layout shifts */
+  .board-card-polaroid {
+    will-change: transform;
+    contain: layout style paint;
+  }
+  
+  /* GPU acceleration for transforms */
+  .board-card-polaroid:hover {
+    transform: translateZ(0) scale(1.03);
+  }
+  
+  /* Font display optimization */
+  @font-face {
+    font-display: swap;
+  }
+  
   /* Prevent layout shifts from dynamic content */
   .min-h-screen {
     min-height: 100vh;
