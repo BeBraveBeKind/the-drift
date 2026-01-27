@@ -28,11 +28,8 @@ export default function BoardCard({ board, townSlug, index }: BoardCardProps) {
               height={210}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 280px"
               className="board-card-polaroid__image"
-              style={{ objectFit: 'cover' }}
-              priority={index < 4}
-              loading={index < 4 ? 'eager' : 'lazy'}
-              placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k="
+              priority={index < 2}
+              loading={index < 2 ? 'eager' : 'lazy'}
             />
           ) : (
             <div className="board-card-polaroid__image board-card-polaroid__image--placeholder">

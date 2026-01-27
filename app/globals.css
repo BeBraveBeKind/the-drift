@@ -107,13 +107,12 @@
   
   /* Prevent layout shifts */
   .board-card-polaroid {
-    will-change: transform;
-    contain: layout style paint;
+    contain: layout;
   }
   
-  /* GPU acceleration for transforms */
+  /* GPU acceleration for transforms - only on hover */
   .board-card-polaroid:hover {
-    transform: translateZ(0) scale(1.03);
+    transform: scale(1.03);
   }
   
   /* Font display optimization */

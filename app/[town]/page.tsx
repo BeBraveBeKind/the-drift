@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense, lazy } from 'react'
+import { useState, useEffect } from 'react'
 import { getPhotoUrl } from '@/lib/utils'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -8,13 +8,11 @@ import { useParams, notFound } from 'next/navigation'
 import { useLocations } from '@/hooks/useLocations'
 import Navigation from '@/components/Navigation'
 import BoardCard from '@/components/BoardCard'
+import DiscoveryFilter from '@/components/DiscoveryFilter'
+import MapView from '@/components/MapView'
+import Footer from '@/components/Footer'
 import type { LocationWithPhoto } from '@/types'
 import type { DiscoveryCategory } from '@/lib/businessProfiles'
-
-// Lazy load heavy components
-const DiscoveryFilter = lazy(() => import('@/components/DiscoveryFilter'))
-const MapView = lazy(() => import('@/components/MapView'))
-const Footer = lazy(() => import('@/components/Footer'))
 
 // Clean, simple design - no unnecessary decorations
 // Removed: cardRotations, cardPushpinColors, getRandomRotation, getRandomPushpinColor
@@ -167,20 +165,16 @@ export default function TownHomePage() {
           )
         ) : (
           <div className="max-w-6xl mx-auto">
-            <Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse rounded" />}>
-              <MapView 
-                locations={filteredBoards}
-                townSlug={townSlug}
-                activeFilter={activeCategory}
-              />
-            </Suspense>
+            <MapView 
+              locations={filteredBoards}
+              townSlug={townSlug}
+              activeFilter={activeCategory}
+            />
           </div>
         )}
       </section>
       
-      <Suspense fallback={<div className="h-64 bg-gray-100" />}>
-        <Footer />
-      </Suspense>
+      <Footer />
       </main>
     </>
   )
