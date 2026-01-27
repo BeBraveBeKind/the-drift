@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
+import OptimizedBoardImage from './OptimizedBoardImage'
 import { getPhotoUrl } from '@/lib/utils'
 import type { LocationWithPhoto } from '@/types'
 
@@ -21,15 +21,10 @@ export default function BoardCard({ board, townSlug, index }: BoardCardProps) {
       <div className="board-card-polaroid__frame">
         <div className="board-card-polaroid__image-wrapper">
           {board.photo ? (
-            <Image 
+            <OptimizedBoardImage
               src={getPhotoUrl(board.photo.storage_path)}
               alt={board.name}
-              width={280}
-              height={210}
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 280px"
-              className="board-card-polaroid__image"
-              priority={index < 2}
-              loading={index < 2 ? 'eager' : 'lazy'}
+              index={index}
             />
           ) : (
             <div className="board-card-polaroid__image board-card-polaroid__image--placeholder">
@@ -39,18 +34,19 @@ export default function BoardCard({ board, townSlug, index }: BoardCardProps) {
         </div>
         
         <div className="board-card-polaroid__content">
-          <h3 className="board-card-polaroid__title">
+          <h3 className="board-card-polaroid__title" style={{ minHeight: '1.5em' }}>
             {board.name}
           </h3>
           {/* Business category and tags */}
-          {(board.business_category || (board.business_tags && board.business_tags.length > 0)) && (
-            <p className="board-card-polaroid__category">
-              {[board.business_category, ...(board.business_tags || [])]
+          <p className="board-card-polaroid__category" style={{ minHeight: '1.2em' }}>
+            {(board.business_category || (board.business_tags && board.business_tags.length > 0)) ? 
+              [board.business_category, ...(board.business_tags || [])]
                 .filter(Boolean)
                 .slice(0, 2)
-                .join(' • ')}
-            </p>
-          )}
+                .join(' • ')
+              : ' '
+            }
+          </p>
           <p className="board-card-polaroid__meta">
             {board.photo 
               ? `Updated ${new Date(board.photo.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`

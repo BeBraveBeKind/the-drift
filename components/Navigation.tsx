@@ -32,7 +32,10 @@ export default function Navigation() {
         borderBottom: '1px solid var(--border)', 
         position: 'sticky', 
         top: 0, 
-        zIndex: 100 
+        zIndex: 100,
+        height: '64px',
+        containIntrinsicSize: '0 64px',
+        contentVisibility: 'auto'
       }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex justify-between items-center h-16">
@@ -55,7 +58,7 @@ export default function Navigation() {
               onClick={() => setMenuOpen(!menuOpen)}
               className="p-2"
               aria-label="Menu"
-              style={{ minWidth: '44px', minHeight: '44px' }}
+              style={{ minWidth: '44px', minHeight: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
               <svg 
                 width="24" 

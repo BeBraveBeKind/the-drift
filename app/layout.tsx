@@ -126,13 +126,61 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         
-        {/* Load fonts with optional display to reduce blocking */}
+        {/* Load fonts with swap to reduce blocking and prevent FOIT */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=optional"
+          href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        
+        {/* Inline critical CSS to prevent render blocking */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            /* Critical CSS for preventing layout shift */
+            .font-quicksand {
+              font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            }
+            
+            /* Prevent CLS on main content */
+            body {
+              min-height: 100vh;
+              background-color: #C4A574;
+            }
+            
+            /* Skeleton styles for initial load */
+            @keyframes pulse {
+              0%, 100% { opacity: 1; }
+              50% { opacity: 0.5; }
+            }
+            
+            .animate-pulse {
+              animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+            
+            /* Reserve space for navigation */
+            .nav-placeholder {
+              height: 64px;
+            }
+            
+            /* Optimize image rendering */
+            img {
+              content-visibility: auto;
+              contain-intrinsic-size: 280px 210px;
+            }
+          `
+        }} />
+        
+        {/* Register service worker for better caching */}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(() => {});
+              });
+            }
+          `
+        }} />
       </head>
-      <body className="font-quicksand bg-[#C4A574] min-h-screen">
+      <body className="font-quicksand bg-[#C4A574] min-h-screen" suppressHydrationWarning>
         {children}
       </body>
     </html>
