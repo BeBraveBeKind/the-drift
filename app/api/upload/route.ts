@@ -54,7 +54,21 @@ export async function POST(request: NextRequest) {
     // Create admin client for this request
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
     
-    const formData = await request.formData()
+    // Parse form data with timeout protection
+    let formData: FormData
+    try {
+      console.log('Parsing form data...')
+      formData = await request.formData()
+      console.log('Form data parsed successfully')
+    } catch (formError) {
+      console.error('Failed to parse form data:', formError)
+      return corsResponse(
+        NextResponse.json({ 
+          error: 'Failed to parse upload data - file may be too large or corrupted' 
+        }, { status: 400 })
+      )
+    }
+    
     const file = formData.get('file') as File
     const slug = formData.get('slug') as string
     const town = formData.get('town') as string
@@ -162,11 +176,16 @@ export async function POST(request: NextRequest) {
       }
       
       // Process with sharp for final optimization
-      processedBuffer = await sharp(imageBuffer)
+      // Use sequential processing to avoid memory issues with large files
+      processedBuffer = await sharp(imageBuffer, {
+        limitInputPixels: 268402689, // ~16k x 16k max
+        sequentialRead: true // Process sequentially for large files
+      })
         .rotate() // Auto-rotate based on EXIF orientation
         .jpeg({ 
           quality: 85, // Good quality with compression
-          progressive: true // Better web loading
+          progressive: true, // Better web loading
+          mozjpeg: true // Better compression algorithm
         })
         .resize(2048, 2048, { // Max 2048px on longest side
           fit: 'inside',

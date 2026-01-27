@@ -3,5 +3,11 @@
   publish = ".next"
   environment = { SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY" }
 
+[functions]
+  # Extend timeout for upload function to 26 seconds (Netlify max for non-background functions)
+  # This helps with processing large images
+  [functions."api-upload"]
+    timeout = 26
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
