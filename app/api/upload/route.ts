@@ -3,6 +3,15 @@ import { createClient } from '@supabase/supabase-js'
 import sharp from 'sharp'
 import convert from 'heic-convert'
 
+// Configure for Netlify Functions (10 second default, extend to 26 seconds)
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb'
+    }
+  }
+}
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
@@ -19,8 +28,15 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now()
   try {
     console.log('Upload API called at:', new Date().toISOString())
+    console.log('Request headers:', {
+      contentType: request.headers.get('content-type'),
+      contentLength: request.headers.get('content-length'),
+      origin: request.headers.get('origin'),
+      referer: request.headers.get('referer')
+    })
     
     // Verify environment variables
     if (!supabaseUrl || !supabaseServiceKey) {
@@ -219,16 +235,21 @@ export async function POST(request: NextRequest) {
       .update({ updated_at: new Date().toISOString() })
       .eq('id', location.id)
     
-    console.log('Upload completed successfully for location:', location.id)
+    const duration = Date.now() - startTime
+    console.log('Upload completed successfully for location:', location.id, `(took ${duration}ms)`)
     return corsResponse(
-      NextResponse.json({ success: true, locationId: location.id })
+      NextResponse.json({ success: true, locationId: location.id, duration })
     )
     
   } catch (error) {
-    console.error('Upload error:', error)
+    const duration = Date.now() - startTime
+    console.error('Upload error after', duration, 'ms:', error)
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace')
+    
     return corsResponse(
       NextResponse.json({ 
-        error: error instanceof Error ? error.message : 'Internal error' 
+        error: error instanceof Error ? error.message : 'Internal error',
+        duration
       }, { status: 500 })
     )
   }

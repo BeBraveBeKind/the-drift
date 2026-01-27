@@ -290,9 +290,9 @@ export default function AdminDashboard() {
         formData.append('slug', location.slug)
         formData.append('town', townSlug)
         
-        // Create timeout (AbortSignal.timeout not supported in all browsers)
+        // Create timeout - increase to 60 seconds for large images
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 30000)
+        const timeoutId = setTimeout(() => controller.abort(), 60000)
         
         const response = await fetch('/api/upload', {
           method: 'POST',
