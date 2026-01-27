@@ -4,7 +4,7 @@
 -- Update the bucket configuration for larger files
 UPDATE storage.buckets 
 SET 
-  file_size_limit = 52428800, -- 50MB limit
+  file_size_limit = 10485760, -- 10MB limit
   allowed_mime_types = ARRAY[
     'image/jpeg',
     'image/jpg', 
