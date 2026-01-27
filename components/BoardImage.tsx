@@ -55,9 +55,6 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
         {/* Polaroid-style photo container */}
         <div 
           className="relative bg-[#FFFEF9] p-2.5 sm:p-3 shadow-xl border border-[#E5E5E5] group cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-0.5"
-          style={{ 
-            transform: `rotate(${stableValues.rotation}deg)`,
-          }}
           onClick={handleImageClick}
         >
           {/* Pushpin at top */}
