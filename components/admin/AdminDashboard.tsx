@@ -290,11 +290,11 @@ export default function AdminDashboard() {
         formData.append('slug', location.slug)
         formData.append('town', townSlug)
         
-        // Create timeout - increase to 60 seconds for large images
+        // Use the fast upload endpoint without heavy processing
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), 60000)
         
-        const response = await fetch('/api/upload', {
+        const response = await fetch('/api/upload-fast', {
           method: 'POST',
           body: formData,
           signal: controller.signal
