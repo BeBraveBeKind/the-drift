@@ -118,4 +118,7 @@ Switchboard celebrates the democratic, analog nature of community bulletin board
 
 Built by Rise Above Partners with support from Ofigona, LLC.
 
-For business inquiries about featuring your community board: michael@rise-above.net
+For business inquiries about featuring your community board: hello  @rise-above.net
+
+⚠️ Legal Notice
+This project is not open source. All rights are reserved by the author. You may view the code for educational purposes, but you do not have permission to run, modify, or distribute it for any personal or commercial use.
