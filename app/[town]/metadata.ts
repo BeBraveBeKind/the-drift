@@ -68,7 +68,7 @@ export function generateTownStructuredData(townSlug: string) {
       "latitude": lat,
       "longitude": lng
     },
-    "url": `https://switchboard.community/${townSlug}`,
+    "url": `https://switchboard.town/${townSlug}`,
     "areaServed": {
       "@type": "City",
       "name": fullName,
