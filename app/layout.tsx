@@ -9,12 +9,12 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://switchboard.community'),
+  metadataBase: new URL('https://switchboard.town'),
   title: {
-    default: 'Switchboard - Local Community Bulletin Boards',
+    default: 'Switchboard | Real. Local. Now.',
     template: '%s | Switchboard'
   },
-  description: 'Connect with your local community. Find events, services, and businesses on digital bulletin boards for small towns across America.',
+  description: 'Your community bulletin board, digitized. No logins, no algorithms, no nonsense.',
   keywords: ['community bulletin board', 'local events', 'small town', 'local business', 'community services', 'rural communities'],
   authors: [{ name: 'Rise Above Partners' }],
   creator: 'Rise Above Partners',
@@ -24,26 +24,45 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.ico' }
+    ],
+    apple: '/apple-touch-icon.png',
+    other: [
+      {
+        rel: 'android-chrome-192x192',
+        url: '/android-chrome-192x192.png',
+      },
+      {
+        rel: 'android-chrome-512x512',
+        url: '/android-chrome-512x512.png',
+      }
+    ]
+  },
+  manifest: '/site.webmanifest',
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://switchboard.community',
+    url: 'https://switchboard.town',
     siteName: 'Switchboard',
-    title: 'Switchboard - Local Community Bulletin Boards',
-    description: 'Connect with your local community. Find events, services, and businesses on digital bulletin boards.',
+    title: 'Switchboard | Real. Local. Now.',
+    description: 'Your community bulletin board, digitized.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Switchboard - Local Community Bulletin Boards',
+        alt: 'Switchboard - Real. Local. Now.',
       }
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Switchboard - Local Community Bulletin Boards',
-    description: 'Connect with your local community. Find events, services, and businesses.',
+    title: 'Switchboard | Real. Local. Now.',
+    description: 'Your community bulletin board, digitized.',
     images: ['/og-image.png'],
   },
   robots: {
@@ -58,7 +77,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://switchboard.community',
+    canonical: '/',
   }
 }
 
@@ -68,12 +87,12 @@ const structuredData = {
   "@type": "WebSite",
   "name": "Switchboard",
   "description": "Local community bulletin boards for small towns",
-  "url": "https://switchboard.community",
+  "url": "https://switchboard.town",
   "potentialAction": {
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": "https://switchboard.community/search?q={search_term_string}"
+      "urlTemplate": "https://switchboard.town/search?q={search_term_string}"
     },
     "query-input": "required name=search_term_string"
   },
@@ -113,9 +132,11 @@ export default function RootLayout({
           </>
         )}
         
-        {/* Favicon */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        {/* Favicons - handled by metadata but kept for legacy support */}
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
         
         {/* Preload critical font weights to prevent CLS */}
         <link
