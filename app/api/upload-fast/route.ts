@@ -4,6 +4,10 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
+// Configure route segment for larger uploads and longer timeout
+export const runtime = 'nodejs'
+export const maxDuration = 60 // 60 seconds max for Vercel Pro
+
 // Add CORS headers
 function corsResponse(response: NextResponse) {
   response.headers.set('Access-Control-Allow-Origin', '*')
