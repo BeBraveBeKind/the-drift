@@ -63,10 +63,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Mark the event as reviewed
+    const reviewer = session.user?.email ?? 'admin'
     const { error } = await supabaseAdmin.rpc('mark_auto_flag_reviewed', {
       p_event_id: event_id,
       p_action: action,
-      p_reviewer: session.email || 'admin'
+      p_reviewer: reviewer
     })
 
     if (error) {
