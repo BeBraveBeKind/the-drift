@@ -123,8 +123,8 @@ export default function AutoFlaggedReview({ onClose, onReviewed }: AutoFlaggedRe
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4" style={{ zIndex: 9999 }}>
+      <div className="bg-white rounded-lg max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col" style={{ zIndex: 10000 }}>
         {/* Header */}
         <div className="border-b p-4">
           <div className="flex justify-between items-center">

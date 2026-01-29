@@ -104,8 +104,8 @@ export default function PhotoHistory({ locationId, locationName, onClose, onReve
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4" style={{ zIndex: 9999 }}>
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col relative" style={{ zIndex: 10000 }}>
         {/* Header */}
         <div className="border-b p-4">
           <div className="flex justify-between items-center">
@@ -204,8 +204,8 @@ export default function PhotoHistory({ locationId, locationName, onClose, onReve
 
         {/* Reason Dialog */}
         {showReasonDialog && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center" style={{ zIndex: 10001 }}>
+            <div className="bg-white rounded-lg p-6 max-w-md w-full" style={{ zIndex: 10002 }}>
               <h3 className="text-lg font-semibold mb-4">Flag Current Photo</h3>
               <p className="text-sm text-gray-600 mb-4">
                 Provide a reason for flagging the current photo (e.g., inappropriate content, wrong business, etc.)
