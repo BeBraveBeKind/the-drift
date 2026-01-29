@@ -8,6 +8,7 @@ import QRCode from 'qrcode'
 import TownsList from './TownsList'
 import LocationForm from './LocationForm'
 import LocationsTable from './LocationsTable'
+import AutoFlaggedReview from './AutoFlaggedReview'
 import type { Location, LocationFormData, Town } from '@/types'
 
 function getRandomRotation() {
@@ -34,6 +35,8 @@ export default function AdminDashboard() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [showTownsSection, setShowTownsSection] = useState(false)
   const [uploadingPhoto, setUploadingPhoto] = useState<string | null>(null)
+  const [autoFlaggedCount, setAutoFlaggedCount] = useState(0)
+  const [showAutoFlagged, setShowAutoFlagged] = useState(false)
   const [form, setForm] = useState<LocationFormData>({
     name: '',
     slug: '',
@@ -48,10 +51,23 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     loadData()
+    checkAutoFlagged()
   }, [])
 
   const loadData = async () => {
     await Promise.all([loadLocations(), loadTowns()])
+  }
+
+  const checkAutoFlagged = async () => {
+    try {
+      const response = await fetch('/api/admin/auto-flagged')
+      if (response.ok) {
+        const data = await response.json()
+        setAutoFlaggedCount(data.count || 0)
+      }
+    } catch (error) {
+      console.error('Error checking auto-flagged photos:', error)
+    }
   }
 
   const loadLocations = async () => {
@@ -388,6 +404,17 @@ export default function AdminDashboard() {
             >
               View Site ↗
             </a>
+            {autoFlaggedCount > 0 && (
+              <button
+                onClick={() => setShowAutoFlagged(true)}
+                className="bg-orange-500 text-white px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-orange-600 transition-colors relative"
+              >
+                Review Flagged
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+                  {autoFlaggedCount}
+                </span>
+              </button>
+            )}
             <button
               onClick={() => setShowTownsSection(!showTownsSection)}
               className="bg-[#F4D03F] text-[#2C2C2C] px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#e6c337] transition-colors"
@@ -441,7 +468,20 @@ export default function AdminDashboard() {
           onRemove={removeLocation}
           onGenerateQR={generateQRCode}
           onUploadPhoto={uploadPhoto}
+          onRefresh={loadLocations}
         />
+
+        {/* Auto-Flagged Review Modal */}
+        {showAutoFlagged && (
+          <AutoFlaggedReview
+            onClose={() => setShowAutoFlagged(false)}
+            onReviewed={() => {
+              setShowAutoFlagged(false)
+              checkAutoFlagged()
+              loadLocations()
+            }}
+          />
+        )}
       </div>
     </main>
   )
