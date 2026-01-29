@@ -301,14 +301,69 @@ export default function AdminDashboard() {
           fileType: file.type
         })
         
+        // Compress image if it's too large (especially for mobile)
+        let uploadFile = file
+        const MAX_SIZE = 5 * 1024 * 1024 // 5MB
+        
+        if (file.size > MAX_SIZE && file.type.startsWith('image/')) {
+          try {
+            // Create a canvas to compress the image
+            const img = new Image()
+            const canvas = document.createElement('canvas')
+            const ctx = canvas.getContext('2d')
+            
+            await new Promise((resolve, reject) => {
+              img.onload = resolve
+              img.onerror = reject
+              img.src = URL.createObjectURL(file)
+            })
+            
+            // Calculate new dimensions (max 2048px on longest side)
+            let { width, height } = img
+            const maxDimension = 2048
+            
+            if (width > maxDimension || height > maxDimension) {
+              if (width > height) {
+                height = (height / width) * maxDimension
+                width = maxDimension
+              } else {
+                width = (width / height) * maxDimension
+                height = maxDimension
+              }
+            }
+            
+            canvas.width = width
+            canvas.height = height
+            ctx?.drawImage(img, 0, 0, width, height)
+            
+            // Convert to blob with compression
+            const blob = await new Promise<Blob>((resolve) => {
+              canvas.toBlob(
+                (b) => resolve(b || file),
+                'image/jpeg',
+                0.85 // 85% quality
+              )
+            })
+            
+            uploadFile = new File([blob], file.name, { type: 'image/jpeg' })
+            console.log(`Compressed image from ${file.size} to ${uploadFile.size} bytes`)
+            
+            URL.revokeObjectURL(img.src)
+          } catch (compressionError) {
+            console.warn('Image compression failed, using original:', compressionError)
+          }
+        }
+        
         const formData = new FormData()
-        formData.append('file', file)
+        formData.append('file', uploadFile)
         formData.append('slug', location.slug)
         formData.append('town', townSlug)
         
-        // Use the fast upload endpoint without heavy processing
+        // Increase timeout for mobile uploads (3 minutes)
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 60000)
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+        const timeoutMs = isMobile ? 180000 : 120000 // 3 min for mobile, 2 min for desktop
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
         
         const response = await fetch('/api/upload-fast', {
           method: 'POST',
@@ -340,7 +395,7 @@ export default function AdminDashboard() {
         
         if (error instanceof Error) {
           if (error.name === 'AbortError') {
-            errorMessage = 'Upload timed out - please check your connection and try again'
+            errorMessage = 'Upload timed out. This can happen with large files or slow connections.'
           } else if (error.message.includes('fetch')) {
             errorMessage = 'Network error - please check your internet connection'
           } else {
@@ -348,7 +403,12 @@ export default function AdminDashboard() {
           }
         }
         
-        alert(`Upload failed: ${errorMessage}\n\nPlease try:\n1. Check your internet connection\n2. Ensure the file is an image\n3. Try a smaller image file\n4. Refresh the page and try again`)
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+        const tips = isMobile 
+          ? `Upload failed: ${errorMessage}\n\nTips for mobile uploads:\n1. Use WiFi instead of cellular data if possible\n2. Take photos in lower resolution if available\n3. Close other apps to free up memory\n4. Try uploading one photo at a time`
+          : `Upload failed: ${errorMessage}\n\nPlease try:\n1. Check your internet connection\n2. Ensure the file is an image\n3. Try a smaller image file\n4. Refresh the page and try again`
+        
+        alert(tips)
       } finally {
         setUploadingPhoto(null)
       }
