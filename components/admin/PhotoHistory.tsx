@@ -35,7 +35,12 @@ export default function PhotoHistory({ locationId, locationName, onClose, onReve
   const loadPhotoHistory = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`/api/photos/history?location_id=${locationId}`)
+      const response = await fetch(`/api/photos/history?location_id=${locationId}`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
       const data = await response.json()
       
       if (response.ok) {
