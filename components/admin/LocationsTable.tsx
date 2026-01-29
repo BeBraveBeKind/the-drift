@@ -1,6 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import type { Location, Town } from '@/types'
+import PhotoHistory from './PhotoHistory'
 
 interface LocationsTableProps {
   locations: Location[]
@@ -12,6 +14,7 @@ interface LocationsTableProps {
   onRemove: (id: string, name: string) => void
   onGenerateQR: (location: Location) => void
   onUploadPhoto: (location: Location) => void
+  onRefresh?: () => void
 }
 
 export default function LocationsTable({
@@ -23,8 +26,11 @@ export default function LocationsTable({
   onToggleActive,
   onRemove,
   onGenerateQR,
-  onUploadPhoto
+  onUploadPhoto,
+  onRefresh
 }: LocationsTableProps) {
+  const [showPhotoHistory, setShowPhotoHistory] = useState<{ id: string; name: string } | null>(null)
+
   if (loading) {
     return (
       <div className="bg-[#FFFEF9] rounded-lg border border-[#E5E5E5] shadow-sm">
@@ -125,6 +131,12 @@ export default function LocationsTable({
                         {uploadingPhoto === location.slug ? 'Uploading...' : 'Upload Photo'}
                       </button>
                       <button
+                        onClick={() => setShowPhotoHistory({ id: location.id, name: location.name })}
+                        className="text-[#F4D03F] hover:text-[#e6c337] text-[12px] font-medium"
+                      >
+                        History
+                      </button>
+                      <button
                         onClick={() => onRemove(location.id, location.name)}
                         className="text-[#D94F4F] hover:text-[#c44343] text-[12px] font-medium"
                       >
@@ -138,6 +150,20 @@ export default function LocationsTable({
           </tbody>
         </table>
       </div>
+
+      {/* Photo History Modal */}
+      {showPhotoHistory && (
+        <PhotoHistory
+          locationId={showPhotoHistory.id}
+          locationName={showPhotoHistory.name}
+          onClose={() => setShowPhotoHistory(null)}
+          onRevert={() => {
+            if (onRefresh) {
+              onRefresh()
+            }
+          }}
+        />
+      )}
     </div>
   )
 }
