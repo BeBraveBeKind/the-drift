@@ -3,14 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 import sharp from 'sharp'
 import convert from 'heic-convert'
 
-// Configure for Netlify Functions (10 second default, extend to 26 seconds)
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb'
-    }
-  }
-}
+// Route segment config for Next.js App Router
+export const maxDuration = 26 // seconds
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
