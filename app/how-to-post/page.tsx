@@ -1,177 +1,229 @@
+import { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
-import Image from 'next/image'
+import { ArrowLeft, QrCode, Camera, CheckCircle, AlertTriangle } from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: 'How to Post — Switchboard',
+  description:
+    'Learn how to update a community bulletin board on Switchboard. Scan the QR code, take a photo, done.',
+}
 
 export default function HowToPostPage() {
   return (
     <>
       <Navigation />
-      <main className="min-h-screen" style={{ backgroundColor: 'var(--bg-page)' }}>
-        <div className="max-w-4xl mx-auto px-6 py-12">
-          
+      <main className="min-h-screen">
+        <div className="max-w-[640px] mx-auto px-4 py-12">
+
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-display mb-4" style={{ color: 'var(--text-primary)' }}>
+            <h1
+              className="text-3xl sm:text-4xl font-bold mb-3"
+              style={{ color: 'var(--sb-charcoal)' }}
+            >
               How to Post
             </h1>
-            <p className="text-subhead" style={{ color: 'var(--text-secondary)' }}>
+            <p
+              className="text-base"
+              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+            >
               Keep community boards fresh with new photos
             </p>
           </div>
 
-          {/* In-Store Signage Example */}
-          <section className="mb-12">
-            <div className="rounded-lg overflow-hidden border-2" style={{ 
-              borderColor: 'var(--border-strong)',
-              backgroundColor: 'var(--bg-card)'
-            }}>
-              <div className="p-4 text-center" style={{ backgroundColor: 'var(--bg-elevated)' }}>
-                <p className="text-caption mb-2">
-                  This is what you'll see posted at each bulletin board location:
-                </p>
-              </div>
-              <div className="bg-white p-4 flex justify-center">
-                <img 
-                  src="/signage-example.png" 
-                  alt="In-store signage showing the 3-step process"
-                  className="mx-auto block"
-                  style={{ maxWidth: '500px', width: '100%', height: 'auto' }}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Detailed Instructions */}
-          <section className="space-y-8">
-            <h2 className="text-heading" style={{ color: 'var(--text-primary)' }}>
-              Detailed Instructions
-            </h2>
+          {/* Steps */}
+          <div className="space-y-8 mb-12">
 
             {/* Step 1 */}
-            <div className="p-6 rounded-lg" style={{ 
-              backgroundColor: 'var(--bg-card)',
-              border: '1px solid var(--border)'
-            }}>
-              <h3 className="text-subhead mb-4" style={{ color: 'var(--text-primary)' }}>
-                1. Use the QR Code at Each Location
-              </h3>
-              <p className="text-body mb-3" style={{ color: 'var(--text-secondary)' }}>
-                <strong>Each bulletin board has its own unique QR code.</strong> You must physically visit the location and scan the QR code posted there to update that specific board.
-              </p>
-              <p className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                This ensures photos are authentic, recent, and taken at the actual location. No remote posting allowed!
-              </p>
+            <div
+              className="p-6"
+              style={{
+                border: '1px solid var(--sb-warm-gray)',
+                borderRadius: 'var(--sb-radius)',
+              }}
+            >
+              <div className="flex items-start gap-4">
+                <div
+                  className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full"
+                  style={{ background: 'var(--sb-amber)', color: 'var(--sb-charcoal)' }}
+                >
+                  <QrCode size={20} />
+                </div>
+                <div>
+                  <h2
+                    className="text-lg font-semibold mb-2"
+                    style={{ color: 'var(--sb-charcoal)' }}
+                  >
+                    1. Scan the QR code at the board
+                  </h2>
+                  <p
+                    className="text-base"
+                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                  >
+                    Each bulletin board has its own unique QR code. You must physically visit the location
+                    and scan the code posted there. This ensures photos are authentic and taken at the actual location.
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Step 2 */}
-            <div className="p-6 rounded-lg" style={{ 
-              backgroundColor: 'var(--bg-card)',
-              border: '1px solid var(--border)'
-            }}>
-              <h3 className="text-subhead mb-4" style={{ color: 'var(--text-primary)' }}>
-                2. Photo Guidelines
-              </h3>
-              <p className="text-body mb-4" style={{ color: 'var(--text-secondary)' }}>
-                <strong>Capture the entire bulletin board</strong> in your photo. We want to see all the flyers, announcements, and community posts currently displayed.
-              </p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                  Take the photo straight-on, not at an angle
-                </li>
-                <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                  Ensure good lighting - avoid glare and shadows
-                </li>
-                <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                  Make sure the image is sharp and in focus
-                </li>
-                <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                  Include the full board, edge to edge
-                </li>
-              </ul>
+            <div
+              className="p-6"
+              style={{
+                border: '1px solid var(--sb-warm-gray)',
+                borderRadius: 'var(--sb-radius)',
+              }}
+            >
+              <div className="flex items-start gap-4">
+                <div
+                  className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full"
+                  style={{ background: 'var(--sb-amber)', color: 'var(--sb-charcoal)' }}
+                >
+                  <Camera size={20} />
+                </div>
+                <div>
+                  <h2
+                    className="text-lg font-semibold mb-2"
+                    style={{ color: 'var(--sb-charcoal)' }}
+                  >
+                    2. Take a photo of the full board
+                  </h2>
+                  <p
+                    className="text-base mb-3"
+                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                  >
+                    Capture the entire bulletin board — all the flyers, announcements, and posts currently displayed.
+                  </p>
+                  <ul
+                    className="space-y-2 text-sm"
+                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                  >
+                    <li className="flex items-start gap-2">
+                      <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
+                      Take the photo straight-on, not at an angle
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
+                      Ensure good lighting — avoid glare and shadows
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
+                      Make sure the image is sharp and in focus
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
+                      Include the full board, edge to edge
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
             {/* Step 3 */}
-            <div className="p-6 rounded-lg" style={{ 
-              backgroundColor: 'var(--bg-elevated)',
-              border: '1px solid var(--border-strong)'
-            }}>
-              <h3 className="text-subhead mb-4" style={{ color: 'var(--text-primary)' }}>
-                3. Quality Standards
-              </h3>
-              <p className="text-body mb-4" style={{ color: 'var(--text-secondary)' }}>
-                <strong>Consider editing your photo before uploading.</strong> Photos with issues will be removed by admins and reverted to the most recent good photo.
-              </p>
-              
-              <div className="p-4 rounded-lg" style={{ 
-                backgroundColor: 'var(--bg-page)',
-                border: '1px solid var(--accent)'
-              }}>
-                <p className="font-semibold mb-3" style={{ color: 'var(--accent)' }}>
-                  Photos will be removed if they have:
-                </p>
-                <ul className="list-disc pl-6 space-y-1">
-                  <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                    Heavy glare or reflections
-                  </li>
-                  <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                    Blur or out-of-focus areas
-                  </li>
-                  <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                    People in the photo (privacy)
-                  </li>
-                  <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                    Poor framing or partial board coverage
-                  </li>
-                  <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                    Inappropriate content
-                  </li>
-                </ul>
+            <div
+              className="p-6"
+              style={{
+                border: '1px solid var(--sb-warm-gray)',
+                borderRadius: 'var(--sb-radius)',
+              }}
+            >
+              <div className="flex items-start gap-4">
+                <div
+                  className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full"
+                  style={{ background: 'var(--sb-amber)', color: 'var(--sb-charcoal)' }}
+                >
+                  <CheckCircle size={20} />
+                </div>
+                <div>
+                  <h2
+                    className="text-lg font-semibold mb-2"
+                    style={{ color: 'var(--sb-charcoal)' }}
+                  >
+                    3. Your photo shows up!
+                  </h2>
+                  <p
+                    className="text-base"
+                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                  >
+                    That&rsquo;s it. Your photo is now the latest view of the board.
+                    No account, no login, no approval process. The community keeps its own boards current.
+                  </p>
+                </div>
               </div>
             </div>
+          </div>
 
-            {/* Additional Guidelines */}
-            <div className="p-6 rounded-lg" style={{ 
-              backgroundColor: 'var(--bg-card)',
-              border: '1px solid var(--border)'
-            }}>
-              <h3 className="text-subhead mb-4" style={{ color: 'var(--text-primary)' }}>
-                Additional Guidelines
+          {/* Quality standards */}
+          <div
+            className="p-6 mb-12"
+            style={{
+              border: '2px solid var(--sb-amber)',
+              borderRadius: 'var(--sb-radius)',
+              background: 'var(--sb-warm-white)',
+            }}
+          >
+            <div className="flex items-start gap-3 mb-4">
+              <AlertTriangle size={20} className="flex-shrink-0 mt-0.5" style={{ color: 'var(--sb-amber)' }} />
+              <h3
+                className="text-base font-semibold"
+                style={{ color: 'var(--sb-charcoal)' }}
+              >
+                Photos will be reverted if they have:
               </h3>
-              <ul className="list-disc pl-6 space-y-3">
-                <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                  <strong>Respect privacy:</strong> Avoid including people in your photos
-                </li>
-                <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                  <strong>Be considerate:</strong> Don't obstruct others while taking photos
-                </li>
-                <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                  <strong>Regular updates:</strong> Feel free to update boards when you notice changes
-                </li>
-                <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                  <strong>Community effort:</strong> Help keep our local boards current and visible
-                </li>
-                <li className="text-body" style={{ color: 'var(--text-secondary)' }}>
-                  <strong>Report issues:</strong> Contact us if you notice damaged or inappropriate content
-                </li>
-              </ul>
-              
-              <div className="mt-6 pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
-                <p className="text-body font-semibold" style={{ color: 'var(--text-primary)' }}>
-                  Goal: Create a living archive of our community's activity and keep everyone connected to local happenings!
-                </p>
-              </div>
             </div>
-          </section>
+            <ul
+              className="space-y-2 text-sm pl-8"
+              style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+            >
+              <li>Heavy glare or reflections</li>
+              <li>Blur or out-of-focus areas</li>
+              <li>People in the photo (privacy)</li>
+              <li>Poor framing or partial board coverage</li>
+              <li>Inappropriate content</li>
+            </ul>
+          </div>
 
-          {/* Back to Home */}
-          <div className="mt-12 text-center">
-            <Link href="/" className="btn-secondary">
-              ← Back to Boards
+          {/* Guidelines */}
+          <div className="space-y-4 mb-12">
+            <h3
+              className="text-lg font-semibold"
+              style={{ color: 'var(--sb-charcoal)' }}
+            >
+              Guidelines
+            </h3>
+            <ul
+              className="space-y-3 text-base"
+              style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+            >
+              <li><strong style={{ fontWeight: 600 }}>Respect privacy:</strong> Avoid including people in your photos</li>
+              <li><strong style={{ fontWeight: 600 }}>Be considerate:</strong> Don&rsquo;t obstruct others while taking photos</li>
+              <li><strong style={{ fontWeight: 600 }}>Update often:</strong> Snap a new photo whenever you notice changes</li>
+              <li><strong style={{ fontWeight: 600 }}>Report issues:</strong> Flag anything inappropriate directly from the board page</li>
+            </ul>
+          </div>
+
+          {/* Back link */}
+          <div
+            className="pt-8"
+            style={{ borderTop: '1px solid var(--sb-warm-gray)' }}
+          >
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-base no-underline"
+              style={{ color: 'var(--sb-amber)' }}
+            >
+              <ArrowLeft size={16} />
+              Back to Home
             </Link>
           </div>
+
+          <div className="mt-8">
+            <Footer />
+          </div>
         </div>
-        <Footer />
       </main>
     </>
   )

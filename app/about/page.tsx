@@ -1,342 +1,211 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
+import { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import Link from 'next/link'
+import { ArrowLeft } from 'lucide-react'
 
-// Random rotation for elements
-function getRandomRotation() {
-  return Math.random() * 6 - 3 // -3 to +3 degrees
-}
-
-// Pushpin colors from style guide
-const pushpinColors = [
-  '#D94F4F', // Pushpin Red
-  '#F4D03F', // Pushpin Yellow  
-  '#5B9BD5', // Pushpin Blue
-  '#6BBF59'  // Pushpin Green
-]
-
-function getRandomPushpinColor() {
-  return pushpinColors[Math.floor(Math.random() * pushpinColors.length)]
+export const metadata: Metadata = {
+  title: 'About Switchboard — Real. Local. Now.',
+  description:
+    'Switchboard turns physical bulletin boards into live, browsable pages. Built for small towns by Rise Above Partners.',
 }
 
 export default function AboutPage() {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return (
-      <>
-        <Navigation />
-        <div className="min-h-screen bg-[#C4A574]" />
-      </>
-    )
-  }
-
   return (
     <>
       <Navigation />
-      <main className="min-h-screen bg-[#C4A574] relative">
-      {/* Cork Board Texture Overlay */}
-      <div 
-        className="absolute inset-0 opacity-30"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A68B5B' fill-opacity='0.4'%3E%3Ccircle cx='9' cy='9' r='1'/%3E%3Ccircle cx='49' cy='21' r='1'/%3E%3Ccircle cx='19' cy='29' r='1'/%3E%3Ccircle cx='39' cy='41' r='1'/%3E%3Ccircle cx='9' cy='49' r='1'/%3E%3Ccircle cx='29' cy='9' r='1'/%3E%3Ccircle cx='51' cy='51' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-      />
-      
-      {/* Back Link */}
-      <div className="relative z-10 pt-6 px-4">
-        <Link href="/" className="inline-block group">
-          <div 
-            className="bg-[#FFFEF9] p-2 px-4 shadow-lg border-[1px] border-[#E5E5E5] relative"
-            style={{ 
-              transform: `rotate(${getRandomRotation()}deg)`,
-              boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
-              borderRadius: '2px'
-            }}
-          >
-            <div className="text-[12px] font-medium text-[#2C2C2C] group-hover:text-[#1a1a1a] transition-colors">
-              ← Back to boards
-            </div>
-            
-            {/* Pushpin */}
-            <div 
-              className="absolute -top-2 left-1/2 w-4 h-4 rounded-full shadow-sm transform -translate-x-1/2"
-              style={{ backgroundColor: getRandomPushpinColor() }}
-            >
-              <div 
-                className="w-2.5 h-2.5 rounded-full absolute top-0.5 left-0.5"
-                style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
-              />
-            </div>
-          </div>
-        </Link>
-      </div>
+      <main className="min-h-screen">
+        <div className="max-w-[640px] mx-auto px-4 py-12">
 
-      {/* Main Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
-        
-        {/* Title */}
-        <div className="text-center mb-12">
-          <div className="relative inline-block">
-            <div 
-              className="bg-[#FFFEF9] p-8 shadow-lg border-[1px] border-[#E5E5E5] relative"
-              style={{ 
-                transform: `rotate(${getRandomRotation()}deg)`,
-                boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
-              }}
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1
+              className="text-3xl sm:text-4xl font-bold mb-3"
+              style={{ color: 'var(--sb-charcoal)' }}
             >
-              <h1 className="text-[36px] font-bold text-[#2C2C2C] leading-[1.2] mb-4">
-                Switchboard
-              </h1>
-              <p className="text-[18px] font-medium text-[#6B6B6B] leading-[1.4]">
-                Where Viroqua-area flyers get a second life
-              </p>
-              
-              {/* Pushpin at top */}
-              <div 
-                className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2"
-                style={{ backgroundColor: getRandomPushpinColor() }}
+              About Switchboard
+            </h1>
+            <p
+              className="text-base"
+              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+            >
+              Real. Local. Now.
+            </p>
+          </div>
+
+          {/* Content */}
+          <div className="space-y-10">
+
+            {/* What Is This */}
+            <section>
+              <h2
+                className="text-xl font-semibold mb-4"
+                style={{ color: 'var(--sb-charcoal)' }}
               >
-                <div 
-                  className="w-3 h-3 rounded-full absolute top-1 left-1"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Content Cards */}
-        <div className="grid md:grid-cols-2 gap-8">
-          
-          {/* What Is This Card */}
-          <div className="relative">
-            <div 
-              className="bg-[#FFFEF9] p-6 shadow-lg border-[1px] border-[#E5E5E5] relative"
-              style={{ 
-                transform: `rotate(${getRandomRotation()}deg)`,
-                boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
-                borderRadius: '2px'
-              }}
-            >
-              <h2 className="text-[20px] font-semibold text-[#2C2C2C] leading-[1.3] mb-4">
-                Bulletin boards are beautiful. But let's be real.
+                Bulletin boards are beautiful. But let&rsquo;s be real.
               </h2>
-              <div className="text-[14px] text-[#2C2C2C] leading-[1.5] space-y-3">
+              <div
+                className="space-y-3 text-base"
+                style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+              >
+                <p><strong style={{ fontWeight: 600 }}>We forget to look at them.</strong></p>
                 <p>
-                  <strong>We forget to look at them.</strong>
-                </p>
-                <p>
-                  There's a yoga instructor with a hand-written class schedule. A guy who fixes bikes 
+                  There&rsquo;s a yoga instructor with a hand-written class schedule. A guy who fixes bikes
                   out of his garage. A local theater group doing something weird and wonderful next weekend.
                 </p>
                 <p>
                   They made a flyer. They found a thumbtack. They pinned it up. And most of us walked right past.
                 </p>
                 <p>
-                  Those boards are full of real people doing real things in your actual neighborhood — not an 
-                  algorithm, not a sponsored post, not someone trying to go viral. <strong>Switchboard makes sure 
-                  that stuff gets seen.</strong>
+                  Those boards are full of real people doing real things in your actual neighborhood — not an
+                  algorithm, not a sponsored post, not someone trying to go viral.{' '}
+                  <strong style={{ fontWeight: 600 }}>Switchboard makes sure that stuff gets seen.</strong>
                 </p>
               </div>
-              
-              {/* Pushpin */}
-              <div 
-                className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2"
-                style={{ backgroundColor: getRandomPushpinColor() }}
-              >
-                <div 
-                  className="w-3 h-3 rounded-full absolute top-1 left-1"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
-                />
-              </div>
-            </div>
-          </div>
+            </section>
 
-          {/* How It Works Card */}
-          <div className="relative">
-            <div 
-              className="bg-[#FFFEF9] p-6 shadow-lg border-[1px] border-[#E5E5E5] relative"
-              style={{ 
-                transform: `rotate(${getRandomRotation()}deg)`,
-                boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
-                borderRadius: '2px'
-              }}
-            >
-              <h2 className="text-[20px] font-semibold text-[#2C2C2C] leading-[1.3] mb-4">
+            <hr style={{ borderColor: 'var(--sb-warm-gray)' }} />
+
+            {/* How It Works */}
+            <section>
+              <h2
+                className="text-xl font-semibold mb-4"
+                style={{ color: 'var(--sb-charcoal)' }}
+              >
                 Post your flyer. Snap a photo. Done.
               </h2>
-              <div className="text-[14px] text-[#2C2C2C] leading-[1.5] space-y-3">
-                <p>
-                  <strong>1.</strong> Find a business board you want to update
-                </p>
-                <p>
-                  <strong>2.</strong> Scan the QR code at that location
-                </p>
-                <p>
-                  <strong>3.</strong> Take a photo of the entire bulletin board
-                </p>
-                <p>
-                  <strong>4.</strong> Your photo shows up!
-                </p>
-                <p className="text-[12px] text-[#6B6B6B] italic">
-                  Your flyer now lives in two places: on the board and online. No likes. No followers. 
-                  No comments section. Just: here's what's happening near you, beyond social media.
-                </p>
-              </div>
-              
-              {/* Pushpin */}
-              <div 
-                className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2"
-                style={{ backgroundColor: getRandomPushpinColor() }}
+              <div
+                className="space-y-3 text-base"
+                style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
               >
-                <div 
-                  className="w-3 h-3 rounded-full absolute top-1 left-1"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
-                />
+                <p><strong style={{ fontWeight: 600 }}>1.</strong> Find a business board you want to update</p>
+                <p><strong style={{ fontWeight: 600 }}>2.</strong> Scan the QR code at that location</p>
+                <p><strong style={{ fontWeight: 600 }}>3.</strong> Take a photo of the entire bulletin board</p>
+                <p><strong style={{ fontWeight: 600 }}>4.</strong> Your photo shows up!</p>
+                <p
+                  className="text-sm italic"
+                  style={{ color: 'var(--sb-stone)' }}
+                >
+                  Your flyer now lives in two places: on the board and online. No likes. No followers.
+                  No comments section. Just: here&rsquo;s what&rsquo;s happening near you, beyond social media.
+                </p>
               </div>
-            </div>
-          </div>
+            </section>
 
-          {/* Why Viroqua Card */}
-          <div className="relative">
-            <div 
-              className="bg-[#FFFEF9] p-6 shadow-lg border-[1px] border-[#E5E5E5] relative"
-              style={{ 
-                transform: `rotate(${getRandomRotation()}deg)`,
-                boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
-                borderRadius: '2px'
-              }}
-            >
-              <h2 className="text-[20px] font-semibold text-[#2C2C2C] leading-[1.3] mb-4">
+            <hr style={{ borderColor: 'var(--sb-warm-gray)' }} />
+
+            {/* This is for the flyer people */}
+            <section>
+              <h2
+                className="text-xl font-semibold mb-4"
+                style={{ color: 'var(--sb-charcoal)' }}
+              >
                 This is for the flyer people.
               </h2>
-              <div className="text-[14px] text-[#2C2C2C] leading-[1.5] space-y-3">
+              <div
+                className="space-y-3 text-base"
+                style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+              >
+                <p><strong style={{ fontWeight: 600 }}>You know who you are.</strong></p>
                 <p>
-                  <strong>You know who you are.</strong>
-                </p>
-                <p>
-                  You designed something in Canva at midnight. You printed 20 copies at the library. 
+                  You designed something in Canva at midnight. You printed 20 copies at the library.
                   You walked around with a stapler and a dream.
                 </p>
                 <p>
-                  And then you thought: <em>"I wish more people could see this."</em>
+                  And then you thought: <em>&ldquo;I wish more people could see this.&rdquo;</em>
                 </p>
                 <p>
-                  Your flyer deserves more than the six people who happened to glance at the board 
-                  that day. We're here to give it a longer life and a wider reach — while still 
+                  Your flyer deserves more than the six people who happened to glance at the board
+                  that day. We&rsquo;re here to give it a longer life and a wider reach — while still
                   keeping it local, still keeping it real.
                 </p>
               </div>
-              
-              {/* Pushpin */}
-              <div 
-                className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2"
-                style={{ backgroundColor: getRandomPushpinColor() }}
-              >
-                <div 
-                  className="w-3 h-3 rounded-full absolute top-1 left-1"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
-                />
-              </div>
-            </div>
-          </div>
+            </section>
 
-          {/* Community Guidelines Card */}
-          <div className="relative">
-            <div 
-              className="bg-[#FFFEF9] p-6 shadow-lg border-[1px] border-[#E5E5E5] relative"
-              style={{ 
-                transform: `rotate(${getRandomRotation()}deg)`,
-                boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
-                borderRadius: '2px'
-              }}
-            >
-              <h2 className="text-[20px] font-semibold text-[#2C2C2C] leading-[1.3] mb-4">
+            <hr style={{ borderColor: 'var(--sb-warm-gray)' }} />
+
+            {/* Community philosophy */}
+            <section>
+              <h2
+                className="text-xl font-semibold mb-4"
+                style={{ color: 'var(--sb-charcoal)' }}
+              >
                 A little nostalgia. A lot of community.
               </h2>
-              <div className="text-[14px] text-[#2C2C2C] leading-[1.5] space-y-3">
+              <div
+                className="space-y-3 text-base"
+                style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+              >
                 <p>
-                  There's something beautiful about a physical bulletin board. It's messy. It's democratic. 
-                  Anyone can pin something up. No account required, no verification, no content policy — 
+                  There&rsquo;s something beautiful about a physical bulletin board. It&rsquo;s messy. It&rsquo;s democratic.
+                  Anyone can pin something up. No account required, no verification, no content policy —
                   just a thumbtack and something to say.
                 </p>
                 <p>
-                  Switchboard isn't replacing that. We're extending it. The physical board is still the 
+                  Switchboard isn&rsquo;t replacing that. We&rsquo;re extending it. The physical board is still the
                   real thing. This is just a way to make sure more people actually see it.
                 </p>
                 <p>
-                  <strong>The best stuff still happens offline. We just want to make sure you hear about it.</strong>
-                </p>
-                <p className="text-[12px] text-[#6B6B6B] italic">
-                  <strong>No spam:</strong> remember, this is about promoting everything on the community board.
+                  <strong style={{ fontWeight: 600 }}>
+                    The best stuff still happens offline. We just want to make sure you hear about it.
+                  </strong>
                 </p>
               </div>
-              
-              {/* Pushpin */}
-              <div 
-                className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2"
-                style={{ backgroundColor: getRandomPushpinColor() }}
+            </section>
+
+            <hr style={{ borderColor: 'var(--sb-warm-gray)' }} />
+
+            {/* Who built this */}
+            <section>
+              <h2
+                className="text-xl font-semibold mb-4"
+                style={{ color: 'var(--sb-charcoal)' }}
               >
-                <div 
-                  className="w-3 h-3 rounded-full absolute top-1 left-1"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
-                />
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        {/* B2B Contact Section */}
-        <div className="mt-16 text-center">
-          <div className="relative inline-block">
-            <div 
-              className="bg-[#FDF6E3] p-6 shadow-lg border-[1px] border-[#E5E5E5] relative mx-auto"
-              style={{ 
-                transform: `rotate(${getRandomRotation()}deg)`,
-                boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
-                borderRadius: '2px'
-              }}
-            >
-              <h2 className="text-[18px] font-semibold text-[#2C2C2C] leading-[1.3] mb-3">
-                💼 For Businesses
+                Who built this?
               </h2>
-              <p className="text-[14px] text-[#2C2C2C] leading-[1.4] mb-4 max-w-md">
-                Want your community board featured on Switchboard?
-              </p>
-              <a 
-                href="mailto:Hello@rise-above.net?subject=Community Board Request"
-                className="inline-block bg-[#D94F4F] text-white px-4 py-2 rounded-md text-[14px] font-semibold hover:bg-[#c44343] transition-colors"
+              <div
+                className="space-y-3 text-base"
+                style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
               >
-                Email Hello@rise-above.net
-              </a>
-              
-              {/* Pushpin */}
-              <div 
-                className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2"
-                style={{ backgroundColor: '#D94F4F' }}
-              >
-                <div 
-                  className="w-3 h-3 rounded-full absolute top-1 left-1"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
-                />
+                <p>
+                  Switchboard is built by{' '}
+                  <strong style={{ fontWeight: 600 }}>Rise Above Partners</strong>, a consulting studio
+                  focused on community-first technology. We believe the best tools are the ones that
+                  disappear — that make real-world connections easier without getting in the way.
+                </p>
+                <p>
+                  Questions? Reach us at{' '}
+                  <a
+                    href="mailto:Hello@rise-above.net"
+                    style={{ color: 'var(--sb-amber)' }}
+                  >
+                    Hello@rise-above.net
+                  </a>
+                </p>
               </div>
-            </div>
+            </section>
+          </div>
+
+          {/* Back link */}
+          <div
+            className="mt-12 pt-8"
+            style={{ borderTop: '1px solid var(--sb-warm-gray)' }}
+          >
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-base no-underline"
+              style={{ color: 'var(--sb-amber)' }}
+            >
+              <ArrowLeft size={16} />
+              Back to Home
+            </Link>
+          </div>
+
+          <div className="mt-8">
+            <Footer />
           </div>
         </div>
-
-      </div>
-      
-      <Footer />
-    </main>
+      </main>
     </>
   )
 }

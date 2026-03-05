@@ -11,7 +11,7 @@ export default function SteveCTA() {
   return (
     <div className="text-center py-8">
       <Link
-        href="/for-businesses"
+        href="/get-listed"
         className="inline-flex items-center gap-2 px-6 py-3 font-semibold text-base no-underline"
         style={{
           background: 'var(--sb-amber)',
