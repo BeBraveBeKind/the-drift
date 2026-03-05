@@ -14,7 +14,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import {
   Phone, Navigation as NavigationIcon, ExternalLink,
-  Camera, PhoneOff, MapPinOff, ArrowRight, ChevronRight,
+  Camera, ArrowRight, ChevronRight,
 } from 'lucide-react'
 
 export const revalidate = 60
@@ -270,43 +270,7 @@ export default async function BoardPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Missing-info text (only shown when the field could exist) */}
-          {!hasPhone && hasAddress && (
-            <p
-              className="flex items-center gap-2 text-sm mb-4"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
-            >
-              <PhoneOff size={14} />
-              No phone number listed
-            </p>
-          )}
-          {!hasAddress && hasPhone && (
-            <p
-              className="flex items-center gap-2 text-sm mb-4"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
-            >
-              <MapPinOff size={14} />
-              No address listed
-            </p>
-          )}
-          {!hasPhone && !hasAddress && (
-            <div className="mb-4 space-y-1">
-              <p
-                className="flex items-center gap-2 text-sm"
-                style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
-              >
-                <PhoneOff size={14} />
-                No phone number listed
-              </p>
-              <p
-                className="flex items-center gap-2 text-sm"
-                style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
-              >
-                <MapPinOff size={14} />
-                No address listed
-              </p>
-            </div>
-          )}
+
 
           {/* Website link */}
           {hasWebsite && (
