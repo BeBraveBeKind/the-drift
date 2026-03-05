@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { buildSign, SIGN_SIZES } from '@/lib/sign-generator'
 
+export const dynamic = 'force-dynamic'
+
 interface RouteParams {
   params: Promise<{ town: string; slug: string }>
 }
@@ -62,13 +64,14 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
   const svg = buildSign(w, h, location.name, address, url)
 
-  const filename = `switchboard-sign-${location.slug}-${size}.svg`
+  const orient = w >= h ? 'landscape' : 'portrait'
+  const filename = `switchboard-sign-${location.slug}-${size}-${orient}.svg`
 
   return new NextResponse(svg, {
     headers: {
       'Content-Type': 'image/svg+xml',
       'Content-Disposition': `attachment; filename="${filename}"`,
-      'Cache-Control': 'public, max-age=3600',
+      'Cache-Control': 'no-store',
     },
   })
 }
