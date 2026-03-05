@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import Map, { Marker, Popup, NavigationControl, GeolocateControl } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { LocationWithPhoto } from '@/types'
@@ -9,28 +9,7 @@ import { DISCOVERY_CATEGORY_LABELS, getDiscoveryCategories, type DiscoveryCatego
 import Link from 'next/link'
 import Image from 'next/image'
 import Supercluster from 'supercluster'
-
-// Color scheme for categories
-const CATEGORY_COLORS: Record<DiscoveryCategory | 'other', string> = {
-  'events': '#D94F4F',      // Red
-  'services': '#5B9BD5',     // Blue
-  'community': '#6BBF59',    // Green
-  'for-sale': '#F4D03F',     // Yellow
-  'food': '#FF8C42',         // Orange
-  'other': '#9B59B6'         // Purple
-}
-
-// Get the primary category for a location (for pin color)
-function getPrimaryCategory(location: LocationWithPhoto): DiscoveryCategory | 'other' {
-  if (!location.business_category || !location.profile_completed) {
-    return 'other'
-  }
-  const categories = getDiscoveryCategories(
-    location.business_category as BusinessCategory, 
-    location.business_tags || []
-  )
-  return categories[0] || 'other'
-}
+import { MapPin } from 'lucide-react'
 
 interface MapViewProps {
   locations: LocationWithPhoto[]
@@ -42,7 +21,6 @@ interface ClusterProperties {
   cluster: boolean
   cluster_id?: number
   point_count?: number
-  category?: DiscoveryCategory | 'other'
   location?: LocationWithPhoto
 }
 
@@ -55,11 +33,28 @@ interface PointFeature {
   }
 }
 
+/* ── Helpers ─────────────────────────────────────────────────── */
+
+/** Derive map center from locations, fallback to first location */
+function deriveCenter(locations: LocationWithPhoto[]): { latitude: number; longitude: number } {
+  const withCoords = locations.filter(l => l.latitude && l.longitude)
+  if (withCoords.length === 0) return { latitude: 43.5548, longitude: -90.8886 }
+
+  const sumLat = withCoords.reduce((s, l) => s + l.latitude!, 0)
+  const sumLng = withCoords.reduce((s, l) => s + l.longitude!, 0)
+  return {
+    latitude: sumLat / withCoords.length,
+    longitude: sumLng / withCoords.length,
+  }
+}
+
+/* ── Component ───────────────────────────────────────────────── */
+
 export default function MapView({ locations, townSlug, activeFilter = 'all' }: MapViewProps) {
+  const center = useMemo(() => deriveCenter(locations), [locations])
   const [viewState, setViewState] = useState({
-    latitude: 43.5548,  // Downtown Viroqua
-    longitude: -90.8886,
-    zoom: 15.5  // Closer zoom to see downtown detail
+    ...center,
+    zoom: 15.5,
   })
   const [selectedLocation, setSelectedLocation] = useState<LocationWithPhoto | null>(null)
   const [clusters, setClusters] = useState<any[]>([])
@@ -91,22 +86,21 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
       type: 'Feature',
       properties: {
         cluster: false,
-        category: getPrimaryCategory(location),
-        location
+        location,
       },
       geometry: {
         type: 'Point',
-        coordinates: [location.longitude!, location.latitude!]
-      }
+        coordinates: [location.longitude!, location.latitude!],
+      },
     }))
   }, [filteredLocations])
 
   // Initialize supercluster
   useEffect(() => {
     superclusterRef.current = new Supercluster({
-      radius: 60,  // Increased for better clustering at street level
+      radius: 60,
       maxZoom: 18,
-      minPoints: 3  // Require more pins before clustering
+      minPoints: 3,
     })
     superclusterRef.current.load(points)
   }, [points])
@@ -118,23 +112,22 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
     const map = mapRef.current.getMap()
     const bounds = map.getBounds().toArray().flat() as [number, number, number, number]
     const zoom = Math.floor(map.getZoom())
-    
+
     const newClusters = superclusterRef.current.getClusters(bounds, zoom)
     setClusters(newClusters)
   }, [viewState, points])
 
-  // Initial load - set clusters after map is ready
+  // Initial load — set clusters after map is ready
   useEffect(() => {
     if (!superclusterRef.current || points.length === 0) return
-    
-    // Use a timeout to ensure map is fully initialized
+
     const timeout = setTimeout(() => {
-      // Get initial clusters for Viroqua area
+      const c = deriveCenter(filteredLocations)
       const initialBounds: [number, number, number, number] = [
-        -90.95, // west
-        43.50,  // south  
-        -90.82, // east
-        43.60   // north
+        c.longitude - 0.07,
+        c.latitude - 0.05,
+        c.longitude + 0.07,
+        c.latitude + 0.05,
       ]
       const initialClusters = superclusterRef.current!.getClusters(initialBounds, 15)
       if (initialClusters.length > 0) {
@@ -143,18 +136,13 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
     }, 100)
 
     return () => clearTimeout(timeout)
-  }, [points])
+  }, [points, filteredLocations])
 
-  // Keep map centered on downtown Viroqua
-  // Don't auto-adjust based on locations
+  // Re-center when town changes
   useEffect(() => {
-    // Always start with downtown view
-    setViewState({
-      latitude: 43.5548,  // Downtown Viroqua
-      longitude: -90.8886,
-      zoom: 15.5
-    })
-  }, [townSlug])  // Only reset when changing towns
+    const c = deriveCenter(locations)
+    setViewState({ ...c, zoom: 15.5 })
+  }, [townSlug, locations])
 
   const handleClusterClick = (cluster: PointFeature) => {
     if (!superclusterRef.current || !mapRef.current) return
@@ -167,18 +155,23 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
     mapRef.current.easeTo({
       center: cluster.geometry.coordinates,
       zoom: expansionZoom,
-      duration: 500
+      duration: 500,
     })
   }
 
   return (
-    <div className="h-[600px] w-full rounded-lg overflow-hidden border-2 border-[#E5E5E5]">
+    <div
+      className="h-[600px] w-full overflow-hidden"
+      style={{
+        border: '1px solid var(--sb-warm-gray)',
+        borderRadius: 'var(--sb-radius)',
+      }}
+    >
       <Map
         ref={mapRef}
         {...viewState}
         onMove={evt => setViewState(evt.viewState)}
         onLoad={() => {
-          // Force cluster update when map loads
           if (superclusterRef.current && mapRef.current) {
             const map = mapRef.current.getMap()
             const bounds = map.getBounds().toArray().flat() as [number, number, number, number]
@@ -191,7 +184,7 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
         style={{ width: '100%', height: '100%' }}
       >
         <NavigationControl position="top-right" />
-        <GeolocateControl 
+        <GeolocateControl
           position="top-right"
           trackUserLocation={false}
         />
@@ -199,10 +192,11 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
         {/* Render clusters and individual pins */}
         {clusters.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates
-          const { cluster: isCluster, point_count, category, location } = cluster.properties
+          const { cluster: isCluster, point_count, location } = cluster.properties
 
           if (isCluster) {
-            // Render cluster
+            // Cluster pin — Amber Gold circle
+            const size = Math.min(30 + (point_count || 0) * 10, 60)
             return (
               <Marker
                 key={`cluster-${cluster.properties.cluster_id}`}
@@ -210,22 +204,23 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
                 longitude={longitude}
               >
                 <div
-                  className="flex items-center justify-center bg-[#5B9BD5] text-white rounded-full shadow-lg cursor-pointer hover:scale-110 transition-transform"
+                  className="flex items-center justify-center rounded-full cursor-pointer"
                   style={{
-                    width: `${30 + (point_count || 0) * 10}px`,
-                    height: `${30 + (point_count || 0) * 10}px`,
-                    maxWidth: '60px',
-                    maxHeight: '60px'
+                    width: `${size}px`,
+                    height: `${size}px`,
+                    background: 'var(--sb-amber)',
+                    color: 'var(--sb-charcoal)',
+                    border: '2px solid var(--sb-white)',
                   }}
                   onClick={() => handleClusterClick(cluster)}
                 >
-                  <span className="text-[14px] font-bold">{point_count}</span>
+                  <span className="text-sm font-bold">{point_count}</span>
                 </div>
               </Marker>
             )
           }
 
-          // Render individual pin
+          // Individual pin — flat Amber Gold circle
           return (
             <Marker
               key={location?.id}
@@ -236,30 +231,26 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
                 setSelectedLocation(location || null)
               }}
             >
-              <div 
-                className="cursor-pointer hover:scale-110 transition-transform"
-                style={{ transform: 'translate(-50%, -100%)' }}
-              >
-                {/* Custom pushpin SVG */}
-                <svg width="30" height="40" viewBox="0 0 30 40" fill="none">
-                  <circle 
-                    cx="15" 
-                    cy="15" 
-                    r="14" 
-                    fill={CATEGORY_COLORS[(category as DiscoveryCategory) || 'other']}
+              <div className="cursor-pointer" style={{ transform: 'translate(-50%, -100%)' }}>
+                <svg width="28" height="36" viewBox="0 0 28 36" fill="none">
+                  <circle
+                    cx="14"
+                    cy="14"
+                    r="13"
+                    fill="var(--sb-amber)"
                     stroke="white"
                     strokeWidth="2"
                   />
-                  <path 
-                    d="M 15 30 L 10 40 L 20 40 Z" 
-                    fill={CATEGORY_COLORS[(category as DiscoveryCategory) || 'other']}
+                  <path
+                    d="M 14 28 L 9 36 L 19 36 Z"
+                    fill="var(--sb-amber)"
                   />
-                  <circle 
-                    cx="15" 
-                    cy="15" 
-                    r="5" 
+                  <circle
+                    cx="14"
+                    cy="14"
+                    r="4"
                     fill="white"
-                    opacity="0.3"
+                    opacity="0.5"
                   />
                 </svg>
               </div>
@@ -277,19 +268,21 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
             closeOnClick={false}
             className="map-popup"
           >
-            <Link 
+            <Link
               href={`/${townSlug}/${selectedLocation.slug}`}
               className="block no-underline"
             >
-              <div 
-                className="bg-[#FFFEF9] p-3 shadow-lg border-[1px] border-[#E5E5E5] cursor-pointer hover:shadow-xl transition-shadow"
-                style={{ 
-                  transform: `rotate(${Math.random() * 4 - 2}deg)`,
-                  minWidth: '200px'
+              <div
+                className="p-3 cursor-pointer"
+                style={{
+                  background: 'var(--sb-white)',
+                  border: '1px solid var(--sb-warm-gray)',
+                  borderRadius: 'var(--sb-radius)',
+                  minWidth: '200px',
                 }}
               >
                 {selectedLocation.photo ? (
-                  <div className="relative w-full h-32 mb-2">
+                  <div className="relative w-full h-32 mb-2 overflow-hidden" style={{ borderRadius: '4px' }}>
                     <Image
                       src={getPhotoUrl(selectedLocation.photo.storage_path)}
                       alt={selectedLocation.name}
@@ -299,37 +292,53 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
                     />
                   </div>
                 ) : (
-                  <div className="w-full h-32 bg-stone-100 flex items-center justify-center mb-2">
-                    <span className="text-stone-400 text-[12px]">No photo yet</span>
+                  <div
+                    className="w-full h-32 flex items-center justify-center mb-2"
+                    style={{
+                      background: 'var(--sb-warm-white)',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    <span className="text-sm" style={{ color: 'var(--sb-stone)' }}>No photo yet</span>
                   </div>
                 )}
-                
-                <h3 className="text-[14px] font-bold text-[#2C2C2C] leading-tight">
+
+                <h3
+                  className="text-sm font-bold leading-tight"
+                  style={{ color: 'var(--sb-charcoal)' }}
+                >
                   {selectedLocation.name}
                 </h3>
-                
+
                 {selectedLocation.address && (
-                  <p className="text-[11px] text-[#6B6B6B] mt-1">
+                  <p
+                    className="text-xs mt-1"
+                    style={{ color: 'var(--sb-slate)' }}
+                  >
                     {selectedLocation.address}
                   </p>
                 )}
-                
+
                 {selectedLocation.profile_completed && selectedLocation.business_category && (
-                  <div className="mt-2">
-                    <span 
-                      className="inline-block px-2 py-1 rounded-full text-[10px] text-white font-medium"
-                      style={{ backgroundColor: CATEGORY_COLORS[getPrimaryCategory(selectedLocation)] }}
-                    >
-                      {DISCOVERY_CATEGORY_LABELS[getPrimaryCategory(selectedLocation) as DiscoveryCategory] || 'Other'}
-                    </span>
-                  </div>
+                  <p
+                    className="text-xs mt-1"
+                    style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+                  >
+                    {selectedLocation.business_category}
+                  </p>
                 )}
-                
-                <p className="text-[11px] text-[#6B6B6B] mt-2">
+
+                <p
+                  className="text-xs mt-1"
+                  style={{ color: 'var(--sb-stone)' }}
+                >
                   {selectedLocation.view_count} views
                 </p>
 
-                <p className="text-[12px] font-semibold text-[#5B9BD5] mt-2">
+                <p
+                  className="text-xs font-semibold mt-2"
+                  style={{ color: 'var(--sb-amber)' }}
+                >
                   View board &rarr;
                 </p>
               </div>
@@ -340,13 +349,20 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
 
       {/* Empty state */}
       {filteredLocations.length === 0 && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white/90">
+        <div
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ background: 'rgba(255,255,255,0.9)' }}
+        >
           <div className="text-center">
-            <p className="text-[18px] font-bold text-[#2C2C2C] mb-2">
-              🗺️ No locations to show
+            <MapPin size={32} color="var(--sb-stone)" className="mx-auto mb-3" />
+            <p
+              className="text-lg font-semibold mb-1"
+              style={{ color: 'var(--sb-charcoal)' }}
+            >
+              No locations to show
             </p>
-            <p className="text-[14px] text-[#6B6B6B]">
-              {activeFilter !== 'all' 
+            <p className="text-sm" style={{ color: 'var(--sb-stone)' }}>
+              {activeFilter !== 'all'
                 ? `No boards match the "${DISCOVERY_CATEGORY_LABELS[activeFilter as DiscoveryCategory]}" filter`
                 : 'No locations have coordinates yet'}
             </p>

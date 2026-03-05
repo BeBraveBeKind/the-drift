@@ -8,6 +8,7 @@ import FreshnessIndicator from '@/components/FreshnessIndicator'
 import ShareButton from '@/components/ShareButton'
 import FlagButton from '@/components/FlagButton'
 import ViewTracker from '@/components/ViewTracker'
+import BusinessPageProbes from '@/components/BusinessPageProbes'
 import PhotoHistory from '@/components/PhotoHistory'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
@@ -151,6 +152,7 @@ export default async function BoardPage({ params }: PageProps) {
       <Navigation />
       <main className="min-h-screen">
         <ViewTracker locationId={location.id} />
+        <BusinessPageProbes businessSlug={location.slug} />
 
         <div className="max-w-[640px] mx-auto px-4 py-8">
 
@@ -234,6 +236,7 @@ export default async function BoardPage({ params }: PageProps) {
               {hasPhone && (
                 <a
                   href={`tel:${phone}`}
+                  data-action="call"
                   className={`${hasAddress ? 'flex-1' : 'w-full'} flex items-center justify-center gap-2 py-3 font-semibold text-base no-underline`}
                   style={{
                     background: 'var(--sb-amber)',
@@ -250,6 +253,7 @@ export default async function BoardPage({ params }: PageProps) {
               {hasAddress && (
                 <a
                   href={`https://maps.google.com/?q=${encodeURIComponent(location.address!)}`}
+                  data-action="directions"
                   className={`${hasPhone ? 'flex-1' : 'w-full'} flex items-center justify-center gap-2 py-3 font-semibold text-base no-underline`}
                   style={{
                     background: 'var(--sb-white)',
@@ -309,6 +313,7 @@ export default async function BoardPage({ params }: PageProps) {
             <div className="mb-4">
               <a
                 href={websiteHref(website!)}
+                data-action="website"
                 className="inline-flex items-center gap-2 text-base hover:underline"
                 style={{ color: 'var(--sb-amber)', fontWeight: 400 }}
               >

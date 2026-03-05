@@ -1,12 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { useParams, notFound } from 'next/navigation'
 import { useLocations } from '@/hooks/useLocations'
 import Navigation from '@/components/Navigation'
 import BoardCard from '@/components/BoardCard'
 import DiscoveryFilter from '@/components/DiscoveryFilter'
 import MapView from '@/components/MapView'
+import Interruptor from '@/components/Interruptor'
+import SteveCTA from '@/components/SteveCTA'
 import Footer from '@/components/Footer'
 import type { LocationWithPhoto } from '@/types'
 import type { DiscoveryCategory } from '@/lib/businessProfiles'
@@ -162,12 +164,15 @@ export default function TownHomePage() {
                 }}
               >
                 {filteredBoards.map((board, index) => (
-                  <BoardCard
-                    key={board.id}
-                    board={board}
-                    townSlug={townSlug}
-                    index={index}
-                  />
+                  <Fragment key={board.id}>
+                    <BoardCard
+                      board={board}
+                      townSlug={townSlug}
+                      index={index}
+                    />
+                    {/* Interruptor after row 2 (~6 cards) */}
+                    {index === 5 && <Interruptor />}
+                  </Fragment>
                 ))}
               </div>
             )
@@ -181,6 +186,11 @@ export default function TownHomePage() {
             </div>
           )}
         </section>
+
+        {/* Steve CTA */}
+        <div className="max-w-[640px] mx-auto px-4">
+          <SteveCTA />
+        </div>
 
         <div className="max-w-[640px] mx-auto px-4">
           <Footer />
