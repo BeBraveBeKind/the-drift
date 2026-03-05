@@ -14,7 +14,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import {
   Phone, Navigation as NavigationIcon, ExternalLink,
-  Camera, ArrowRight, ChevronRight,
+  Camera, ArrowRight, ChevronRight, Download,
 } from 'lucide-react'
 
 export const revalidate = 60
@@ -287,10 +287,19 @@ export default async function BoardPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Share + Flag row */}
+          {/* Share + Flag + Sign row */}
           <div className="flex items-center gap-6 mb-10">
             <ShareButton town={town} slug={location.slug} name={location.name} />
             {photo && <FlagButton photoId={photo.id} />}
+            <a
+              href={`/api/sign/${town}/${location.slug}`}
+              download
+              className="inline-flex items-center gap-1.5 text-sm"
+              style={{ color: 'var(--sb-stone)', fontWeight: 400, textDecoration: 'none' }}
+            >
+              <Download size={14} />
+              Download Sign
+            </a>
           </div>
 
           {/* ── P4: Context (10+ seconds) ─────────────────────── */}
