@@ -328,6 +328,10 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
                 <p className="text-[11px] text-[#6B6B6B] mt-2">
                   {selectedLocation.view_count} views
                 </p>
+
+                <p className="text-[12px] font-semibold text-[#5B9BD5] mt-2">
+                  View board &rarr;
+                </p>
               </div>
             </Link>
           </Popup>

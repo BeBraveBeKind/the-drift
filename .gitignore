@@ -48,3 +48,9 @@ next-env.d.ts
 
 # Local Netlify folder
 .netlify
+
+# AI/agent config
+.agents/
+.claude/
+.codex/
+.gemini/
