@@ -112,9 +112,13 @@ export default function RootLayout({
       <head>
         {/* Plausible Analytics — privacy-first, no cookies, GDPR-compliant */}
         <script
-          defer
-          data-domain="switchboard.town"
-          src="https://plausible.io/js/script.js"
+          async
+          src="https://plausible.io/js/pa-E3IB4m_nCRcwkyW3n0SIJ.js"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()`,
+          }}
         />
 
         {/* Structured Data for SEO */}

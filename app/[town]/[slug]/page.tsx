@@ -1,208 +1,380 @@
 import { supabase } from '@/lib/supabase'
-import { getPhotoUrl, timeAgo } from '@/lib/utils'
+import { getPhotoUrl } from '@/lib/utils'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
+import type { Metadata } from 'next'
+import BoardImage from '@/components/BoardImage'
+import FreshnessIndicator from '@/components/FreshnessIndicator'
 import ShareButton from '@/components/ShareButton'
 import FlagButton from '@/components/FlagButton'
 import ViewTracker from '@/components/ViewTracker'
-import BoardImage from '@/components/BoardImage'
-import BusinessProfileDisplay from '@/components/BusinessProfileDisplay'
+import PhotoHistory from '@/components/PhotoHistory'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import {
+  Phone, Navigation as NavigationIcon, ExternalLink,
+  Camera, PhoneOff, MapPinOff, ArrowRight, ChevronRight,
+} from 'lucide-react'
 
 export const revalidate = 60
 
-// Format town name for display
-function formatTownName(town: string) {
-  return town.charAt(0).toUpperCase() + town.slice(1)
-}
+/* ── Data fetching ──────────────────────────────────────────────── */
 
 async function getBoard(townSlug: string, slug: string) {
-  // First get the town by slug to get its ID
   const { data: townData } = await supabase
     .from('towns')
     .select('id, name')
     .eq('slug', townSlug)
     .single()
-  
+
   if (!townData) return null
-  
+
   const { data: location } = await supabase
     .from('locations')
-    .select('*, business_category, business_tags, profile_completed')
+    .select('*')
     .eq('slug', slug)
     .eq('town_id', townData.id)
     .single()
-  
+
   if (!location) return null
-  
+
   const { data: photo } = await supabase
     .from('photos')
-    .select('*')
+    .select('id, storage_path, created_at')
     .eq('location_id', location.id)
     .eq('is_current', true)
     .eq('is_flagged', false)
     .single()
-  
-  return { location, photo }
+
+  // Other businesses in same town for "Also on this board"
+  const { data: otherLocations } = await supabase
+    .from('locations')
+    .select('name, slug')
+    .eq('town_id', townData.id)
+    .neq('id', location.id)
+    .eq('is_active', true)
+    .order('name')
+    .limit(10)
+
+  return {
+    location,
+    photo,
+    townName: townData.name,
+    otherLocations: otherLocations || [],
+  }
 }
+
+/* ── Helpers ────────────────────────────────────────────────────── */
+
+function formatPhotoDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
+}
+
+function displayDomain(url: string): string {
+  try {
+    const hostname = new URL(
+      url.startsWith('http') ? url : `https://${url}`
+    ).hostname.replace(/^www\./, '')
+    return hostname.length > 30 ? hostname.substring(0, 27) + '...' : hostname
+  } catch {
+    return url.length > 30 ? url.substring(0, 27) + '...' : url
+  }
+}
+
+function websiteHref(url: string): string {
+  return url.startsWith('http') ? url : `https://${url}`
+}
+
+/* ── SEO metadata ───────────────────────────────────────────────── */
 
 interface PageProps {
   params: Promise<{ town: string; slug: string }>
 }
 
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { town, slug } = await params
+  const data = await getBoard(town, slug)
+  if (!data) return { title: 'Not Found' }
+
+  const { location, photo, townName } = data
+  const category = location.business_category || ''
+  const address = location.address || ''
+
+  const title = `${location.name} — ${townName} | Switchboard`
+  const desc = [
+    `${location.name} in ${townName}.`,
+    category ? `${category}` : '',
+    address ? `at ${address}.` : '',
+    'On Switchboard — your community bulletin board.',
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .substring(0, 155)
+
+  return {
+    title,
+    description: desc,
+    openGraph: {
+      title,
+      description: `${category}${address ? ` at ${address}` : ''}`,
+      type: 'website',
+      ...(photo && {
+        images: [{ url: getPhotoUrl(photo.storage_path) }],
+      }),
+    },
+  }
+}
+
+/* ── Page component ─────────────────────────────────────────────── */
+
 export default async function BoardPage({ params }: PageProps) {
   const { town, slug } = await params
-  const townName = formatTownName(town)
   const data = await getBoard(town, slug)
-  
+
   if (!data) notFound()
-  
-  const { location, photo } = data
-  
+
+  const { location, photo, townName, otherLocations } = data
+
+  // Future-proof: phone/website may exist in DB but aren't in TS types yet
+  const phone = (location as Record<string, unknown>).phone as string | undefined
+  const website = (location as Record<string, unknown>).website as string | undefined
+  const hasPhone = !!phone
+  const hasAddress = !!location.address
+  const hasWebsite = !!website
+
   return (
     <>
       <Navigation />
-      <main className="min-h-screen bg-gradient-to-b from-stone-50 to-stone-100">
+      <main className="min-h-screen">
         <ViewTracker locationId={location.id} />
-        
-        {/* Cork board texture background pattern */}
-        <div 
-          className="fixed inset-0 opacity-5 pointer-events-none"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A68B5B' fill-opacity='0.4'%3E%3Ccircle cx='9' cy='9' r='1'/%3E%3Ccircle cx='49' cy='21' r='1'/%3E%3Ccircle cx='19' cy='29' r='1'/%3E%3Ccircle cx='39' cy='41' r='1'/%3E%3Ccircle cx='9' cy='49' r='1'/%3E%3Ccircle cx='29' cy='9' r='1'/%3E%3Ccircle cx='51' cy='51' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
-        />
-        
-        <div className="relative max-w-3xl mx-auto px-6 py-8 sm:py-12">
-          {/* Breadcrumb Navigation */}
-          <nav className="mb-8">
-            <Link 
-              href={`/${town}`} 
-              className="inline-flex items-center gap-2 text-sm font-medium text-stone-600 hover:text-stone-800 transition-colors"
+
+        <div className="max-w-[640px] mx-auto px-4 py-8">
+
+          {/* ── P1: Orient (0-2 seconds) ──────────────────────── */}
+
+          {/* Brand header */}
+          <p
+            className="text-sm mb-6"
+            style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+          >
+            Switchboard &middot; {townName}
+          </p>
+
+          {/* Business name */}
+          <h1
+            className="text-[28px] sm:text-[32px] font-bold mb-2"
+            style={{ color: 'var(--sb-charcoal)' }}
+          >
+            {location.name}
+          </h1>
+
+          {/* Category · Address */}
+          {(location.business_category || location.address) && (
+            <p
+              className="text-base mb-3"
+              style={{ color: 'var(--sb-slate)' }}
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Back to {townName}
-            </Link>
-          </nav>
-          
-          {/* Business Header */}
-          <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden mb-8">
-            <div className="px-10 sm:px-12 py-10">
-              <h1 className="text-3xl font-bold text-stone-900 mb-2">{location.name}</h1>
-              {location.address && (
-                <p className="text-stone-500 text-base mb-6">
-                  {location.address}
-                </p>
-              )}
-              
-              {/* Business Profile */}
-              <BusinessProfileDisplay 
-                businessCategory={location.business_category}
-                businessTags={location.business_tags}
-                className=""
-              />
-            </div>
+              {location.business_category}
+              {location.business_category && location.address && ' \u00B7 '}
+              {location.address}
+            </p>
+          )}
+
+          {/* Freshness indicator */}
+          <div className="mb-8">
+            <FreshnessIndicator updatedAt={photo?.created_at} />
           </div>
-          
+
+          {/* ── P2: See (2-5 seconds) ─────────────────────────── */}
+
           {photo ? (
-            <>
-              {/* Board Image with Frame */}
+            <div className="mb-6">
               <BoardImage
                 src={getPhotoUrl(photo.storage_path)}
                 alt={`${location.name} bulletin board`}
               />
-              
-              {/* Photo Metadata */}
-              <div className="mt-8 px-2">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-sm text-stone-600">
-                  <div className="flex items-center gap-6">
-                    <span>Updated {timeAgo(photo.created_at)}</span>
-                    <span>{location.view_count.toLocaleString()} views</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <ShareButton town={town} slug={location.slug} name={location.name} />
-                    <FlagButton photoId={photo.id} />
-                  </div>
-                </div>
-              </div>
-              
-              {/* How to Post Section */}
-              <div className="mt-12 bg-white rounded-xl border border-stone-200 overflow-hidden">
-                <div className="px-10 sm:px-12 py-10">
-                  <h3 className="font-bold text-lg text-stone-900 mb-3">
-                    Want to update this board?
-                  </h3>
-                  <p className="text-stone-600 mb-6">
-                    Visit {location.name} and scan the QR code on their bulletin board to post a fresh photo. 
-                    It's free and takes less than 30 seconds.
-                  </p>
-                  <Link 
-                    href="/how-to-post" 
-                    className="inline-flex items-center gap-2 px-8 py-4 bg-stone-800 text-white rounded-lg hover:bg-stone-900 transition-colors font-medium"
-                  >
-                    Learn How to Post
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </Link>
-                </div>
-              </div>
-            </>
+              <p
+                className="mt-2 text-sm"
+                style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              >
+                Photo taken {formatPhotoDate(photo.created_at)}
+              </p>
+            </div>
           ) : (
-            // No Photo State
-            <div className="bg-white rounded-xl border-2 border-dashed border-stone-300 overflow-hidden">
-              <div className="px-8 py-16 text-center">
-                <div className="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-10 h-10 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold text-stone-700 mb-3">No photo yet</h3>
-                <p className="text-stone-500 mb-8 max-w-md mx-auto">
-                  Be the first to share what's posted on this board. 
-                  Visit the location and scan their QR code to upload a photo.
-                </p>
-                <Link 
-                  href="/how-to-post" 
-                  className="inline-flex items-center gap-2 bg-stone-800 text-white px-8 py-4 rounded-lg font-medium hover:bg-stone-900 transition-colors"
+            <div
+              className="mb-6 flex flex-col items-center justify-center py-12"
+              style={{
+                background: 'var(--sb-warm-white)',
+                border: '2px dashed var(--sb-warm-gray)',
+                borderRadius: 'var(--sb-radius)',
+              }}
+            >
+              <Camera size={48} color="var(--sb-stone)" className="mb-4" />
+              <p className="text-base" style={{ color: 'var(--sb-slate)' }}>
+                No photo of this listing yet
+              </p>
+              <p
+                className="text-sm"
+                style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              >
+                Be the first to add one.
+              </p>
+            </div>
+          )}
+
+          {/* ── P3: Act (5-10 seconds) ────────────────────────── */}
+
+          {/* Call + Directions buttons */}
+          {(hasPhone || hasAddress) && (
+            <div className="flex gap-3 mb-4">
+              {hasPhone && (
+                <a
+                  href={`tel:${phone}`}
+                  className={`${hasAddress ? 'flex-1' : 'w-full'} flex items-center justify-center gap-2 py-3 font-semibold text-base no-underline`}
+                  style={{
+                    background: 'var(--sb-amber)',
+                    color: 'var(--sb-charcoal)',
+                    minHeight: '48px',
+                    borderRadius: '6px',
+                  }}
                 >
-                  <span>📸</span>
-                  Learn How to Post
-                </Link>
+                  <Phone size={18} />
+                  Call
+                </a>
+              )}
+
+              {hasAddress && (
+                <a
+                  href={`https://maps.google.com/?q=${encodeURIComponent(location.address!)}`}
+                  className={`${hasPhone ? 'flex-1' : 'w-full'} flex items-center justify-center gap-2 py-3 font-semibold text-base no-underline`}
+                  style={{
+                    background: 'var(--sb-white)',
+                    color: 'var(--sb-charcoal)',
+                    border: '1px solid var(--sb-warm-gray)',
+                    minHeight: '48px',
+                    borderRadius: '6px',
+                  }}
+                >
+                  <NavigationIcon size={18} />
+                  Directions
+                </a>
+              )}
+            </div>
+          )}
+
+          {/* Missing-info text (only shown when the field could exist) */}
+          {!hasPhone && hasAddress && (
+            <p
+              className="flex items-center gap-2 text-sm mb-4"
+              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+            >
+              <PhoneOff size={14} />
+              No phone number listed
+            </p>
+          )}
+          {!hasAddress && hasPhone && (
+            <p
+              className="flex items-center gap-2 text-sm mb-4"
+              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+            >
+              <MapPinOff size={14} />
+              No address listed
+            </p>
+          )}
+          {!hasPhone && !hasAddress && (
+            <div className="mb-4 space-y-1">
+              <p
+                className="flex items-center gap-2 text-sm"
+                style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              >
+                <PhoneOff size={14} />
+                No phone number listed
+              </p>
+              <p
+                className="flex items-center gap-2 text-sm"
+                style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              >
+                <MapPinOff size={14} />
+                No address listed
+              </p>
+            </div>
+          )}
+
+          {/* Website link */}
+          {hasWebsite && (
+            <div className="mb-4">
+              <a
+                href={websiteHref(website!)}
+                className="inline-flex items-center gap-2 text-base hover:underline"
+                style={{ color: 'var(--sb-amber)', fontWeight: 400 }}
+              >
+                {displayDomain(website!)}
+                <ExternalLink size={14} />
+              </a>
+            </div>
+          )}
+
+          {/* Share + Flag row */}
+          <div className="flex items-center gap-6 mb-10">
+            <ShareButton town={town} slug={location.slug} name={location.name} />
+            {photo && <FlagButton photoId={photo.id} />}
+          </div>
+
+          {/* ── P4: Context (10+ seconds) ─────────────────────── */}
+
+          {/* Photo History */}
+          <PhotoHistory locationId={location.id} />
+
+          {/* Also on this board */}
+          {otherLocations.length > 0 && (
+            <div className="mb-8">
+              <h2
+                className="text-xl font-semibold mb-4"
+                style={{ color: 'var(--sb-charcoal)' }}
+              >
+                Also on this board
+              </h2>
+              <div>
+                {otherLocations.map((loc: { name: string; slug: string }) => (
+                  <Link
+                    key={loc.slug}
+                    href={`/${town}/${loc.slug}`}
+                    className="flex items-center justify-between py-3"
+                    style={{
+                      borderBottom: '1px solid var(--sb-warm-gray)',
+                      color: 'var(--sb-slate)',
+                      minHeight: '44px',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    <span className="text-base">{loc.name}</span>
+                    <ChevronRight size={16} color="var(--sb-stone)" />
+                  </Link>
+                ))}
               </div>
             </div>
           )}
-          
-          {/* Get Listed CTA */}
-          <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 overflow-hidden">
-            <div className="px-10 sm:px-12 py-10">
-              <h3 className="font-bold text-lg text-blue-900 mb-3">
-                Own a business in {townName}?
-              </h3>
-              <p className="text-blue-700 mb-6">
-                Get your bulletin board on Switchboard for free. Customers can share what's new at your location.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link 
-                  href="/get-listed" 
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                >
-                  Get Your Business Listed
-                </Link>
-                <Link 
-                  href="/start-town" 
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-blue-600 border-2 border-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
-                >
-                  Start a New Town
-                </Link>
-              </div>
-            </div>
+
+          {/* More in Town */}
+          <div className="mb-8">
+            <Link
+              href={`/${town}`}
+              className="inline-flex items-center gap-2 font-semibold text-base"
+              style={{
+                color: 'var(--sb-amber)',
+                textDecoration: 'none',
+                minHeight: '44px',
+              }}
+            >
+              More in {townName}
+              <ArrowRight size={16} />
+            </Link>
           </div>
-          
+
           <Footer />
         </div>
       </main>

@@ -1,13 +1,20 @@
 'use client'
 
 import { useState } from 'react'
-import { 
-  DISCOVERY_CATEGORIES, 
-  DISCOVERY_CATEGORY_LABELS, 
+import {
+  DISCOVERY_CATEGORIES,
+  DISCOVERY_CATEGORY_LABELS,
   getDiscoveryCategories,
-  type DiscoveryCategory 
+  type DiscoveryCategory,
 } from '@/lib/businessProfiles'
 import type { LocationWithPhoto } from '@/types'
+
+/**
+ * DiscoveryFilter — Switchboard Design System
+ *
+ * Category chips using filter-chip classes.
+ * Amber Gold active state, warm gray inactive.
+ */
 
 interface DiscoveryFilterProps {
   locations: LocationWithPhoto[]
@@ -17,9 +24,8 @@ interface DiscoveryFilterProps {
 export default function DiscoveryFilter({ locations, onFilterChange }: DiscoveryFilterProps) {
   const [activeCategory, setActiveCategory] = useState<DiscoveryCategory | 'all'>('all')
 
-  // Count locations by category
   const categoryCounts = DISCOVERY_CATEGORIES.reduce((counts, category) => {
-    counts[category] = locations.filter(location => {
+    counts[category] = locations.filter((location) => {
       const categories = getDiscoveryCategories(
         location.business_category as any,
         location.business_tags || []
@@ -31,11 +37,11 @@ export default function DiscoveryFilter({ locations, onFilterChange }: Discovery
 
   const handleCategoryClick = (category: DiscoveryCategory | 'all') => {
     setActiveCategory(category)
-    
+
     if (category === 'all') {
       onFilterChange(locations, 'all')
     } else {
-      const filtered = locations.filter(location => {
+      const filtered = locations.filter((location) => {
         const categories = getDiscoveryCategories(
           location.business_category as any,
           location.business_tags || []
@@ -47,47 +53,35 @@ export default function DiscoveryFilter({ locations, onFilterChange }: Discovery
   }
 
   return (
-    <div className="relative z-10 max-w-6xl mx-auto px-4 mb-6">
-      <div className="flex justify-center">
-        <div className="bg-[#FFFEF9] border-[1px] border-[#E5E5E5] rounded-lg p-2 shadow-sm">
-          <div className="flex flex-wrap gap-1">
-            {/* All button */}
-            <button
-              onClick={() => handleCategoryClick('all')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                activeCategory === 'all'
-                  ? 'bg-[#D94F4F] text-white'
-                  : 'text-[#6B6B6B] hover:text-[#2C2C2C] hover:bg-[#F8F9FA]'
-              }`}
-            >
-              All ({locations.length})
-            </button>
-            
-            {/* Category buttons */}
-            {DISCOVERY_CATEGORIES.map(category => (
-              <button
-                key={category}
-                onClick={() => handleCategoryClick(category)}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeCategory === category
-                    ? 'bg-[#D94F4F] text-white'
-                    : 'text-[#6B6B6B] hover:text-[#2C2C2C] hover:bg-[#F8F9FA]'
-                }`}
-                disabled={categoryCounts[category] === 0}
-              >
-                {DISCOVERY_CATEGORY_LABELS[category]} ({categoryCounts[category]})
-              </button>
-            ))}
-          </div>
-        </div>
+    <div className="max-w-[640px] mx-auto px-4 mb-6">
+      <div className="filter-group justify-center">
+        <button
+          onClick={() => handleCategoryClick('all')}
+          className={`filter-chip ${activeCategory === 'all' ? 'filter-chip--active' : ''}`}
+        >
+          All ({locations.length})
+        </button>
+
+        {DISCOVERY_CATEGORIES.map((category) => (
+          <button
+            key={category}
+            onClick={() => handleCategoryClick(category)}
+            className={`filter-chip ${activeCategory === category ? 'filter-chip--active' : ''}`}
+            disabled={categoryCounts[category] === 0}
+            style={categoryCounts[category] === 0 ? { opacity: 0.4, cursor: 'default' } : undefined}
+          >
+            {DISCOVERY_CATEGORY_LABELS[category]} ({categoryCounts[category]})
+          </button>
+        ))}
       </div>
-      
+
       {activeCategory !== 'all' && (
-        <div className="text-center mt-3">
-          <p className="text-[#6B6B6B] text-sm">
-            Showing {categoryCounts[activeCategory]} locations in {DISCOVERY_CATEGORY_LABELS[activeCategory].toLowerCase()}
-          </p>
-        </div>
+        <p
+          className="text-center mt-3 text-sm"
+          style={{ color: 'var(--sb-stone)' }}
+        >
+          Showing {categoryCounts[activeCategory]} in {DISCOVERY_CATEGORY_LABELS[activeCategory].toLowerCase()}
+        </p>
       )}
     </div>
   )

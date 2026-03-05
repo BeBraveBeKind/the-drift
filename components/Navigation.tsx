@@ -3,168 +3,119 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import { Menu, X } from 'lucide-react'
 
+/**
+ * Navigation — design system spec.
+ * Sticky white bar, 640px max, Lucide icons.
+ * Marketing nav variant will be built with marketing pages.
+ */
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
 
-  // Close menu when route changes
   useEffect(() => {
     setMenuOpen(false)
   }, [pathname])
 
-  // Prevent body scroll when menu is open
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
+    document.body.style.overflow = menuOpen ? 'hidden' : 'unset'
+    return () => { document.body.style.overflow = 'unset' }
   }, [menuOpen])
 
   return (
     <>
-      <nav className="site-header" style={{ 
-        backgroundColor: 'var(--bg-card)', 
-        borderBottom: '1px solid var(--border)', 
-        position: 'sticky', 
-        top: 0, 
-        zIndex: 100,
-        height: '64px',
-        containIntrinsicSize: '0 64px',
-        contentVisibility: 'auto'
-      }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <Link 
-              href="/" 
-              className="site-header__logo" 
-              style={{ 
-                fontSize: '1.25rem', 
-                fontWeight: 700, 
-                color: 'var(--text-primary)', 
-                textDecoration: 'none' 
-              }}
-            >
-              Switchboard
-            </Link>
+      <nav
+        className="sticky top-0 z-50 h-16"
+        style={{
+          backgroundColor: 'var(--sb-white)',
+          borderBottom: '1px solid var(--sb-warm-gray)',
+        }}
+      >
+        <div className="max-w-[640px] mx-auto px-4 h-full flex items-center justify-between">
+          <Link
+            href="/"
+            className="text-lg font-bold"
+            style={{ color: 'var(--sb-charcoal)', textDecoration: 'none' }}
+          >
+            Switchboard
+          </Link>
 
-            {/* Hamburger Menu Button */}
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="p-2"
-              aria-label="Menu"
-              style={{ minWidth: '44px', minHeight: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >
-              <svg 
-                width="24" 
-                height="24" 
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {menuOpen ? (
-                  <>
-                    <path d="M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                    <path d="M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  </>
-                ) : (
-                  <>
-                    <path d="M4 6H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                    <path d="M4 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                    <path d="M4 18H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  </>
-                )}
-              </svg>
-            </button>
-          </div>
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            className="flex items-center justify-center"
+            style={{ minWidth: 44, minHeight: 44 }}
+          >
+            {menuOpen ? (
+              <X size={24} color="var(--sb-charcoal)" />
+            ) : (
+              <Menu size={24} color="var(--sb-charcoal)" />
+            )}
+          </button>
         </div>
       </nav>
 
-      {/* Clean Dropdown Menu */}
-      <div 
-        className={`fixed top-16 right-0 z-40 transition-all duration-200 ease-in-out ${
+      {/* Dropdown */}
+      <div
+        className={`fixed top-16 left-0 right-0 z-40 transition-all duration-150 ease-in-out ${
           menuOpen ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0 pointer-events-none'
         }`}
-        style={{ 
-          width: '100%',
-          maxWidth: '100vw',
-          backgroundColor: 'var(--bg-card)',
-          borderBottom: '1px solid var(--border)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+        style={{
+          backgroundColor: 'var(--sb-white)',
+          borderBottom: '1px solid var(--sb-warm-gray)',
         }}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
-          <nav className="space-y-1">
-            <Link 
-              href="/towns" 
-              className="block py-3 text-[17px] font-medium transition-colors hover:opacity-70"
-              style={{ 
-                color: 'var(--text-primary)',
-                textDecoration: 'none'
-              }}
+        <div className="max-w-[640px] mx-auto px-4 py-4 space-y-1">
+          <Link
+            href="/towns"
+            className="block py-3 text-base font-medium"
+            style={{ color: 'var(--sb-charcoal)', textDecoration: 'none' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            Towns
+          </Link>
+          <Link
+            href="/about"
+            className="block py-3 text-base font-medium"
+            style={{ color: 'var(--sb-charcoal)', textDecoration: 'none' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            About
+          </Link>
+          <Link
+            href="/how-to-post"
+            className="block py-3 text-base font-medium"
+            style={{ color: 'var(--sb-charcoal)', textDecoration: 'none' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            How It Works
+          </Link>
+          <Link
+            href="/get-listed"
+            className="block py-3 text-base font-medium"
+            style={{ color: 'var(--sb-charcoal)', textDecoration: 'none' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            For Businesses
+          </Link>
+          <div className="pt-2">
+            <Link
+              href="/start-town"
+              className="btn-primary w-full text-center"
+              style={{ textDecoration: 'none' }}
               onClick={() => setMenuOpen(false)}
             >
-              See Towns
+              Bring Switchboard to Your Town
             </Link>
-            <Link 
-              href="/about" 
-              className="block py-3 text-[17px] font-medium transition-colors hover:opacity-70"
-              style={{ 
-                color: 'var(--text-primary)',
-                textDecoration: 'none'
-              }}
-              onClick={() => setMenuOpen(false)}
-            >
-              About
-            </Link>
-            <Link 
-              href="/how-to-post" 
-              className="block py-3 text-[17px] font-medium transition-colors hover:opacity-70"
-              style={{ 
-                color: 'var(--text-primary)',
-                textDecoration: 'none'
-              }}
-              onClick={() => setMenuOpen(false)}
-            >
-              How to Post
-            </Link>
-            <Link 
-              href="/get-listed" 
-              className="block py-3 text-[17px] font-medium transition-colors hover:opacity-70"
-              style={{ 
-                color: 'var(--text-primary)',
-                textDecoration: 'none'
-              }}
-              onClick={() => setMenuOpen(false)}
-            >
-              Get Listed
-            </Link>
-            <div className="pt-2">
-              <Link 
-                href="/start-town" 
-                className="btn-primary w-full"
-                style={{ 
-                  textDecoration: 'none'
-                }}
-                onClick={() => setMenuOpen(false)}
-              >
-                Start a Town
-              </Link>
-            </div>
-          </nav>
+          </div>
         </div>
       </div>
 
-      {/* Overlay */}
       {menuOpen && (
-        <div 
-          className="fixed inset-0 z-30" 
-          style={{ top: '64px' }}
+        <div
+          className="fixed inset-0 z-30"
+          style={{ top: 64 }}
           onClick={() => setMenuOpen(false)}
         />
       )}
