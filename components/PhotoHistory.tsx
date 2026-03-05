@@ -16,7 +16,7 @@ import { getPhotoUrl } from '@/lib/utils'
 interface HistoryPhoto {
   id: string
   storage_path: string
-  created_at: string
+  uploaded_at: string
   is_current?: boolean
 }
 
@@ -83,7 +83,7 @@ export default function PhotoHistory({ locationId }: { locationId: string }) {
               key={photo.id}
               onClick={() => {
                 setViewerSrc(getPhotoUrl(photo.storage_path))
-                setViewerAlt(`Photo from ${formatFullDate(photo.created_at)}`)
+                setViewerAlt(`Photo from ${formatFullDate(photo.uploaded_at)}`)
               }}
               className="flex-shrink-0 cursor-pointer"
             >
@@ -96,7 +96,7 @@ export default function PhotoHistory({ locationId }: { locationId: string }) {
               >
                 <Image
                   src={getPhotoUrl(photo.storage_path)}
-                  alt={`Photo from ${formatThumbDate(photo.created_at)}`}
+                  alt={`Photo from ${formatThumbDate(photo.uploaded_at)}`}
                   fill
                   sizes="80px"
                   className="object-cover"
@@ -106,7 +106,7 @@ export default function PhotoHistory({ locationId }: { locationId: string }) {
                 className="text-xs text-center mt-1"
                 style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
               >
-                {formatThumbDate(photo.created_at)}
+                {formatThumbDate(photo.uploaded_at)}
               </p>
             </button>
           ))}
