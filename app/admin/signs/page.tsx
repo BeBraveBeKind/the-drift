@@ -33,8 +33,6 @@ export default function AdminSignsPage() {
   const [sizePreset, setSizePreset] = useState('6x9')
   const [customW, setCustomW] = useState('12')
   const [customH, setCustomH] = useState('18')
-  const [previewUrl, setPreviewUrl] = useState('')
-
   // Fetch towns on mount
   useEffect(() => {
     supabase
@@ -67,17 +65,10 @@ export default function AdminSignsPage() {
       })
   }, [selectedTown, towns])
 
-  // Update preview when selections change
-  useEffect(() => {
-    if (!selectedTown || !selectedLocation) {
-      setPreviewUrl('')
-      return
-    }
-    const size = sizePreset === 'custom' ? `${customW}x${customH}` : sizePreset
-    setPreviewUrl(`/api/sign/${selectedTown}/${selectedLocation}?size=${size}`)
-  }, [selectedTown, selectedLocation, sizePreset, customW, customH])
-
   const size = sizePreset === 'custom' ? `${customW}x${customH}` : sizePreset
+  const previewUrl = selectedTown && selectedLocation
+    ? `/api/sign/${selectedTown}/${selectedLocation}?size=${size}`
+    : ''
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--sb-warm-white)', padding: '48px 24px' }}>
@@ -214,6 +205,7 @@ export default function AdminSignsPage() {
             <p style={{ color: 'var(--sb-stone)', fontSize: 13, marginBottom: 16 }}>Preview</p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
+              key={previewUrl}
               src={previewUrl}
               alt="Sign preview"
               style={{ width: '100%', height: 'auto' }}
