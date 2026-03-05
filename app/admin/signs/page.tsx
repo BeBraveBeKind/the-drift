@@ -68,9 +68,12 @@ export default function AdminSignsPage() {
 
   const size = sizePreset === 'custom' ? `${customW}x${customH}` : sizePreset
   const orientationParam = sizePreset !== 'custom' ? `&orientation=${orientation}` : ''
-  const previewUrl = selectedTown && selectedLocation
+  const baseUrl = selectedTown && selectedLocation
     ? `/api/sign/${selectedTown}/${selectedLocation}?size=${size}${orientationParam}`
     : ''
+  // Cache-bust for preview; download uses clean URL
+  const previewUrl = baseUrl ? `${baseUrl}&t=${Date.now()}` : ''
+  const downloadUrl = baseUrl
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--sb-warm-white)', padding: '48px 24px' }}>
@@ -198,9 +201,9 @@ export default function AdminSignsPage() {
         </div>
 
         {/* Download button */}
-        {previewUrl && (
+        {downloadUrl && (
           <a
-            href={previewUrl}
+            href={downloadUrl}
             download
             style={{
               display: 'inline-flex',
