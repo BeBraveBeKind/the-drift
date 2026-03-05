@@ -32,12 +32,18 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: 'Business not found' }, { status: 404 })
   }
 
+  const orientation = request.nextUrl.searchParams.get('orientation') || 'landscape'
+
   // Resolve dimensions
   const preset = SIGN_SIZES[size]
   let w: number, h: number
   if (preset) {
     w = preset.w
     h = preset.h
+    // Swap for portrait
+    if (orientation === 'portrait') {
+      ;[w, h] = [h, w]
+    }
   } else {
     // Custom size: WxH in inches
     const parts = size.split('x')

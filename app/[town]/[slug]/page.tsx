@@ -305,7 +305,7 @@ export default async function BoardPage({ params }: PageProps) {
                 className="text-xl font-semibold mb-4"
                 style={{ color: 'var(--sb-charcoal)' }}
               >
-                Also on this board
+                Also on Switchboard {townData.name}
               </h2>
               <div>
                 {otherLocations.map((loc: { name: string; slug: string }) => (

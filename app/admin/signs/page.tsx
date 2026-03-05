@@ -31,6 +31,7 @@ export default function AdminSignsPage() {
   const [selectedTown, setSelectedTown] = useState('')
   const [selectedLocation, setSelectedLocation] = useState('')
   const [sizePreset, setSizePreset] = useState('6x9')
+  const [orientation, setOrientation] = useState<'landscape' | 'portrait'>('landscape')
   const [customW, setCustomW] = useState('12')
   const [customH, setCustomH] = useState('18')
   // Fetch towns on mount
@@ -66,8 +67,9 @@ export default function AdminSignsPage() {
   }, [selectedTown, towns])
 
   const size = sizePreset === 'custom' ? `${customW}x${customH}` : sizePreset
+  const orientationParam = sizePreset !== 'custom' ? `&orientation=${orientation}` : ''
   const previewUrl = selectedTown && selectedLocation
-    ? `/api/sign/${selectedTown}/${selectedLocation}?size=${size}`
+    ? `/api/sign/${selectedTown}/${selectedLocation}?size=${size}${orientationParam}`
     : ''
 
   return (
@@ -134,6 +136,34 @@ export default function AdminSignsPage() {
               ))}
             </select>
           </div>
+
+          {/* Orientation (only for presets) */}
+          {sizePreset !== 'custom' && (
+            <div>
+              <label style={labelStyle}>Orientation</label>
+              <div style={{ display: 'flex', gap: 0, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--sb-warm-gray)' }}>
+                {(['landscape', 'portrait'] as const).map(o => (
+                  <button
+                    key={o}
+                    onClick={() => setOrientation(o)}
+                    style={{
+                      flex: 1,
+                      padding: '10px 16px',
+                      fontSize: 14,
+                      fontWeight: orientation === o ? 700 : 400,
+                      background: orientation === o ? 'var(--sb-amber)' : 'var(--sb-white)',
+                      color: 'var(--sb-charcoal)',
+                      border: 'none',
+                      cursor: 'pointer',
+                      textTransform: 'capitalize',
+                    }}
+                  >
+                    {o === 'landscape' ? 'Landscape (side-by-side)' : 'Portrait (stacked)'}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Custom dimensions */}
           {sizePreset === 'custom' && (
