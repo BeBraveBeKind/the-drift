@@ -4,8 +4,8 @@
   "description": "Your community bulletin board, digitized",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#F5E6D3",
-  "theme_color": "#5D4E37",
+  "background_color": "#FFFBEB",
+  "theme_color": "#F59E0B",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -16,6 +16,12 @@
       "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
