@@ -4,9 +4,7 @@
 
 /* Critical CSS - Prevent layout shift on initial load */
 html {
-  /* Prevent font size adjustments in iOS Safari */
   -webkit-text-size-adjust: 100%;
-  /* Smooth scrolling */
   scroll-behavior: smooth;
 }
 
@@ -17,144 +15,65 @@ img {
   display: block;
 }
 
-/* Prevent FOUC and layout shift */
-.board-card-polaroid__image-wrapper {
-  position: relative;
-  aspect-ratio: 4/3;
-  background: #f3f4f6;
-  overflow: hidden;
-}
-
-/* Navigation placeholder to prevent jump */
-.nav-placeholder {
-  height: 64px;
-  background: transparent;
-}
-
-/* Font loading optimization */
-.font-quicksand {
-  font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-display: swap;
-}
-
 @layer base {
   :root {
-    /* Backgrounds */
-    --bg-page: #F5F0E8;        /* Warm off-white, like aged paper */
-    --bg-card: #FFFFFF;        /* Pure white cards for contrast */
-    --bg-elevated: #FFFDF9;    /* Slightly warm white for modals/tooltips */
-    
-    /* Cork accent (use sparingly) */
-    --cork: #C9A66B;           /* For subtle borders or small accents only */
-    --cork-dark: #8B7355;      /* For text on cork if needed */
-    
+    /* ========================================
+       Switchboard Design System
+       Source: switchboard-design-system.md (locked)
+       ======================================== */
+
+    /* Brand */
+    --sb-amber: #F59E0B;
+    --sb-amber-hover: #D97706;
+
     /* Text */
-    --text-primary: #1A1A1A;   /* Near-black, high contrast */
-    --text-secondary: #4A4A4A; /* Dark gray for meta info */
-    --text-muted: #6B6B6B;     /* Medium gray - use sparingly, never for important info */
-    
-    /* Interactive */
-    --link: #2563EB;           /* Blue, not purple. Familiar. */
-    --link-hover: #1D4ED8;     /* Darker on hover */
-    --accent: #DC2626;         /* Red for primary actions, active states */
-    --accent-hover: #B91C1C;
-    
-    /* Utility */
-    --border: #D1D5DB;         /* Light gray borders */
-    --border-strong: #9CA3AF;  /* Darker borders for emphasis */
-    --success: #059669;
-    --warning: #D97706;
+    --sb-charcoal: #1E293B;
+    --sb-slate: #334155;
+    --sb-stone: #78716C;
+
+    /* Backgrounds */
+    --sb-warm-white: #FFFBEB;
+    --sb-white: #FFFFFF;
+
+    /* Borders */
+    --sb-warm-gray: #E7E5E4;
+
+    /* Status */
+    --sb-green: #16A34A;
+    --sb-red: #DC2626;
+
+    /* Spacing grid: 8px base */
+    --sb-space-1: 8px;
+    --sb-space-2: 16px;
+    --sb-space-3: 24px;
+    --sb-space-4: 32px;
+    --sb-space-6: 48px;
+
+    /* Layout */
+    --sb-max-width: 640px;
+    --sb-radius: 8px;
+    --sb-radius-sm: 6px;
+    --sb-radius-badge: 20px;
+
+    /* Transitions */
+    --sb-transition: 150ms ease;
   }
-  
-  /* System font stack for optimal readability */
+
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 1.0625rem;  /* 17px base */
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem; /* 16px base */
     line-height: 1.5;
-    color: var(--text-primary);
-    background-color: var(--bg-page);
+    color: var(--sb-charcoal);
+    background-color: var(--sb-warm-white);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  
-  /* Typography scale */
-  .text-display { 
-    font-size: 1.75rem; 
-    font-weight: 700; 
-    line-height: 1.2; 
-  }
-  
-  .text-heading { 
-    font-size: 1.375rem; 
-    font-weight: 600; 
-    line-height: 1.3; 
-  }
-  
-  .text-subhead { 
-    font-size: 1.125rem; 
-    font-weight: 600; 
-    line-height: 1.4; 
-  }
-  
-  .text-body { 
-    font-size: 1.0625rem; 
-    font-weight: 400; 
-    line-height: 1.5; 
-  }
-  
-  .text-caption { 
-    font-size: 0.9375rem; 
-    font-weight: 400; 
-    line-height: 1.4; 
-    color: var(--text-secondary); 
-  }
-  
-  .text-small { 
-    font-size: 0.8125rem; 
-    font-weight: 500; 
-    line-height: 1.4; 
-  }
-  
-  /* Link styles */
-  a {
-    color: var(--link);
-    text-decoration: none;
-    font-weight: 500;
-  }
-  
-  a:hover {
-    color: var(--link-hover);
-  }
-  
-  /* Only underline inline text links, not navigation */
-  p a, li a, .content a {
-    text-decoration: underline;
-  }
-  
+
   /* Don't apply EXIF orientation - images are already rotated server-side */
   img {
     image-orientation: none;
   }
-  
-  /* Optimize rendering performance */
-  * {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  /* Prevent layout shifts */
-  .board-card-polaroid {
-    contain: layout;
-  }
-  
-  /* GPU acceleration for transforms - only on hover */
-  .board-card-polaroid:hover {
-    transform: scale(1.03);
-  }
-  
-  /* Font display optimization */
-  @font-face {
-    font-display: swap;
-  }
-  
+
   /* Prevent layout shifts from dynamic content */
   .min-h-screen {
     min-height: 100vh;
@@ -163,56 +82,61 @@ img {
 }
 
 @layer components {
-  /* Button styles */
+  /* ========================================
+     Buttons — Design System
+     Min touch target: 44x44px
+     Border radius: 6px buttons, 20px badges
+     No shadows — flat design
+     ======================================== */
+
   .btn-primary {
-    background: var(--accent);
-    color: white;
+    background: var(--sb-amber);
+    color: var(--sb-charcoal);
     font-size: 1rem;
     font-weight: 600;
     padding: 12px 24px;
-    min-height: 48px;
-    border-radius: 8px;
+    min-height: 44px;
+    border-radius: var(--sb-radius-sm);
     border: none;
     cursor: pointer;
-    transition: background 0.15s;
+    transition: background var(--sb-transition);
     display: inline-flex;
     align-items: center;
     justify-content: center;
   }
-  
-  .btn-primary:hover { 
-    background: var(--accent-hover); 
+
+  .btn-primary:hover {
+    background: var(--sb-amber-hover);
   }
-  
-  .btn-primary:active { 
-    transform: scale(0.98); 
+
+  .btn-primary:active {
+    transform: scale(0.98);
   }
-  
+
   .btn-secondary {
-    background: var(--bg-card);
-    color: var(--text-primary);
+    background: var(--sb-white);
+    color: var(--sb-charcoal);
     font-size: 0.9375rem;
     font-weight: 500;
     padding: 10px 20px;
     min-height: 44px;
-    border-radius: 8px;
-    border: 1px solid var(--border-strong);
+    border-radius: var(--sb-radius-sm);
+    border: 1px solid var(--sb-warm-gray);
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
+    transition: border-color var(--sb-transition);
     display: inline-flex;
     align-items: center;
     justify-content: center;
   }
-  
+
   .btn-secondary:hover {
-    border-color: var(--text-secondary);
-    background: var(--bg-elevated);
+    border-color: var(--sb-stone);
   }
-  
+
   .btn-text {
     background: none;
     border: none;
-    color: var(--link);
+    color: var(--sb-amber);
     font-size: 1rem;
     font-weight: 600;
     padding: 12px 8px;
@@ -221,129 +145,134 @@ img {
     text-decoration: none;
     display: inline-flex;
     align-items: center;
+    transition: color var(--sb-transition);
   }
-  
-  .btn-text:hover { 
-    color: var(--link-hover);
-    text-decoration: underline;
+
+  .btn-text:hover {
+    color: var(--sb-amber-hover);
   }
-  
-  /* Polaroid Card styles */
-  .board-card-polaroid {
+
+  /* ========================================
+     Grid Card — Flat design
+     No shadows, border only, 8px radius
+     ======================================== */
+
+  .board-card {
     display: block;
-    transition: transform 0.2s ease;
-    width: 100%;
-    max-width: 240px;
-    margin: 0 auto;
-  }
-  
-  .board-card-polaroid:hover {
-    transform: scale(1.03);
-  }
-  
-  .board-card-polaroid__frame {
-    background: white;
-    padding: 8px 8px 12px 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    border-radius: 2px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .board-card-polaroid__image-wrapper {
-    width: 100%;
-    aspect-ratio: 4/3;
+    background: var(--sb-white);
+    border: 1px solid var(--sb-warm-gray);
+    border-radius: var(--sb-radius);
     overflow: hidden;
-    background: #f5f5f5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    transition: border-color var(--sb-transition);
+    cursor: pointer;
   }
-  
-  .board-card-polaroid__image {
+
+  .board-card:hover {
+    border-color: var(--sb-stone);
+  }
+
+  .board-card__image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    background: var(--sb-warm-white);
+  }
+
+  .board-card__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  
-  .board-card-polaroid__image--placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-page);
+
+  .board-card__content {
+    padding: var(--sb-space-2);
   }
-  
-  .board-card-polaroid__content {
-    padding: 12px 4px 4px;
-    text-align: center;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .board-card-polaroid__title {
-    font-size: 0.9375rem;
+
+  .board-card__title {
+    font-size: 1rem;
     font-weight: 600;
-    color: var(--text-primary);
-    margin: 0 0 2px 0;
-    line-height: 1.2;
+    color: var(--sb-charcoal);
+    margin: 0;
+    line-height: 1.3;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
-  
-  .board-card-polaroid__category {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin: 2px 0 4px 0;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+
+  .board-card__category {
+    font-size: 0.875rem;
+    color: var(--sb-stone);
+    margin: 4px 0 0 0;
+    font-weight: 400;
   }
-  
-  .board-card-polaroid__meta {
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-    margin: 0;
-  }
-  
-  /* Filter pills */
+
+  /* ========================================
+     Filter Chips — Design System
+     Gold active, charcoal text inactive
+     ======================================== */
+
   .filter-group {
     display: flex;
-    gap: 8px;
+    gap: var(--sb-space-1);
     flex-wrap: wrap;
-    padding: 8px 0;
+    padding: var(--sb-space-1) 0;
   }
-  
-  .filter-pill {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
+
+  .filter-chip {
+    background: var(--sb-white);
+    border: 1px solid var(--sb-warm-gray);
+    border-radius: var(--sb-radius-badge);
     padding: 10px 18px;
     min-height: 44px;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     font-weight: 500;
-    color: var(--text-secondary);
+    color: var(--sb-slate);
     cursor: pointer;
-    transition: all 0.15s;
+    transition: all var(--sb-transition);
     display: flex;
     align-items: center;
     gap: 6px;
   }
-  
-  .filter-pill:hover {
-    border-color: var(--border-strong);
-    color: var(--text-primary);
+
+  .filter-chip:hover {
+    border-color: var(--sb-stone);
+    color: var(--sb-charcoal);
   }
-  
-  .filter-pill--active {
-    background: var(--text-primary);
-    border-color: var(--text-primary);
-    color: white;
+
+  .filter-chip--active {
+    background: var(--sb-amber);
+    border-color: var(--sb-amber);
+    color: var(--sb-charcoal);
+    font-weight: 600;
+  }
+
+  /* ========================================
+     Freshness Badges — Design System
+     Green (< 7d), Amber (7-30d), Red (30d+)
+     ======================================== */
+
+  .freshness-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .freshness-badge--fresh {
+    color: var(--sb-green);
+  }
+
+  .freshness-badge--aging {
+    color: var(--sb-amber);
+  }
+
+  .freshness-badge--stale {
+    color: var(--sb-red);
   }
 }

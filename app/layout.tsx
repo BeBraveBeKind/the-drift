@@ -1,6 +1,5 @@
 import { Metadata, Viewport } from 'next'
 import './globals.css'
-import Analytics from '@/components/Analytics'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -111,16 +110,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Analytics */}
-        <Analytics />
-        
+        {/* Plausible Analytics — privacy-first, no cookies, GDPR-compliant */}
+        <script
+          defer
+          data-domain="switchboard.town"
+          src="https://plausible.io/js/script.js"
+        />
+
         {/* Structured Data for SEO */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        
-        {/* Critical preconnects with dns-prefetch fallback */}
+
+        {/* Critical preconnects */}
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
@@ -131,65 +134,40 @@ export default function RootLayout({
             <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
           </>
         )}
-        
-        {/* Favicons - handled by metadata but kept for legacy support */}
+
+        {/* Favicons */}
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        
-        {/* Preload critical font weights to prevent CLS */}
+
+        {/* Plus Jakarta Sans — design system font */}
         <link
-          rel="preload"
-          href="https://fonts.gstatic.com/s/quicksand/v31/6xKtdSZaM9iE8KbpRA_hK1QNYuDyPw.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        
-        {/* Load fonts with swap to reduce blocking and prevent FOIT */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
-        
-        {/* Inline critical CSS to prevent render blocking */}
+
+        {/* Inline critical CSS */}
         <style dangerouslySetInnerHTML={{
           __html: `
-            /* Critical CSS for preventing layout shift */
-            .font-quicksand {
-              font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            }
-            
-            /* Prevent CLS on main content */
             body {
               min-height: 100vh;
-              background-color: #C4A574;
+              background-color: #FFFBEB;
             }
-            
-            /* Skeleton styles for initial load */
             @keyframes pulse {
               0%, 100% { opacity: 1; }
               50% { opacity: 0.5; }
             }
-            
             .animate-pulse {
               animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
             }
-            
-            /* Reserve space for navigation */
-            .nav-placeholder {
-              height: 64px;
-            }
-            
-            /* Optimize image rendering */
             img {
               content-visibility: auto;
               contain-intrinsic-size: 280px 210px;
             }
           `
         }} />
-        
+
         {/* Register service worker for better caching */}
         <script dangerouslySetInnerHTML={{
           __html: `
@@ -201,7 +179,7 @@ export default function RootLayout({
           `
         }} />
       </head>
-      <body className="font-quicksand bg-[#C4A574] min-h-screen" suppressHydrationWarning>
+      <body className="min-h-screen" suppressHydrationWarning>
         {children}
       </body>
     </html>
