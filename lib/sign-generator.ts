@@ -157,6 +157,7 @@ function buildLandscape(
   // Font sizes — legible from 3 feet on 6x9
   const bizSize = Math.max(40, Math.floor(s(68)))
   const connectSize = Math.max(20, Math.floor(s(30)))
+  const descriptorSize = Math.max(11, Math.floor(s(14)))
   const benefitSize = Math.max(18, Math.floor(s(24)))
   const taglineSize = Math.max(15, Math.floor(s(20)))
   const urlSize = Math.max(12, Math.floor(s(16)))
@@ -166,6 +167,7 @@ function buildLandscape(
   const bizY = Math.floor(h * 0.26)
   const bizName = fitBusinessName(safeName, leftCx, bizY, leftMaxW, bizSize, Math.floor(bizSize * 0.5), Math.floor(s(52)))
   const connectY = bizName.bottomY + Math.floor(s(48))
+  const descriptorY = connectY + Math.floor(s(22))
   const benefitY = Math.floor(h * 0.68)
   const taglineY = Math.floor(h * 0.90)
 
@@ -188,6 +190,11 @@ function buildLandscape(
         text-anchor="middle" font-family="${FONT}"
         font-size="${connectSize}" font-weight="600"
         fill="${AMBER_DARK}">is now a part of Switchboard</text>
+
+  <text x="${leftCx}" y="${descriptorY}"
+        text-anchor="middle" font-family="${FONT}"
+        font-size="${descriptorSize}" font-weight="400"
+        fill="${CHARCOAL}" opacity="0.45">the digital network of local bulletin boards</text>
 
   <text x="${leftCx}" y="${benefitY}"
         text-anchor="middle" font-family="${FONT}"
@@ -230,6 +237,7 @@ function buildPortrait(
   // Font sizes — legible from 3 feet on 6x9
   const bizSize = Math.max(34, Math.floor(s(58)))
   const connectSize = Math.max(18, Math.floor(s(26)))
+  const descriptorSize = Math.max(10, Math.floor(s(13)))
   const benefitSize = Math.max(16, Math.floor(s(22)))
   const taglineSize = Math.max(14, Math.floor(s(18)))
   const urlSize = Math.max(11, Math.floor(s(14)))
@@ -240,6 +248,7 @@ function buildPortrait(
   const bizY = Math.floor(h * 0.10)
   const bizName = fitBusinessName(safeName, cx, bizY, portMaxW, bizSize, Math.floor(bizSize * 0.5), Math.floor(s(46)))
   const connectY = bizName.bottomY + Math.floor(s(42))
+  const descriptorY = connectY + Math.floor(s(20))
 
   // Middle: QR code — big and central
   const qrSize = Math.floor(Math.min(w * 0.65, h * 0.34))
@@ -266,6 +275,11 @@ function buildPortrait(
         text-anchor="middle" font-family="${FONT}"
         font-size="${connectSize}" font-weight="600"
         fill="${AMBER_DARK}">is now a part of Switchboard</text>
+
+  <text x="${cx}" y="${descriptorY}"
+        text-anchor="middle" font-family="${FONT}"
+        font-size="${descriptorSize}" font-weight="400"
+        fill="${CHARCOAL}" opacity="0.45">the digital network of local bulletin boards</text>
 
   <!-- MIDDLE: QR Code -->
 
