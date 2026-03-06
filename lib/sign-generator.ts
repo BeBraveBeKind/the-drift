@@ -41,6 +41,87 @@ function escapeXml(str: string): string {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
+// Approximate text width for Plus Jakarta Sans 800 weight.
+// Average char width ≈ 0.58 × fontSize; capitals/wide chars ≈ 0.72.
+function estimateTextWidth(text: string, fontSize: number): number {
+  let width = 0
+  for (const ch of text) {
+    if (/[MWQO@]/.test(ch)) width += fontSize * 0.78
+    else if (/[A-Z]/.test(ch)) width += fontSize * 0.68
+    else if (/[mw]/.test(ch)) width += fontSize * 0.7
+    else if (/[ijl.,'!|:]/.test(ch)) width += fontSize * 0.3
+    else if (/[ftrs]/.test(ch)) width += fontSize * 0.42
+    else if (ch === ' ') width += fontSize * 0.28
+    else width += fontSize * 0.55
+  }
+  return width
+}
+
+// Returns SVG text element(s) for the business name, auto-sizing or
+// wrapping to 2 lines if the name is too wide for the available space.
+function fitBusinessName(
+  name: string, x: number, y: number, maxWidth: number,
+  baseFontSize: number, minFontSize: number, lineSpacing: number
+): { svg: string; bottomY: number } {
+  // Try full size, single line
+  let fontSize = baseFontSize
+  let tw = estimateTextWidth(name, fontSize)
+
+  if (tw <= maxWidth) {
+    return {
+      svg: `<text x="${x}" y="${y}" text-anchor="middle" font-family="${FONT}" font-size="${fontSize}" font-weight="800" fill="${CHARCOAL}">${name}</text>`,
+      bottomY: y,
+    }
+  }
+
+  // Try shrinking down to minFontSize
+  while (fontSize > minFontSize) {
+    fontSize -= 2
+    tw = estimateTextWidth(name, fontSize)
+    if (tw <= maxWidth) {
+      return {
+        svg: `<text x="${x}" y="${y}" text-anchor="middle" font-family="${FONT}" font-size="${fontSize}" font-weight="800" fill="${CHARCOAL}">${name}</text>`,
+        bottomY: y,
+      }
+    }
+  }
+
+  // Still too long — wrap to 2 lines at the best word boundary
+  fontSize = baseFontSize
+  const words = name.split(' ')
+  let bestSplit = Math.ceil(words.length / 2)
+  let bestDiff = Infinity
+
+  for (let i = 1; i < words.length; i++) {
+    const line1 = words.slice(0, i).join(' ')
+    const line2 = words.slice(i).join(' ')
+    const w1 = estimateTextWidth(line1, fontSize)
+    const w2 = estimateTextWidth(line2, fontSize)
+    const diff = Math.abs(w1 - w2)
+    if (Math.max(w1, w2) <= maxWidth && diff < bestDiff) {
+      bestDiff = diff
+      bestSplit = i
+    }
+  }
+
+  const line1 = words.slice(0, bestSplit).join(' ')
+  const line2 = words.slice(bestSplit).join(' ')
+
+  // Shrink if even 2 lines overflow
+  const longerLine = estimateTextWidth(line1, fontSize) > estimateTextWidth(line2, fontSize) ? line1 : line2
+  while (fontSize > minFontSize && estimateTextWidth(longerLine, fontSize) > maxWidth) {
+    fontSize -= 2
+  }
+
+  const y1 = y
+  const y2 = y + lineSpacing
+  return {
+    svg: `<text x="${x}" y="${y1}" text-anchor="middle" font-family="${FONT}" font-size="${fontSize}" font-weight="800" fill="${CHARCOAL}">${line1}</text>
+  <text x="${x}" y="${y2}" text-anchor="middle" font-family="${FONT}" font-size="${fontSize}" font-weight="800" fill="${CHARCOAL}">${line2}</text>`,
+    bottomY: y2,
+  }
+}
+
 function svgWrapper(w: number, h: number, r: number, content: string): string {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -80,9 +161,11 @@ function buildLandscape(
   const taglineSize = Math.max(15, Math.floor(s(20)))
   const urlSize = Math.max(12, Math.floor(s(16)))
 
-  // Left column positions
-  const bizY = Math.floor(h * 0.30)
-  const connectY = bizY + Math.floor(s(48))
+  // Left column: fit business name with auto-sizing
+  const leftMaxW = colSplit - pad * 2
+  const bizY = Math.floor(h * 0.26)
+  const bizName = fitBusinessName(safeName, leftCx, bizY, leftMaxW, bizSize, Math.floor(bizSize * 0.5), Math.floor(s(52)))
+  const connectY = bizName.bottomY + Math.floor(s(48))
   const benefitY = Math.floor(h * 0.68)
   const taglineY = Math.floor(h * 0.90)
 
@@ -99,10 +182,7 @@ function buildLandscape(
 
   const content = `  <!-- LEFT COLUMN -->
 
-  <text x="${leftCx}" y="${bizY}"
-        text-anchor="middle" font-family="${FONT}"
-        font-size="${bizSize}" font-weight="800"
-        fill="${CHARCOAL}">${safeName}</text>
+  ${bizName.svg}
 
   <text x="${leftCx}" y="${connectY}"
         text-anchor="middle" font-family="${FONT}"
@@ -154,14 +234,18 @@ function buildPortrait(
   const taglineSize = Math.max(14, Math.floor(s(18)))
   const urlSize = Math.max(11, Math.floor(s(14)))
 
-  // Top: business name + connector
+  // Top: business name + connector with auto-sizing
+  const portPad = Math.max(20, Math.floor(w * 0.06))
+  const portMaxW = w - portPad * 2
   const bizY = Math.floor(h * 0.10)
-  const connectY = bizY + Math.floor(s(42))
+  const bizName = fitBusinessName(safeName, cx, bizY, portMaxW, bizSize, Math.floor(bizSize * 0.5), Math.floor(s(46)))
+  const connectY = bizName.bottomY + Math.floor(s(42))
 
   // Middle: QR code — big and central
   const qrSize = Math.floor(Math.min(w * 0.65, h * 0.34))
   const qrX = Math.floor(cx - qrSize / 2)
-  const qrY = Math.floor(h * 0.27)
+  const qrTopTarget = connectY + Math.floor(s(32))
+  const qrY = Math.max(Math.floor(h * 0.27), qrTopTarget)
   const qrPad = Math.max(10, Math.floor(s(16)))
   const qrCorner = Math.max(8, Math.floor(s(12)))
 
@@ -176,10 +260,7 @@ function buildPortrait(
 
   const content = `  <!-- TOP: Business Name -->
 
-  <text x="${cx}" y="${bizY}"
-        text-anchor="middle" font-family="${FONT}"
-        font-size="${bizSize}" font-weight="800"
-        fill="${CHARCOAL}">${safeName}</text>
+  ${bizName.svg}
 
   <text x="${cx}" y="${connectY}"
         text-anchor="middle" font-family="${FONT}"
