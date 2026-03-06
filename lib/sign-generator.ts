@@ -156,20 +156,22 @@ function buildLandscape(
 
   // Font sizes — legible from 3 feet on 6x9
   const bizSize = Math.max(40, Math.floor(s(68)))
-  const connectSize = Math.max(20, Math.floor(s(30)))
-  const descriptorSize = Math.max(11, Math.floor(s(14)))
+  const tagSize = Math.max(11, Math.floor(s(14)))
+  const logoSize = Math.max(24, Math.floor(s(38)))
+  const descriptorSize = Math.max(10, Math.floor(s(12)))
   const benefitSize = Math.max(18, Math.floor(s(24)))
   const taglineSize = Math.max(15, Math.floor(s(20)))
   const urlSize = Math.max(12, Math.floor(s(16)))
 
   // Left column: fit business name with auto-sizing
   const leftMaxW = colSplit - pad * 2
-  const bizY = Math.floor(h * 0.26)
+  const bizY = Math.floor(h * 0.24)
   const bizName = fitBusinessName(safeName, leftCx, bizY, leftMaxW, bizSize, Math.floor(bizSize * 0.5), Math.floor(s(52)))
-  const connectY = bizName.bottomY + Math.floor(s(48))
-  const descriptorY = connectY + Math.floor(s(22))
-  const benefitY = Math.floor(h * 0.68)
-  const taglineY = Math.floor(h * 0.90)
+  const tagY = bizName.bottomY + Math.floor(s(32))
+  const logoY = tagY + Math.floor(s(32))
+  const descriptorY = logoY + Math.floor(s(18))
+  const benefitY = Math.floor(h * 0.72)
+  const taglineY = Math.floor(h * 0.92)
 
   // Right column: QR code — big, vertically centered
   const qrSize = Math.floor(Math.min((w - colSplit) * 0.80, h * 0.62))
@@ -186,10 +188,15 @@ function buildLandscape(
 
   ${bizName.svg}
 
-  <text x="${leftCx}" y="${connectY}"
+  <text x="${leftCx}" y="${tagY}"
         text-anchor="middle" font-family="${FONT}"
-        font-size="${connectSize}" font-weight="600"
-        fill="${AMBER_DARK}">is now a part of Switchboard</text>
+        font-size="${tagSize}" font-weight="400"
+        fill="${AMBER_DARK}">is now a part of</text>
+
+  <text x="${leftCx}" y="${logoY}"
+        text-anchor="middle" font-family="${FONT}"
+        font-size="${logoSize}" font-weight="800"
+        letter-spacing="0.14em" fill="${CHARCOAL}">SWITCHBOARD</text>
 
   <text x="${leftCx}" y="${descriptorY}"
         text-anchor="middle" font-family="${FONT}"
@@ -236,25 +243,27 @@ function buildPortrait(
 
   // Font sizes — legible from 3 feet on 6x9
   const bizSize = Math.max(34, Math.floor(s(58)))
-  const connectSize = Math.max(18, Math.floor(s(26)))
-  const descriptorSize = Math.max(10, Math.floor(s(13)))
+  const tagSize = Math.max(10, Math.floor(s(13)))
+  const logoSize = Math.max(20, Math.floor(s(32)))
+  const descriptorSize = Math.max(9, Math.floor(s(11)))
   const benefitSize = Math.max(16, Math.floor(s(22)))
   const taglineSize = Math.max(14, Math.floor(s(18)))
   const urlSize = Math.max(11, Math.floor(s(14)))
 
-  // Top: business name + connector with auto-sizing
+  // Top: business name + Switchboard lockup with auto-sizing
   const portPad = Math.max(20, Math.floor(w * 0.06))
   const portMaxW = w - portPad * 2
-  const bizY = Math.floor(h * 0.10)
+  const bizY = Math.floor(h * 0.09)
   const bizName = fitBusinessName(safeName, cx, bizY, portMaxW, bizSize, Math.floor(bizSize * 0.5), Math.floor(s(46)))
-  const connectY = bizName.bottomY + Math.floor(s(42))
-  const descriptorY = connectY + Math.floor(s(20))
+  const tagY = bizName.bottomY + Math.floor(s(28))
+  const logoY = tagY + Math.floor(s(28))
+  const descriptorY = logoY + Math.floor(s(16))
 
   // Middle: QR code — big and central
   const qrSize = Math.floor(Math.min(w * 0.65, h * 0.34))
   const qrX = Math.floor(cx - qrSize / 2)
-  const qrTopTarget = connectY + Math.floor(s(32))
-  const qrY = Math.max(Math.floor(h * 0.27), qrTopTarget)
+  const qrTopTarget = descriptorY + Math.floor(s(20))
+  const qrY = Math.max(Math.floor(h * 0.30), qrTopTarget)
   const qrPad = Math.max(10, Math.floor(s(16)))
   const qrCorner = Math.max(8, Math.floor(s(12)))
 
@@ -271,10 +280,15 @@ function buildPortrait(
 
   ${bizName.svg}
 
-  <text x="${cx}" y="${connectY}"
+  <text x="${cx}" y="${tagY}"
         text-anchor="middle" font-family="${FONT}"
-        font-size="${connectSize}" font-weight="600"
-        fill="${AMBER_DARK}">is now a part of Switchboard</text>
+        font-size="${tagSize}" font-weight="400"
+        fill="${AMBER_DARK}">is now a part of</text>
+
+  <text x="${cx}" y="${logoY}"
+        text-anchor="middle" font-family="${FONT}"
+        font-size="${logoSize}" font-weight="800"
+        letter-spacing="0.14em" fill="${CHARCOAL}">SWITCHBOARD</text>
 
   <text x="${cx}" y="${descriptorY}"
         text-anchor="middle" font-family="${FONT}"
