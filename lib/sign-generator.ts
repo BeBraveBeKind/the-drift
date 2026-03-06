@@ -60,7 +60,7 @@ ${content}
 </svg>`
 }
 
-// ── Landscape layout: side-by-side (copy left, QR right) ────────────
+// ── Landscape layout: business-first, QR right ──────────────────────
 function buildLandscape(
   w: number, h: number, safeName: string, safeAddr: string, url: string
 ): string {
@@ -68,85 +68,62 @@ function buildLandscape(
   const scale = Math.min(w / 864, h / 576)
   const s = (base: number) => base * scale
 
-  const pad = Math.max(24, Math.floor(w * 0.045))
-  const colSplit = Math.floor(w * 0.56)
-  const leftCx = Math.floor(colSplit / 2)
+  const pad = Math.max(28, Math.floor(w * 0.05))
+  const colSplit = Math.floor(w * 0.52)
+  const leftCx = Math.floor(pad + (colSplit - pad * 2) / 2)
   const rightCx = Math.floor(colSplit + (w - colSplit) / 2)
 
-  // Font sizes — bumped for readability at distance
-  const headlineSize = Math.max(32, Math.floor(s(56)))
-  const subSize = Math.max(14, Math.floor(s(21)))
-  const brandSize = Math.max(11, Math.floor(s(15)))
-  const bizSize = Math.max(22, Math.floor(s(36)))
-  const addrSize = Math.max(13, Math.floor(s(18)))
-  const taglineSize = Math.max(12, Math.floor(s(17)))
-  const trustSize = Math.max(10, Math.floor(s(13)))
-  const urlSize = Math.max(9, Math.floor(s(12)))
+  // Font sizes — business name dominates
+  const bizSize = Math.max(28, Math.floor(s(48)))
+  const connectSize = Math.max(13, Math.floor(s(19)))
+  const bulletSize = Math.max(11, Math.floor(s(15)))
+  const trustSize = Math.max(9, Math.floor(s(11)))
+  const urlSize = Math.max(8, Math.floor(s(10)))
 
-  // Left column positions
-  const brandY = Math.floor(h * 0.10)
-  const divider1Y = Math.floor(h * 0.155)
-  const headlineY = Math.floor(h * 0.34)
-  const subLine1Y = headlineY + Math.floor(s(48))
-  const subLine2Y = subLine1Y + Math.floor(s(26))
-  const bizY = Math.floor(h * 0.78)
-  const addrY = bizY + Math.floor(s(30))
-  const taglineY = Math.floor(h * 0.95)
+  // Left column: business name top, benefits bottom
+  const bizY = Math.floor(h * 0.28)
+  const connectY = bizY + Math.floor(s(38))
+  const bullet1Y = Math.floor(h * 0.68)
+  const bullet2Y = bullet1Y + Math.floor(s(24))
+  const trustY = Math.floor(h * 0.93)
 
   // Right column: QR code centered vertically
-  const qrSize = Math.floor(Math.min((w - colSplit) * 0.72, h * 0.52))
+  const qrSize = Math.floor(Math.min((w - colSplit) * 0.78, h * 0.60))
   const qrX = Math.floor(rightCx - qrSize / 2)
-  const qrY = Math.floor((h - qrSize) / 2 - s(16))
+  const qrY = Math.floor((h - qrSize) / 2)
   const qrPad = Math.max(10, Math.floor(s(18)))
   const qrCorner = Math.max(8, Math.floor(s(14)))
 
-  const trustY = qrY + qrSize + qrPad + Math.floor(s(30))
-  const urlY = trustY + Math.floor(s(20))
-
-  const marginL = pad
-  const marginR = colSplit - pad
+  const urlY = qrY + qrSize + qrPad + Math.floor(s(28))
 
   const qrRects = generateQrRects(url, qrSize, qrX, qrY)
 
-  const content = `  <!-- LEFT COLUMN: Copy -->
-
-  <text x="${leftCx}" y="${brandY}"
-        text-anchor="middle" font-family="${FONT}"
-        font-size="${brandSize}" font-weight="700"
-        letter-spacing="0.18em" fill="${CHARCOAL}">SWITCHBOARD</text>
-
-  <line x1="${marginL}" y1="${divider1Y}" x2="${marginR}" y2="${divider1Y}"
-        stroke="${CHARCOAL}" stroke-width="1.5" stroke-opacity="0.2"/>
-
-  <text x="${leftCx}" y="${headlineY}"
-        text-anchor="middle" font-family="${FONT}"
-        font-size="${headlineSize}" font-weight="800"
-        fill="${CHARCOAL}">This board is online.</text>
-
-  <text x="${leftCx}" y="${subLine1Y}"
-        text-anchor="middle" font-family="${FONT}"
-        font-size="${subSize}" font-weight="600"
-        fill="${AMBER_DARK}">Scan to see it.</text>
-
-  <text x="${leftCx}" y="${subLine2Y}"
-        text-anchor="middle" font-family="${FONT}"
-        font-size="${subSize}" font-weight="600"
-        fill="${AMBER_DARK}">Snap a photo to update it.</text>
+  const content = `  <!-- LEFT COLUMN -->
 
   <text x="${leftCx}" y="${bizY}"
         text-anchor="middle" font-family="${FONT}"
-        font-size="${bizSize}" font-weight="700"
+        font-size="${bizSize}" font-weight="800"
         fill="${CHARCOAL}">${safeName}</text>
 
-  <text x="${leftCx}" y="${addrY}"
+  <text x="${leftCx}" y="${connectY}"
         text-anchor="middle" font-family="${FONT}"
-        font-size="${addrSize}" font-weight="400"
-        fill="${AMBER_DARK}">${safeAddr}</text>
+        font-size="${connectSize}" font-weight="600"
+        fill="${AMBER_DARK}">is now on Switchboard</text>
 
-  <text x="${leftCx}" y="${taglineY}"
+  <text x="${leftCx}" y="${bullet1Y}"
         text-anchor="middle" font-family="${FONT}"
-        font-size="${taglineSize}" font-weight="700"
-        letter-spacing="0.08em" fill="${CHARCOAL}">Real. Local. Now.</text>
+        font-size="${bulletSize}" font-weight="400"
+        fill="${CHARCOAL}">Scan to check this spot anytime</text>
+
+  <text x="${leftCx}" y="${bullet2Y}"
+        text-anchor="middle" font-family="${FONT}"
+        font-size="${bulletSize}" font-weight="400"
+        fill="${CHARCOAL}">Snap a photo to keep it fresh</text>
+
+  <text x="${leftCx}" y="${trustY}"
+        text-anchor="middle" font-family="${FONT}"
+        font-size="${trustSize}" font-weight="400"
+        fill="${AMBER_DARK}">No app needed. Just your camera.</text>
 
   <!-- RIGHT COLUMN: QR -->
 
@@ -159,20 +136,15 @@ function buildLandscape(
       ${qrRects}
   </g>
 
-  <text x="${rightCx}" y="${trustY}"
-        text-anchor="middle" font-family="${FONT}"
-        font-size="${trustSize}" font-weight="400"
-        fill="${AMBER_DARK}">No app. No account. Just your camera.</text>
-
   <text x="${rightCx}" y="${urlY}"
         text-anchor="middle" font-family="${FONT}"
         font-size="${urlSize}" font-weight="600"
-        letter-spacing="0.04em" fill="${CHARCOAL}">www.switchboard.town</text>`
+        letter-spacing="0.04em" fill="${CHARCOAL}">switchboard.town</text>`
 
   return svgWrapper(w, h, r, content)
 }
 
-// ── Portrait layout: stacked (copy top, QR middle, business bottom) ─
+// ── Portrait layout: business-first, stacked ────────────────────────
 function buildPortrait(
   w: number, h: number, safeName: string, safeAddr: string, url: string
 ): string {
@@ -181,65 +153,46 @@ function buildPortrait(
   const s = (base: number) => base * scale
 
   const cx = Math.floor(w / 2)
-  const pad = Math.max(20, Math.floor(w * 0.06))
 
-  // Font sizes — bumped for readability at distance
-  const brandSize = Math.max(11, Math.floor(s(14)))
-  const headlineSize = Math.max(28, Math.floor(s(48)))
-  const subSize = Math.max(14, Math.floor(s(20)))
-  const bizSize = Math.max(20, Math.floor(s(32)))
-  const addrSize = Math.max(12, Math.floor(s(16)))
-  const taglineSize = Math.max(12, Math.floor(s(16)))
-  const trustSize = Math.max(10, Math.floor(s(13)))
-  const urlSize = Math.max(9, Math.floor(s(11)))
+  // Font sizes — business name dominates
+  const bizSize = Math.max(26, Math.floor(s(44)))
+  const connectSize = Math.max(13, Math.floor(s(18)))
+  const bulletSize = Math.max(11, Math.floor(s(15)))
+  const trustSize = Math.max(9, Math.floor(s(11)))
+  const urlSize = Math.max(8, Math.floor(s(10)))
 
-  // Top section: brand + headline + subhead
-  const brandY = Math.floor(h * 0.055)
-  const dividerY = Math.floor(h * 0.08)
-  const headlineY = Math.floor(h * 0.16)
-  const subLine1Y = headlineY + Math.floor(s(42))
-  const subLine2Y = subLine1Y + Math.floor(s(26))
+  // Top: business name + connector
+  const bizY = Math.floor(h * 0.10)
+  const connectY = bizY + Math.floor(s(36))
 
-  // Middle section: QR code
-  const qrSize = Math.floor(Math.min(w * 0.55, h * 0.30))
+  // Middle: QR code — big and central
+  const qrSize = Math.floor(Math.min(w * 0.65, h * 0.34))
   const qrX = Math.floor(cx - qrSize / 2)
-  const qrY = Math.floor(h * 0.38)
+  const qrY = Math.floor(h * 0.28)
   const qrPad = Math.max(10, Math.floor(s(16)))
   const qrCorner = Math.max(8, Math.floor(s(12)))
 
-  // Bottom section
-  const trustY = qrY + qrSize + qrPad + Math.floor(s(24))
-  const bizY = Math.floor(h * 0.80)
-  const addrY = bizY + Math.floor(s(28))
-  const taglineY = Math.floor(h * 0.92)
-  const urlY = taglineY + Math.floor(s(20))
+  // Below QR: benefits
+  const bullet1Y = qrY + qrSize + qrPad + Math.floor(s(32))
+  const bullet2Y = bullet1Y + Math.floor(s(24))
+
+  // Bottom: trust + url
+  const trustY = Math.floor(h * 0.88)
+  const urlY = trustY + Math.floor(s(18))
 
   const qrRects = generateQrRects(url, qrSize, qrX, qrY)
 
-  const content = `  <!-- TOP: Brand + Headline -->
+  const content = `  <!-- TOP: Business Name -->
 
-  <text x="${cx}" y="${brandY}"
+  <text x="${cx}" y="${bizY}"
         text-anchor="middle" font-family="${FONT}"
-        font-size="${brandSize}" font-weight="700"
-        letter-spacing="0.18em" fill="${CHARCOAL}">SWITCHBOARD</text>
+        font-size="${bizSize}" font-weight="800"
+        fill="${CHARCOAL}">${safeName}</text>
 
-  <line x1="${pad}" y1="${dividerY}" x2="${w - pad}" y2="${dividerY}"
-        stroke="${CHARCOAL}" stroke-width="1.5" stroke-opacity="0.2"/>
-
-  <text x="${cx}" y="${headlineY}"
+  <text x="${cx}" y="${connectY}"
         text-anchor="middle" font-family="${FONT}"
-        font-size="${headlineSize}" font-weight="800"
-        fill="${CHARCOAL}">This board is online.</text>
-
-  <text x="${cx}" y="${subLine1Y}"
-        text-anchor="middle" font-family="${FONT}"
-        font-size="${subSize}" font-weight="600"
-        fill="${AMBER_DARK}">Scan to see it.</text>
-
-  <text x="${cx}" y="${subLine2Y}"
-        text-anchor="middle" font-family="${FONT}"
-        font-size="${subSize}" font-weight="600"
-        fill="${AMBER_DARK}">Snap a photo to update it.</text>
+        font-size="${connectSize}" font-weight="600"
+        fill="${AMBER_DARK}">is now on Switchboard</text>
 
   <!-- MIDDLE: QR Code -->
 
@@ -252,32 +205,29 @@ function buildPortrait(
       ${qrRects}
   </g>
 
+  <!-- Benefits -->
+
+  <text x="${cx}" y="${bullet1Y}"
+        text-anchor="middle" font-family="${FONT}"
+        font-size="${bulletSize}" font-weight="400"
+        fill="${CHARCOAL}">Scan to check this spot anytime</text>
+
+  <text x="${cx}" y="${bullet2Y}"
+        text-anchor="middle" font-family="${FONT}"
+        font-size="${bulletSize}" font-weight="400"
+        fill="${CHARCOAL}">Snap a photo to keep it fresh</text>
+
+  <!-- Bottom -->
+
   <text x="${cx}" y="${trustY}"
         text-anchor="middle" font-family="${FONT}"
         font-size="${trustSize}" font-weight="400"
-        fill="${AMBER_DARK}">No app. No account. Just your camera.</text>
-
-  <!-- BOTTOM: Business + URL -->
-
-  <text x="${cx}" y="${bizY}"
-        text-anchor="middle" font-family="${FONT}"
-        font-size="${bizSize}" font-weight="700"
-        fill="${CHARCOAL}">${safeName}</text>
-
-  <text x="${cx}" y="${addrY}"
-        text-anchor="middle" font-family="${FONT}"
-        font-size="${addrSize}" font-weight="400"
-        fill="${AMBER_DARK}">${safeAddr}</text>
-
-  <text x="${cx}" y="${taglineY}"
-        text-anchor="middle" font-family="${FONT}"
-        font-size="${taglineSize}" font-weight="700"
-        letter-spacing="0.08em" fill="${CHARCOAL}">Real. Local. Now.</text>
+        fill="${AMBER_DARK}">No app needed. Just your camera.</text>
 
   <text x="${cx}" y="${urlY}"
         text-anchor="middle" font-family="${FONT}"
         font-size="${urlSize}" font-weight="600"
-        letter-spacing="0.04em" fill="${CHARCOAL}">www.switchboard.town</text>`
+        letter-spacing="0.04em" fill="${CHARCOAL}">switchboard.town</text>`
 
   return svgWrapper(w, h, r, content)
 }
