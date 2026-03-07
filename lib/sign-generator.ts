@@ -259,7 +259,7 @@ function buildPortrait(
   <text x="${cx}" y="${urlLockupY}"
         text-anchor="middle" font-family="${FONT}"
         font-size="${urlLockupSize}" font-weight="600"
-        letter-spacing="0.08em" fill="${AMBER_DARK}" opacity="0.55">www.switchboard.town</text>
+        letter-spacing="0.08em" fill="${AMBER_DARK}" opacity="0.8">www.switchboard.town</text>
 
   <!-- BUSINESS -->
   ${bizName.svg}
@@ -302,7 +302,7 @@ function buildPortrait(
   <text x="${cx}" y="${botUrlY}"
         text-anchor="middle" font-family="${FONT}"
         font-size="${botUrlSize}" font-weight="600"
-        letter-spacing="0.04em" fill="${AMBER_DARK}" opacity="0.55">www.switchboard.town</text>`
+        letter-spacing="0.04em" fill="${AMBER_DARK}" opacity="0.8">www.switchboard.town</text>`
 
   return svgWrapper(w, h, r, content)
 }
@@ -445,7 +445,7 @@ function buildLandscape(
   <text x="${cx}" y="${urlLockupY}"
         text-anchor="middle" font-family="${FONT}"
         font-size="${urlLockupSize}" font-weight="600"
-        letter-spacing="0.08em" fill="${AMBER_DARK}" opacity="0.55">www.switchboard.town</text>
+        letter-spacing="0.08em" fill="${AMBER_DARK}" opacity="0.8">www.switchboard.town</text>
 
   <!-- BUSINESS -->
   ${bizName.svg}
@@ -488,7 +488,7 @@ function buildLandscape(
   <text x="${cx}" y="${botUrlY}"
         text-anchor="middle" font-family="${FONT}"
         font-size="${botUrlSize}" font-weight="600"
-        letter-spacing="0.04em" fill="${AMBER_DARK}" opacity="0.55">www.switchboard.town</text>`
+        letter-spacing="0.04em" fill="${AMBER_DARK}" opacity="0.8">www.switchboard.town</text>`
 
   return svgWrapper(w, h, r, content)
 }
