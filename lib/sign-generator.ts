@@ -125,8 +125,8 @@ function dotDivider(cx: number, y: number, lineWidth: number, scale: number): st
 
 // Scan/upload instruction block with bold verbs
 function instructionBlock(cx: number, y1: number, y2: number, fontSize: number): string {
-  return `<text x="${cx}" y="${y1}" text-anchor="middle" font-family="${FONT}" font-size="${fontSize}" fill="${CHARCOAL}"><tspan font-weight="800">Scan</tspan><tspan font-weight="400" opacity="0.65"> to see what\u2019s posted.</tspan></text>
-  <text x="${cx}" y="${y2}" text-anchor="middle" font-family="${FONT}" font-size="${fontSize}" fill="${AMBER_DARK}"><tspan font-weight="800" font-style="italic">Upload a photo</tspan><tspan font-weight="400" opacity="0.65"> to refresh.</tspan></text>`
+  return `<text x="${cx}" y="${y1}" text-anchor="middle" font-family="${FONT}" font-size="${fontSize}" fill="${CHARCOAL}"><tspan font-weight="800">Scan</tspan><tspan font-weight="400" opacity="0.65">\u2003to see what\u2019s posted.</tspan></text>
+  <text x="${cx}" y="${y2}" text-anchor="middle" font-family="${FONT}" font-size="${fontSize}" fill="${AMBER_DARK}"><tspan font-weight="800" font-style="italic">Upload a photo</tspan><tspan font-weight="400" opacity="0.65">\u2003to refresh.</tspan></text>`
 }
 
 // Viewfinder corners around QR + "SCAN WITH YOUR PHONE" label
@@ -259,7 +259,7 @@ function buildPortrait(
   <text x="${cx}" y="${urlLockupY}"
         text-anchor="middle" font-family="${FONT}"
         font-size="${urlLockupSize}" font-weight="600"
-        letter-spacing="0.08em" fill="${AMBER_DARK}" opacity="0.8">www.switchboard.town</text>
+        letter-spacing="0.08em" fill="${AMBER_DARK}">www.switchboard.town</text>
 
   <!-- BUSINESS -->
   ${bizName.svg}
@@ -302,7 +302,7 @@ function buildPortrait(
   <text x="${cx}" y="${botUrlY}"
         text-anchor="middle" font-family="${FONT}"
         font-size="${botUrlSize}" font-weight="600"
-        letter-spacing="0.04em" fill="${AMBER_DARK}" opacity="0.8">www.switchboard.town</text>`
+        letter-spacing="0.04em" fill="${AMBER_DARK}">www.switchboard.town</text>`
 
   return svgWrapper(w, h, r, content)
 }
@@ -445,7 +445,7 @@ function buildLandscape(
   <text x="${cx}" y="${urlLockupY}"
         text-anchor="middle" font-family="${FONT}"
         font-size="${urlLockupSize}" font-weight="600"
-        letter-spacing="0.08em" fill="${AMBER_DARK}" opacity="0.8">www.switchboard.town</text>
+        letter-spacing="0.08em" fill="${AMBER_DARK}">www.switchboard.town</text>
 
   <!-- BUSINESS -->
   ${bizName.svg}
@@ -488,7 +488,7 @@ function buildLandscape(
   <text x="${cx}" y="${botUrlY}"
         text-anchor="middle" font-family="${FONT}"
         font-size="${botUrlSize}" font-weight="600"
-        letter-spacing="0.04em" fill="${AMBER_DARK}" opacity="0.8">www.switchboard.town</text>`
+        letter-spacing="0.04em" fill="${AMBER_DARK}">www.switchboard.town</text>`
 
   return svgWrapper(w, h, r, content)
 }
