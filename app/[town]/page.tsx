@@ -105,6 +105,12 @@ export default function TownHomePage() {
                 background: 'rgba(30,41,59,0.65)',
               }}
             >
+              <p
+                className="text-xs sm:text-sm font-light uppercase tracking-widest mb-1"
+                style={{ color: 'rgba(255,255,255,0.7)', letterSpacing: '0.15em' }}
+              >
+                Welcome to
+              </p>
               <h1
                 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-1"
                 style={{ color: '#F59E0B' }}
