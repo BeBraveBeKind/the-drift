@@ -11,17 +11,17 @@ interface PhotoPromptProps {
 
 const TIPS = [
   {
-    image: '/instructional/tip-1.jpg',
+    image: '/instructional/tip-1.webp',
     label: 'Step back',
     desc: 'Get the whole board in frame.',
   },
   {
-    image: '/instructional/tip-2.jpg',
+    image: '/instructional/tip-2.webp',
     label: 'Straight on',
     desc: 'Shoot flat — avoid angles.',
   },
   {
-    image: '/instructional/tip-3.jpg',
+    image: '/instructional/tip-3.webp',
     label: 'Good light',
     desc: 'Make sure flyers are readable.',
   },
