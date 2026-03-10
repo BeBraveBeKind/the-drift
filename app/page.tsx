@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
@@ -43,6 +44,7 @@ async function getTowns() {
 
 export default async function HomePage() {
   const towns = await getTowns()
+  const totalBoards = towns.reduce((sum, t) => sum + t.boardCount, 0)
 
   return (
     <>
@@ -97,11 +99,56 @@ export default async function HomePage() {
             </div>
 
             <p
-              className="text-sm mt-4"
+              className="text-sm mt-4 mb-10"
               style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
             >
               Free for everyone. Always.
             </p>
+
+            <Image
+              src="/hero-banner.webp"
+              alt="Illustrated community bulletin board with flyers, business cards, and local postings"
+              width={640}
+              height={280}
+              className="w-full h-auto"
+              priority
+              style={{ borderRadius: 'var(--sb-radius)' }}
+            />
+
+            {/* Aggregate stats */}
+            <div
+              className="flex justify-center gap-10 mt-8 pt-6"
+              style={{ borderTop: '1px solid var(--sb-warm-gray)' }}
+            >
+              <div className="text-center">
+                <p
+                  className="text-2xl font-bold"
+                  style={{ color: 'var(--sb-charcoal)' }}
+                >
+                  {totalBoards}
+                </p>
+                <p
+                  className="text-sm"
+                  style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+                >
+                  bulletin boards
+                </p>
+              </div>
+              <div className="text-center">
+                <p
+                  className="text-2xl font-bold"
+                  style={{ color: 'var(--sb-charcoal)' }}
+                >
+                  {towns.length}
+                </p>
+                <p
+                  className="text-sm"
+                  style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+                >
+                  {towns.length === 1 ? 'community' : 'communities'}
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -132,18 +179,24 @@ export default async function HomePage() {
                   step: '1',
                   title: 'Scan',
                   desc: 'A QR code on a local bulletin board opens it on your phone. Library, co-op, coffee shop — wherever boards already exist.',
+                  image: '/instructional/IMG_2404.jpg',
+                  imageAlt: 'Person scanning a Switchboard QR code at a bulletin board with their phone',
                 },
                 {
                   icon: <Smartphone size={28} />,
                   step: '2',
                   title: 'Browse',
                   desc: 'See every listing as a photo. Filter by category. Check when it was last updated. Find what you need in seconds.',
+                  image: '/instructional/IMG_2408.jpg',
+                  imageAlt: 'Phone showing the Switchboard business page after scanning a QR code',
                 },
                 {
                   icon: <Camera size={28} />,
                   step: '3',
                   title: 'Update',
                   desc: 'Snap a photo of the board to keep it current. Geo-verified — you must be there in person. The community keeps it real.',
+                  image: '/instructional/tip-2.webp',
+                  imageAlt: 'Person stepping back to photograph the full bulletin board',
                 },
               ].map((s) => (
                 <div key={s.step} className="flex items-start gap-5">
@@ -156,7 +209,7 @@ export default async function HomePage() {
                   >
                     {s.icon}
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h3
                       className="text-lg font-semibold mb-1"
                       style={{ color: 'var(--sb-charcoal)' }}
@@ -164,11 +217,24 @@ export default async function HomePage() {
                       {s.title}
                     </h3>
                     <p
-                      className="text-base"
+                      className="text-base mb-4"
                       style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
                     >
                       {s.desc}
                     </p>
+                    <div
+                      className="overflow-hidden"
+                      style={{ borderRadius: 'var(--sb-radius)' }}
+                    >
+                      <Image
+                        src={s.image}
+                        alt={s.imageAlt}
+                        width={480}
+                        height={320}
+                        className="w-full h-auto"
+                        style={{ maxHeight: '220px', objectFit: 'cover', objectPosition: 'top' }}
+                      />
+                    </div>
                   </div>
                 </div>
               ))}
