@@ -92,17 +92,17 @@ export default function PhotoPrompt({
         {/* Tip text */}
         <div className="absolute bottom-0 left-0 right-0 p-4">
           <p
-            className="text-xs font-semibold mb-1"
+            className="text-sm font-semibold mb-1"
             style={{ color: '#F59E0B', letterSpacing: '0.1em' }}
           >
             TIP {current + 1}/{TIPS.length}
           </p>
-          <p className="text-lg font-bold text-white leading-tight">
+          <p className="text-2xl font-bold text-white leading-tight">
             {tip.label}
           </p>
           <p
-            className="text-sm leading-snug"
-            style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}
+            className="text-base leading-snug"
+            style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}
           >
             {tip.desc}
           </p>
@@ -164,8 +164,15 @@ export default function PhotoPrompt({
 
         <button
           onClick={() => setDismissed(true)}
-          className="w-full mt-2 text-center text-sm cursor-pointer bg-transparent border-none"
-          style={{ color: 'rgba(255,255,255,0.35)' }}
+          className="flex items-center justify-center w-full font-semibold no-underline cursor-pointer mt-3"
+          style={{
+            background: 'transparent',
+            color: 'rgba(255,255,255,0.7)',
+            border: '1px solid rgba(255,255,255,0.25)',
+            borderRadius: '8px',
+            height: '48px',
+            fontSize: '16px',
+          }}
         >
           Not right now
         </button>
