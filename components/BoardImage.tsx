@@ -20,6 +20,7 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
     <>
       <div
         className="relative cursor-pointer group"
+        onClick={() => setShowViewer(true)}
         style={{
           border: '1px solid var(--sb-warm-gray)',
           borderRadius: 'var(--sb-radius)',

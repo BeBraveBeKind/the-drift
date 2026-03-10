@@ -81,12 +81,12 @@ export default function PhotoPrompt({
           alt={tip.label}
           className="absolute inset-0 w-full h-full object-cover"
         />
-        {/* Gradient overlay */}
+        {/* Dark overlay — heavy enough for legible text */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(to top, rgba(30,41,59,0.9) 0%, rgba(30,41,59,0.3) 50%, rgba(30,41,59,0) 100%)',
+              'linear-gradient(to top, rgba(30,41,59,0.95) 0%, rgba(30,41,59,0.85) 40%, rgba(30,41,59,0.2) 100%)',
           }}
         />
         {/* Tip text */}
@@ -97,12 +97,15 @@ export default function PhotoPrompt({
           >
             TIP {current + 1}/{TIPS.length}
           </p>
-          <p className="text-2xl font-bold text-white leading-tight">
+          <p
+            className="text-2xl font-bold leading-tight"
+            style={{ color: '#ffffff', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}
+          >
             {tip.label}
           </p>
           <p
             className="text-base leading-snug"
-            style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}
+            style={{ color: 'rgba(255,255,255,0.9)', fontWeight: 400, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}
           >
             {tip.desc}
           </p>
