@@ -12,6 +12,7 @@
     "fix-rotation-manual": "tsx scripts/fix-rotation-manual.ts"
   },
   "dependencies": {
+    "@mindstudio-ai/agent": "^0.1.7",
     "@supabase/auth-helpers-nextjs": "^0.15.0",
     "@supabase/supabase-js": "^2.89.0",
     "@types/qrcode": "^1.5.6",

@@ -12,6 +12,7 @@ import BusinessPageProbes from '@/components/BusinessPageProbes'
 import PhotoHistory from '@/components/PhotoHistory'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import QrPhotoPrompt from '@/components/QrPhotoPrompt'
 import {
   Phone, Navigation as NavigationIcon, ExternalLink,
   Camera, ArrowRight, ChevronRight,
@@ -190,6 +191,13 @@ export default async function BoardPage({ params }: PageProps) {
           <div className="mb-8">
             <FreshnessIndicator updatedAt={photo?.created_at} />
           </div>
+
+          {/* ── QR Photo Prompt (above fold for QR visitors) ──── */}
+          <QrPhotoPrompt
+            townSlug={town}
+            businessSlug={slug}
+            lastUpdated={photo?.created_at}
+          />
 
           {/* ── P2: See (2-5 seconds) ─────────────────────────── */}
 

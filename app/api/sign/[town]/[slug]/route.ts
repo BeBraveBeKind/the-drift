@@ -59,7 +59,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
   }
 
-  const url = `https://switchboard.town/${town}/${location.slug}`
+  const url = `https://switchboard.town/${town}/${location.slug}?src=qr`
   const address = location.address || `${townData.name}`
 
   const svg = buildSign(w, h, location.name, address, url, townData.name)

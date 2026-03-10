@@ -198,7 +198,8 @@ function buildPortrait(
   const bizY     = Math.floor(h * 0.17)
   const bizMaxW  = w - pad * 2
   const bizName  = fitBusinessName(safeName, cx, bizY, bizMaxW, bizSize, Math.floor(bizSize * 0.5), Math.floor(s(38)))
-  const townY    = bizName.bottomY + Math.floor(s(18))
+  const descenderPad = Math.floor(bizSize * 0.28)
+  const townY    = bizName.bottomY + descenderPad + Math.floor(s(10))
   const townSize = Math.max(9, Math.floor(s(12)))
 
   // Divider (25%)
@@ -354,7 +355,7 @@ function buildLandscape(
   const bizLines = bizTest.bottomY > 0 ? 2 : 1
 
   const lockupH = logoSize + s(2) + urlLockupSize
-  const bizH    = (bizLines === 2 ? bizSize + s(28) : bizSize) + s(12) + townSize
+  const bizH    = (bizLines === 2 ? bizSize + s(28) : bizSize) + bizSize * 0.28 + s(6) + townSize
   const divLineH = s(2)
   const ctaH    = cta1Size + s(6) + cta2Size
   const taglineBlockH = taglineSize + Math.floor(taglineSize + s(4)) + Math.floor(s(14)) + Math.max(8, Math.floor(s(10)))
@@ -377,7 +378,8 @@ function buildLandscape(
   // Business
   const bizY_raw = Math.floor(y + bizSize * 0.8)
   const bizName_raw = fitBusinessName(safeName, cx, bizY_raw, bizMaxW, bizSize, Math.floor(bizSize * 0.45), Math.floor(s(28)))
-  const townY_raw = bizName_raw.bottomY + Math.floor(s(12))
+  const descenderPad = Math.floor(bizSize * 0.28)
+  const townY_raw = bizName_raw.bottomY + descenderPad + Math.floor(s(6))
   y = townY_raw + Math.floor(townSize * 0.2)
 
   // Divider
@@ -416,7 +418,7 @@ function buildLandscape(
   const urlLockupY = urlLockupY_raw + vOffset
   const bizY = bizY_raw + vOffset
   const bizName = fitBusinessName(safeName, cx, bizY, bizMaxW, bizSize, Math.floor(bizSize * 0.45), Math.floor(s(28)))
-  const townY = bizName.bottomY + Math.floor(s(12))
+  const townY = bizName.bottomY + descenderPad + Math.floor(s(6))
   const div1Y = div1Y_raw + vOffset
   const cta1Y = cta1Y_raw + vOffset
   const cta2Y = cta2Y_raw + vOffset
