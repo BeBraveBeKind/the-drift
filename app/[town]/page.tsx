@@ -84,18 +84,40 @@ export default function TownHomePage() {
     <>
       <Navigation />
       <main className="min-h-screen">
-        {/* Header */}
-        <header className="text-center pt-6 pb-4">
-          <div className="max-w-[640px] mx-auto px-4">
-            <h1
-              className="text-3xl sm:text-4xl font-bold mb-2"
-              style={{ color: 'var(--sb-charcoal)' }}
+        {/* Hero banner */}
+        <header className="max-w-[640px] mx-auto px-4 pt-4 pb-2">
+          <div
+            className="relative overflow-hidden"
+            style={{ borderRadius: 'var(--sb-radius)' }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/hero-banner.webp"
+              alt=""
+              className="w-full h-auto"
+              width={640}
+              height={280}
+              style={{ display: 'block' }}
+            />
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center text-center px-6"
+              style={{
+                background: 'rgba(30,41,59,0.65)',
+              }}
             >
-              Switchboard
-            </h1>
-            <p className="text-base" style={{ color: 'var(--sb-stone)' }}>
-              What&rsquo;s posted in {townName}
-            </p>
+              <h1
+                className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-1"
+                style={{ color: '#F59E0B' }}
+              >
+                Switchboard
+              </h1>
+              <p
+                className="text-sm sm:text-base font-light"
+                style={{ color: 'rgba(255,255,255,0.85)' }}
+              >
+                What&rsquo;s posted in {townName}
+              </p>
+            </div>
           </div>
         </header>
 
