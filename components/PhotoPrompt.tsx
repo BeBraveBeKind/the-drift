@@ -10,24 +10,12 @@ interface PhotoPromptProps {
 }
 
 const TIPS = [
-  {
-    image: '/instructional/tip-1.webp',
-    label: 'Step back',
-    desc: 'Get the whole board in frame.',
-  },
-  {
-    image: '/instructional/tip-2.webp',
-    label: 'Straight on',
-    desc: 'Shoot flat — avoid angles.',
-  },
-  {
-    image: '/instructional/tip-3.webp',
-    label: 'Good light',
-    desc: 'Make sure flyers are readable.',
-  },
+  'Step back — get the whole board in frame',
+  'Shoot straight on — avoid angles',
+  'Good light — make sure flyers are readable',
 ]
 
-const SLIDE_DURATION = 2800
+const TIP_DURATION = 3200
 const DISMISS_KEY = 'sb-photo-prompt-dismissed'
 
 function getFreshnessMessage(lastUpdated?: string): string {
@@ -47,12 +35,11 @@ export default function PhotoPrompt({
   businessSlug,
   lastUpdated,
 }: PhotoPromptProps) {
-  const [current, setCurrent] = useState(0)
-  const [dismissed, setDismissed] = useState(true) // hidden until hydration check
+  const [tipIndex, setTipIndex] = useState(0)
+  const [dismissed, setDismissed] = useState(true)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  // Check dismiss state + motion preference on mount
   useEffect(() => {
     const wasDismissed = localStorage.getItem(DISMISS_KEY)
     if (!wasDismissed) setDismissed(false)
@@ -64,18 +51,16 @@ export default function PhotoPrompt({
     return () => mq.removeEventListener('change', handler)
   }, [])
 
-  // Auto-advance slides (respects reduced motion + tab visibility)
   const startInterval = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current)
     if (prefersReducedMotion) return
     intervalRef.current = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % TIPS.length)
-    }, SLIDE_DURATION)
+      setTipIndex((prev) => (prev + 1) % TIPS.length)
+    }, TIP_DURATION)
   }, [prefersReducedMotion])
 
   useEffect(() => {
     startInterval()
-
     const handleVisibility = () => {
       if (document.hidden) {
         if (intervalRef.current) clearInterval(intervalRef.current)
@@ -84,23 +69,11 @@ export default function PhotoPrompt({
       }
     }
     document.addEventListener('visibilitychange', handleVisibility)
-
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
       document.removeEventListener('visibilitychange', handleVisibility)
     }
   }, [startInterval])
-
-  // Preload next image
-  useEffect(() => {
-    const nextIndex = (current + 1) % TIPS.length
-    const link = document.createElement('link')
-    link.rel = 'prefetch'
-    link.as = 'image'
-    link.href = TIPS[nextIndex].image
-    document.head.appendChild(link)
-    return () => { link.remove() }
-  }, [current])
 
   function handleDismiss() {
     localStorage.setItem(DISMISS_KEY, '1')
@@ -110,147 +83,73 @@ export default function PhotoPrompt({
   if (dismissed) return null
 
   const freshnessMsg = getFreshnessMessage(lastUpdated)
-  const tip = TIPS[current]
 
   return (
     <div
-      className="mb-6 overflow-hidden"
+      className="mb-6"
       role="region"
-      aria-label="Photo tips and upload prompt"
+      aria-label="Photo upload prompt"
       style={{
         background: 'var(--sb-charcoal)',
         borderRadius: 'var(--sb-radius)',
+        padding: '20px',
       }}
     >
-      {/* Photo slideshow with crossfade */}
-      <div
-        className="relative w-full overflow-hidden"
-        style={{ aspectRatio: '16/9' }}
-        aria-live="polite"
-        aria-atomic="true"
+      {/* Freshness urgency — the WHY */}
+      <p
+        className="text-xs font-semibold tracking-widest uppercase mb-1"
+        style={{ color: '#F59E0B' }}
       >
-        {TIPS.map((t, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={i}
-            src={t.image}
-            alt={t.label}
-            width={800}
-            height={450}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{
-              opacity: i === current ? 1 : 0,
-              transition: prefersReducedMotion ? 'none' : 'opacity 400ms ease',
-            }}
-          />
-        ))}
+        Post to Switchboard
+      </p>
+      <p
+        className="text-sm mb-5"
+        style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 300 }}
+      >
+        {freshnessMsg}
+      </p>
 
-        {/* Progress pips */}
-        <div
-          className="absolute top-0 left-0 right-0 flex gap-1 p-3"
-          role="tablist"
-          aria-label="Photo tips progress"
-        >
-          {TIPS.map((t, i) => (
-            <button
-              key={i}
-              role="tab"
-              aria-selected={i === current}
-              aria-label={`Tip ${i + 1}: ${t.label}`}
-              className="flex-1 h-[3px] rounded-full overflow-hidden cursor-pointer border-none p-0"
-              style={{ background: 'rgba(255,255,255,0.25)' }}
-              onClick={() => {
-                setCurrent(i)
-                startInterval() // reset timer on manual nav
-              }}
-            >
-              <div
-                className="h-full rounded-full"
-                style={{
-                  background: '#F59E0B',
-                  width: i < current ? '100%' : i === current ? '100%' : '0%',
-                  transition:
-                    prefersReducedMotion
-                      ? 'none'
-                      : i === current
-                        ? `width ${SLIDE_DURATION}ms linear`
-                        : 'none',
-                }}
-              />
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* Primary CTA — the WHAT */}
+      <a
+        href={`/post/${townSlug}/${businessSlug}`}
+        className="flex items-center justify-center gap-3 w-full font-bold no-underline transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 active:brightness-90"
+        style={{
+          background: '#F59E0B',
+          color: 'var(--sb-charcoal)',
+          borderRadius: '8px',
+          height: '56px',
+          fontSize: '18px',
+        }}
+      >
+        <Camera size={22} strokeWidth={2.5} />
+        Take a Photo
+      </a>
 
-      {/* All text on solid dark background */}
-      <div className="px-5 pt-5 pb-6">
-        {/* Tip copy */}
-        <p
-          className="text-sm font-semibold mb-2"
-          style={{ color: '#F59E0B', letterSpacing: '0.1em' }}
-        >
-          TIP {current + 1}/{TIPS.length}
-        </p>
-        <p className="text-2xl font-bold text-white leading-tight mb-1">
-          {tip.label}
-        </p>
-        <p
-          className="text-base leading-snug mb-5"
-          style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 400 }}
-        >
-          {tip.desc}
-        </p>
+      {/* Rotating tip — the HOW (supplementary) */}
+      <p
+        className="text-sm mt-4 mb-3 text-center"
+        style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}
+        aria-live="polite"
+      >
+        <span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>Tip:</span>{' '}
+        {TIPS[tipIndex]}
+      </p>
 
-        {/* Divider */}
-        <div
-          className="mb-5"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
-        />
-
-        {/* CTA section */}
-        <p
-          className="text-xs font-semibold mb-1 tracking-widest uppercase"
-          style={{ color: '#F59E0B' }}
-        >
-          Post to Switchboard
-        </p>
-        <p
-          className="text-sm mb-5"
-          style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}
-        >
-          {freshnessMsg}
-        </p>
-
-        <a
-          href={`/post/${townSlug}/${businessSlug}`}
-          className="flex items-center justify-center gap-3 w-full font-bold no-underline transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 active:brightness-90"
-          style={{
-            background: '#F59E0B',
-            color: 'var(--sb-charcoal)',
-            borderRadius: '8px',
-            height: '56px',
-            fontSize: '18px',
-          }}
-        >
-          <Camera size={22} strokeWidth={2.5} />
-          Take a Photo
-        </a>
-
-        <button
-          onClick={handleDismiss}
-          className="flex items-center justify-center w-full font-semibold no-underline cursor-pointer mt-3 transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 hover:border-white/40 hover:text-white/90 active:bg-white/5"
-          style={{
-            background: 'transparent',
-            color: 'rgba(255,255,255,0.7)',
-            border: '1px solid rgba(255,255,255,0.25)',
-            borderRadius: '8px',
-            height: '48px',
-            fontSize: '16px',
-          }}
-        >
-          Not right now
-        </button>
-      </div>
+      {/* Dismiss */}
+      <button
+        onClick={handleDismiss}
+        className="flex items-center justify-center w-full font-semibold cursor-pointer transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 hover:text-white/90 active:bg-white/5"
+        style={{
+          background: 'transparent',
+          color: 'rgba(255,255,255,0.5)',
+          border: '1px solid rgba(255,255,255,0.15)',
+          borderRadius: '8px',
+          height: '44px',
+          fontSize: '15px',
+        }}
+      >
+        Not right now
+      </button>
     </div>
   )
 }
