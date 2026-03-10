@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
-import { ArrowLeft, QrCode, Camera, CheckCircle, AlertTriangle } from 'lucide-react'
+import { ArrowLeft, QrCode, Camera, CheckCircle, AlertTriangle, X } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'How to Post — Switchboard',
@@ -51,7 +52,7 @@ export default function HowToPostPage() {
                 >
                   <QrCode size={20} />
                 </div>
-                <div>
+                <div className="flex-1">
                   <h2
                     className="text-lg font-semibold mb-2"
                     style={{ color: 'var(--sb-charcoal)' }}
@@ -59,12 +60,25 @@ export default function HowToPostPage() {
                     1. Scan the QR code at the board
                   </h2>
                   <p
-                    className="text-base"
+                    className="text-base mb-4"
                     style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
                   >
                     Each bulletin board has its own unique QR code. You must physically visit the location
                     and scan the code posted there. This ensures photos are authentic and taken at the actual location.
                   </p>
+                  <div
+                    className="overflow-hidden"
+                    style={{ borderRadius: 'var(--sb-radius)' }}
+                  >
+                    <Image
+                      src="/instructional/IMG_2408.jpg"
+                      alt="Scanning the Switchboard QR code at a bulletin board with a phone"
+                      width={480}
+                      height={640}
+                      className="w-full h-auto"
+                      style={{ maxHeight: '280px', objectFit: 'cover', objectPosition: 'top' }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -84,7 +98,7 @@ export default function HowToPostPage() {
                 >
                   <Camera size={20} />
                 </div>
-                <div>
+                <div className="flex-1">
                   <h2
                     className="text-lg font-semibold mb-2"
                     style={{ color: 'var(--sb-charcoal)' }}
@@ -98,26 +112,82 @@ export default function HowToPostPage() {
                     Capture the entire bulletin board — all the flyers, announcements, and posts currently displayed.
                   </p>
                   <ul
-                    className="space-y-2 text-sm"
+                    className="space-y-2 text-sm mb-5"
                     style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
                   >
                     <li className="flex items-start gap-2">
                       <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
-                      Take the photo straight-on, not at an angle
+                      Step back — get the whole board in frame
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
-                      Ensure good lighting — avoid glare and shadows
+                      Shoot straight-on, not at an angle
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
-                      Make sure the image is sharp and in focus
+                      Good light — make sure flyers are readable
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
-                      Include the full board, edge to edge
+                      No people in the shot — just the board
                     </li>
                   </ul>
+
+                  {/* Good / Bad photo comparison */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <div
+                        className="relative overflow-hidden"
+                        style={{ borderRadius: 'var(--sb-radius)' }}
+                      >
+                        <Image
+                          src="/instructional/tip-1.webp"
+                          alt="Bad example: person blocking the bulletin board, too close"
+                          width={320}
+                          height={240}
+                          className="w-full h-auto"
+                          style={{ aspectRatio: '4/3', objectFit: 'cover' }}
+                        />
+                        <span
+                          className="absolute top-2 left-2 flex items-center gap-1 text-xs font-semibold px-2 py-1"
+                          style={{
+                            background: 'var(--sb-red)',
+                            color: '#fff',
+                            borderRadius: 'var(--sb-radius-sm)',
+                          }}
+                        >
+                          <X size={12} strokeWidth={3} />
+                          Too close
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <div
+                        className="relative overflow-hidden"
+                        style={{ borderRadius: 'var(--sb-radius)' }}
+                      >
+                        <Image
+                          src="/instructional/tip-2.webp"
+                          alt="Good example: stepped back, full board visible while taking photo"
+                          width={320}
+                          height={240}
+                          className="w-full h-auto"
+                          style={{ aspectRatio: '4/3', objectFit: 'cover' }}
+                        />
+                        <span
+                          className="absolute top-2 left-2 flex items-center gap-1 text-xs font-semibold px-2 py-1"
+                          style={{
+                            background: 'var(--sb-green)',
+                            color: '#fff',
+                            borderRadius: 'var(--sb-radius-sm)',
+                          }}
+                        >
+                          <CheckCircle size={12} strokeWidth={3} />
+                          Good
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

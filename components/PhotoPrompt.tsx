@@ -13,6 +13,7 @@ const TIPS = [
   'Step back — get the whole board in frame',
   'Shoot straight on — avoid angles',
   'Good light — make sure flyers are readable',
+  'No people in the shot — just the board',
 ]
 
 const TIP_DURATION = 3200

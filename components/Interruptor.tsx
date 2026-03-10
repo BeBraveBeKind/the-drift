@@ -4,14 +4,18 @@ import { useState, useEffect } from 'react'
 import { hasSeenInterruptor, markInterruptorSeen } from '@/lib/probes'
 import { X } from 'lucide-react'
 
+interface InterruptorProps {
+  townName: string
+}
+
 /**
- * Interruptor — "How It Works" explainer card.
+ * Interruptor — inline hint for first-time visitors.
  *
  * Appears once per visitor (controlled by localStorage).
- * Inserted after row 2 of the town grid.
- * Full-width card with Amber Gold border.
+ * Slim amber bar inserted after the first row of the town grid.
+ * Tells the user what they're looking at and what to do.
  */
-export default function Interruptor() {
+export default function Interruptor({ townName }: InterruptorProps) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -29,39 +33,27 @@ export default function Interruptor() {
 
   return (
     <div
-      className="col-span-full relative"
+      className="col-span-full flex items-center gap-3"
       style={{
-        border: '2px solid var(--sb-amber)',
+        background: '#FEF3C7',
         borderRadius: 'var(--sb-radius)',
-        background: 'var(--sb-warm-white)',
-        padding: '24px 20px',
+        padding: '12px 16px',
       }}
     >
-      {/* Dismiss button */}
+      <p
+        className="text-sm font-medium flex-1"
+        style={{ color: 'var(--sb-charcoal)' }}
+      >
+        Each card is a bulletin board in {townName}. Tap one to see what&rsquo;s posted.
+      </p>
       <button
         onClick={handleDismiss}
-        className="absolute top-3 right-3 cursor-pointer"
+        className="cursor-pointer flex-shrink-0"
         style={{ color: 'var(--sb-stone)' }}
         aria-label="Dismiss"
       >
-        <X size={18} />
+        <X size={16} />
       </button>
-
-      <div className="text-center">
-        {/* Placeholder for future GIF — static text for now */}
-        <p
-          className="text-base font-semibold mb-1"
-          style={{ color: 'var(--sb-charcoal)' }}
-        >
-          Scan any board. See what&rsquo;s new.
-        </p>
-        <p
-          className="text-sm"
-          style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
-        >
-          No app. No account.
-        </p>
-      </div>
     </div>
   )
 }

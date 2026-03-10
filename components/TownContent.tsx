@@ -93,8 +93,8 @@ export default function TownContent({ boards, townSlug, townName }: TownContentP
                     townSlug={townSlug}
                     index={index}
                   />
-                  {/* Interruptor after row 2 (~6 cards) */}
-                  {index === 5 && <Interruptor />}
+                  {/* Interruptor after first row (2 cards on 2-col grid) */}
+                  {index === 1 && <Interruptor townName={townName} />}
                 </Fragment>
               ))}
             </div>
