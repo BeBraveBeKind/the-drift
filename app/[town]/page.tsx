@@ -106,8 +106,8 @@ export default function TownHomePage() {
               }}
             >
               <p
-                className="text-xs sm:text-sm font-light uppercase tracking-widest mb-1"
-                style={{ color: 'rgba(255,255,255,0.7)', letterSpacing: '0.15em' }}
+                className="text-sm sm:text-base uppercase tracking-widest mb-1"
+                style={{ color: '#ffffff', letterSpacing: '0.15em', fontWeight: 400 }}
               >
                 Welcome to
               </p>
