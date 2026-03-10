@@ -103,6 +103,7 @@ export default function TownHomePage() {
               className="absolute inset-0 flex flex-col items-center justify-center text-center px-6"
               style={{
                 background: 'rgba(30,41,59,0.82)',
+                zIndex: 1,
               }}
             >
               <p
