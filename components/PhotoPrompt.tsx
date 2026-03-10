@@ -11,17 +11,17 @@ interface PhotoPromptProps {
 
 const TIPS = [
   {
-    image: '/instructional/IMG_2396.jpg',
+    image: '/instructional/tip-1.jpg',
     label: 'Step back',
     desc: 'Get the whole board in frame.',
   },
   {
-    image: '/instructional/IMG_2412.jpg',
+    image: '/instructional/tip-2.jpg',
     label: 'Straight on',
     desc: 'Shoot flat — avoid angles.',
   },
   {
-    image: '/instructional/IMG_2416.jpeg',
+    image: '/instructional/tip-3.jpg',
     label: 'Good light',
     desc: 'Make sure flyers are readable.',
   },
@@ -62,6 +62,7 @@ export default function PhotoPrompt({
   if (dismissed) return null
 
   const freshnessMsg = getFreshnessMessage(lastUpdated)
+  const tip = TIPS[current]
 
   return (
     <div
@@ -71,52 +72,41 @@ export default function PhotoPrompt({
         borderRadius: 'var(--sb-radius)',
       }}
     >
-      {/* Looping tips slideshow — 16:9 compact */}
-      <div
-        className="relative w-full overflow-hidden"
-        style={{ aspectRatio: '16/9' }}
-      >
-        {TIPS.map((tip, i) => (
-          <div
-            key={i}
-            className="absolute inset-0 transition-opacity duration-500"
-            style={{ opacity: i === current ? 1 : 0 }}
+      {/* Single active slide — no stacking/overlap */}
+      <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          key={current}
+          src={tip.image}
+          alt={tip.label}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Gradient overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to top, rgba(30,41,59,0.9) 0%, rgba(30,41,59,0.3) 50%, rgba(30,41,59,0) 100%)',
+          }}
+        />
+        {/* Tip text */}
+        <div className="absolute bottom-0 left-0 right-0 p-4">
+          <p
+            className="text-xs font-semibold mb-1"
+            style={{ color: '#F59E0B', letterSpacing: '0.1em' }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={tip.image}
-              alt={tip.label}
-              className="absolute inset-0 w-full h-full object-cover"
-              loading={i === 0 ? 'eager' : 'lazy'}
-            />
-            {/* Gradient overlay */}
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  'linear-gradient(to top, rgba(30,41,59,0.9) 0%, rgba(30,41,59,0.3) 50%, rgba(30,41,59,0) 100%)',
-              }}
-            />
-            {/* Tip text */}
-            <div className="absolute bottom-0 left-0 right-0 p-4">
-              <p
-                className="text-xs font-semibold mb-1"
-                style={{ color: '#F59E0B', letterSpacing: '0.1em' }}
-              >
-                TIP {i + 1}/{TIPS.length}
-              </p>
-              <p className="text-lg font-bold text-white leading-tight">
-                {tip.label}
-              </p>
-              <p
-                className="text-sm leading-snug"
-                style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}
-              >
-                {tip.desc}
-              </p>
-            </div>
-          </div>
-        ))}
+            TIP {current + 1}/{TIPS.length}
+          </p>
+          <p className="text-lg font-bold text-white leading-tight">
+            {tip.label}
+          </p>
+          <p
+            className="text-sm leading-snug"
+            style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}
+          >
+            {tip.desc}
+          </p>
+        </div>
 
         {/* Progress pips */}
         <div className="absolute top-0 left-0 right-0 flex gap-1 p-3">
