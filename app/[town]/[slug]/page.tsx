@@ -40,23 +40,25 @@ async function getBoard(townSlug: string, slug: string) {
 
   if (!location) return null
 
-  const { data: photo } = await supabase
-    .from('photos')
-    .select('id, storage_path, created_at')
-    .eq('location_id', location.id)
-    .eq('is_current', true)
-    .eq('is_flagged', false)
-    .single()
-
-  // Other businesses in same town for "Also on this board"
-  const { data: otherLocations } = await supabase
-    .from('locations')
-    .select('name, slug')
-    .eq('town_id', townData.id)
-    .neq('id', location.id)
-    .eq('is_active', true)
-    .order('name')
-    .limit(10)
+  // Photo and other locations are independent — fetch in parallel
+  const [{ data: photo }, { data: otherLocations }] = await Promise.all([
+    supabase
+      .from('photos')
+      .select('id, storage_path, created_at')
+      .eq('location_id', location.id)
+      .eq('is_current', true)
+      .eq('is_flagged', false)
+      .single(),
+    // Other businesses in same town for "Also on this board"
+    supabase
+      .from('locations')
+      .select('name, slug')
+      .eq('town_id', townData.id)
+      .neq('id', location.id)
+      .eq('is_active', true)
+      .order('name')
+      .limit(10),
+  ])
 
   return {
     location,

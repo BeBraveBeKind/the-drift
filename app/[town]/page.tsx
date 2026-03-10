@@ -1,90 +1,105 @@
-'use client'
-
-import { Fragment, useState, useEffect } from 'react'
-import { useParams, notFound } from 'next/navigation'
-import { useLocations } from '@/hooks/useLocations'
+import { supabase } from '@/lib/supabase'
+import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
-import BoardCard from '@/components/BoardCard'
-import DiscoveryFilter from '@/components/DiscoveryFilter'
-import MapView from '@/components/MapView'
-import Interruptor from '@/components/Interruptor'
+import TownContent from '@/components/TownContent'
 import SteveCTA from '@/components/SteveCTA'
 import Footer from '@/components/Footer'
 import type { LocationWithPhoto } from '@/types'
-import type { DiscoveryCategory } from '@/lib/businessProfiles'
 
-function formatTownName(town: string) {
-  return town.charAt(0).toUpperCase() + town.slice(1)
+export const revalidate = 60
+
+/* ── Data fetching ──────────────────────────────────────────────── */
+
+async function getTownBoards(townSlug: string) {
+  const { data: townData, error: townError } = await supabase
+    .from('towns')
+    .select('id, name, slug')
+    .eq('slug', townSlug)
+    .eq('is_active', true)
+    .single()
+
+  if (townError || !townData) return null
+
+  // Get locations with current photos
+  const { data: locationsData } = await supabase
+    .from('locations')
+    .select(`
+      id, name, slug, address, town, town_id, view_count, updated_at,
+      business_category, business_tags, profile_completed, latitude, longitude,
+      photos!inner(id, storage_path, created_at)
+    `)
+    .eq('is_active', true)
+    .eq('town_id', townData.id)
+    .eq('photos.is_current', true)
+    .eq('photos.is_flagged', false)
+    .order('updated_at', { ascending: false })
+
+  // Get locations without photos
+  const { data: locationsWithoutPhotos } = await supabase
+    .from('locations')
+    .select('id, name, slug, address, town, town_id, view_count, updated_at, business_category, business_tags, profile_completed, latitude, longitude')
+    .eq('is_active', true)
+    .eq('town_id', townData.id)
+    .not('id', 'in', `(${(locationsData || []).map(l => l.id).join(',') || 'null'})`)
+    .order('updated_at', { ascending: false })
+
+  // Combine and sort by freshness
+  const withPhotos = (locationsData || []).map(location => ({
+    ...location,
+    photo: location.photos[0] || null,
+  }))
+
+  const withoutPhotos = (locationsWithoutPhotos || []).map(location => ({
+    ...location,
+    photo: null,
+  }))
+
+  const boards = [...withPhotos, ...withoutPhotos].sort((a, b) => {
+    const dateA = a.photo ? new Date(a.photo.created_at).getTime() : new Date(a.updated_at).getTime()
+    const dateB = b.photo ? new Date(b.photo.created_at).getTime() : new Date(b.updated_at).getTime()
+    return dateB - dateA
+  }) as LocationWithPhoto[]
+
+  return { town: townData, boards }
 }
 
-export default function TownHomePage() {
-  const params = useParams()
-  const townSlug = params.town as string
-  const [mounted, setMounted] = useState(false)
-  const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid')
-  const [filteredBoards, setFilteredBoards] = useState<LocationWithPhoto[]>([])
-  const [activeCategory, setActiveCategory] = useState<DiscoveryCategory | 'all'>('all')
+/* ── SEO metadata ───────────────────────────────────────────────── */
 
-  const { locations: allBoards, loading, error } = useLocations(townSlug)
-  const townName = formatTownName(townSlug)
+interface PageProps {
+  params: Promise<{ town: string }>
+}
 
-  useEffect(() => {
-    if (allBoards.length > 0) {
-      setFilteredBoards(allBoards)
-    }
-  }, [allBoards])
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { town } = await params
+  const data = await getTownBoards(town)
+  if (!data) return { title: 'Not Found' }
 
-  const handleFilterChange = (filtered: LocationWithPhoto[], category: DiscoveryCategory | 'all') => {
-    setFilteredBoards(filtered)
-    setActiveCategory(category)
+  const title = `${data.town.name} Bulletin Boards`
+  const desc = `See what's posted in ${data.town.name}. ${data.boards.length} community bulletin boards on Switchboard.`
+
+  return {
+    title,
+    description: desc,
+    openGraph: { title, description: desc, type: 'website' },
   }
+}
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+/* ── Page component ─────────────────────────────────────────────── */
 
-  useEffect(() => {
-    if (error === 'Town not found') {
-      notFound()
-    }
-  }, [error])
+export default async function TownHomePage({ params }: PageProps) {
+  const { town } = await params
+  const data = await getTownBoards(town)
 
-  if (!mounted) {
-    return (
-      <>
-        <Navigation />
-        <div className="min-h-screen">
-          <div className="text-center pt-6 pb-4">
-            <div className="max-w-md mx-auto px-4">
-              <div
-                className="h-12 rounded animate-pulse mb-2"
-                style={{ background: 'var(--sb-warm-gray)' }}
-              />
-              <div
-                className="h-6 rounded animate-pulse w-3/4 mx-auto"
-                style={{ background: 'var(--sb-warm-gray)' }}
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 max-w-[640px] mx-auto">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div
-                key={i}
-                className="h-64 rounded animate-pulse"
-                style={{ background: 'var(--sb-warm-gray)' }}
-              />
-            ))}
-          </div>
-        </div>
-      </>
-    )
-  }
+  if (!data) notFound()
+
+  const { town: townData, boards } = data
 
   return (
     <>
       <Navigation />
       <main className="min-h-screen">
-        {/* Hero banner */}
+        {/* Hero banner — server-rendered */}
         <header className="max-w-[640px] mx-auto px-4 pt-4 pb-2">
           <div
             className="flex flex-col items-center justify-center text-center px-6"
@@ -112,100 +127,18 @@ export default function TownHomePage() {
               className="text-sm sm:text-base font-light"
               style={{ color: 'rgba(255,255,255,0.85)', textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
             >
-              What&rsquo;s posted in {townName}
+              What&rsquo;s posted in {townData.name}
             </p>
           </div>
         </header>
 
-        {/* Discovery Filter */}
-        {allBoards.length > 0 && (
-          <DiscoveryFilter
-            locations={allBoards}
-            onFilterChange={handleFilterChange}
-          />
-        )}
+        {/* Interactive content — client island */}
+        <TownContent
+          boards={boards}
+          townSlug={town}
+          townName={townData.name}
+        />
 
-        {/* View Mode Toggle */}
-        <div className="max-w-[640px] mx-auto px-4 mb-6">
-          <div className="flex justify-center">
-            <div className="filter-group">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`filter-chip ${viewMode === 'grid' ? 'filter-chip--active' : ''}`}
-              >
-                Grid View
-              </button>
-              <button
-                onClick={() => setViewMode('map')}
-                className={`filter-chip ${viewMode === 'map' ? 'filter-chip--active' : ''}`}
-              >
-                Map View
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Board Cards */}
-        <section className="max-w-[640px] mx-auto px-4 py-8">
-          {loading ? (
-            <div className="text-center py-12">
-              <p style={{ color: 'var(--sb-stone)' }}>Loading boards...</p>
-            </div>
-          ) : viewMode === 'grid' ? (
-            filteredBoards.length === 0 && allBoards.length > 0 ? (
-              <div className="text-center py-20">
-                <div
-                  className="p-8 rounded-lg mx-auto max-w-md"
-                  style={{
-                    background: 'var(--sb-white)',
-                    border: '1px solid var(--sb-warm-gray)',
-                    borderRadius: 'var(--sb-radius)',
-                  }}
-                >
-                  <h3
-                    className="text-lg font-semibold mb-3"
-                    style={{ color: 'var(--sb-charcoal)' }}
-                  >
-                    No boards found
-                  </h3>
-                  <p className="text-base" style={{ color: 'var(--sb-stone)' }}>
-                    No bulletin boards match this category in {townName}. Try
-                    selecting &ldquo;All&rdquo; to see all boards.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div
-                className="grid gap-4 justify-center"
-                style={{
-                  gridTemplateColumns: 'repeat(auto-fill, 240px)',
-                }}
-              >
-                {filteredBoards.map((board, index) => (
-                  <Fragment key={board.id}>
-                    <BoardCard
-                      board={board}
-                      townSlug={townSlug}
-                      index={index}
-                    />
-                    {/* Interruptor after row 2 (~6 cards) */}
-                    {index === 5 && <Interruptor />}
-                  </Fragment>
-                ))}
-              </div>
-            )
-          ) : (
-            <div>
-              <MapView
-                locations={filteredBoards}
-                townSlug={townSlug}
-                activeFilter={activeCategory}
-              />
-            </div>
-          )}
-        </section>
-
-        {/* Steve CTA */}
         <div className="max-w-[640px] mx-auto px-4">
           <SteveCTA />
         </div>

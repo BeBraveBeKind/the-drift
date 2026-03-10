@@ -9,13 +9,13 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://switchboard.town'),
+  metadataBase: new URL('https://switchboardapp.com'),
   title: {
-    default: 'Switchboard | Real. Local. Now.',
+    default: 'Switchboard — Community Bulletin Boards Online',
     template: '%s | Switchboard'
   },
-  description: 'Your community bulletin board, digitized. No logins, no algorithms, no nonsense.',
-  keywords: ['community bulletin board', 'local events', 'small town', 'local business', 'community services', 'rural communities'],
+  description: 'Switchboard brings your community bulletin board online. Discover local businesses, events, and services posted on real bulletin boards in your town — no logins, no algorithms.',
+  keywords: ['community bulletin board', 'local events', 'small town', 'local business', 'community services', 'rural communities', 'bulletin board online'],
   authors: [{ name: 'Rise Above Partners' }],
   creator: 'Rise Above Partners',
   publisher: 'Rise Above Partners',
@@ -46,23 +46,23 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://switchboard.town',
+    url: 'https://switchboardapp.com',
     siteName: 'Switchboard',
-    title: 'Switchboard | Real. Local. Now.',
-    description: 'Your community bulletin board, digitized.',
+    title: 'Switchboard — Community Bulletin Boards Online',
+    description: 'Discover local businesses, events, and services posted on real community bulletin boards in your town.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Switchboard - Real. Local. Now.',
+        alt: 'Switchboard — Community Bulletin Boards Online',
       }
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Switchboard | Real. Local. Now.',
-    description: 'Your community bulletin board, digitized.',
+    title: 'Switchboard — Community Bulletin Boards Online',
+    description: 'Discover local businesses, events, and services posted on real community bulletin boards in your town.',
     images: ['/og-image.png'],
   },
   robots: {
@@ -87,12 +87,12 @@ const structuredData = {
   "@type": "WebSite",
   "name": "Switchboard",
   "description": "Local community bulletin boards for small towns",
-  "url": "https://switchboard.town",
+  "url": "https://switchboardapp.com",
   "potentialAction": {
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": "https://switchboard.town/search?q={search_term_string}"
+      "urlTemplate": "https://switchboardapp.com/search?q={search_term_string}"
     },
     "query-input": "required name=search_term_string"
   },
