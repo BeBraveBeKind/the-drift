@@ -475,6 +475,12 @@ export default function AdminDashboard() {
                 </span>
               </button>
             )}
+            <a
+              href="/admin/signs"
+              className="bg-[#8B5CF6] text-white px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#7c4fe0] transition-colors"
+            >
+              Signs
+            </a>
             <button
               onClick={() => setShowTownsSection(!showTownsSection)}
               className="bg-[#F4D03F] text-[#2C2C2C] px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#e6c337] transition-colors"

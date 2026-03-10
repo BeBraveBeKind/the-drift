@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { Camera } from 'lucide-react'
-import Image from 'next/image'
 
 interface PhotoPromptProps {
   townSlug: string
@@ -72,10 +71,10 @@ export default function PhotoPrompt({
         borderRadius: 'var(--sb-radius)',
       }}
     >
-      {/* Looping tips slideshow */}
+      {/* Looping tips slideshow — 16:9 compact */}
       <div
-        className="relative w-full"
-        style={{ aspectRatio: '4/3' }}
+        className="relative w-full overflow-hidden"
+        style={{ aspectRatio: '16/9' }}
       >
         {TIPS.map((tip, i) => (
           <div
@@ -83,34 +82,34 @@ export default function PhotoPrompt({
             className="absolute inset-0 transition-opacity duration-500"
             style={{ opacity: i === current ? 1 : 0 }}
           >
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={tip.image}
               alt={tip.label}
-              fill
-              className="object-cover"
-              sizes="640px"
+              className="absolute inset-0 w-full h-full object-cover"
+              loading={i === 0 ? 'eager' : 'lazy'}
             />
             {/* Gradient overlay */}
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(to top, rgba(30,41,59,0.85) 0%, rgba(30,41,59,0.2) 50%, rgba(30,41,59,0) 100%)',
+                  'linear-gradient(to top, rgba(30,41,59,0.9) 0%, rgba(30,41,59,0.3) 50%, rgba(30,41,59,0) 100%)',
               }}
             />
             {/* Tip text */}
-            <div className="absolute bottom-0 left-0 right-0 p-5">
+            <div className="absolute bottom-0 left-0 right-0 p-4">
               <p
-                className="text-sm font-semibold mb-1"
-                style={{ color: '#F59E0B', letterSpacing: '0.05em' }}
+                className="text-xs font-semibold mb-1"
+                style={{ color: '#F59E0B', letterSpacing: '0.1em' }}
               >
-                TIP {i + 1} OF {TIPS.length}
+                TIP {i + 1}/{TIPS.length}
               </p>
-              <p className="text-xl font-bold text-white">
+              <p className="text-lg font-bold text-white leading-tight">
                 {tip.label}
               </p>
               <p
-                className="text-sm"
+                className="text-sm leading-snug"
                 style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}
               >
                 {tip.desc}
@@ -144,35 +143,39 @@ export default function PhotoPrompt({
       </div>
 
       {/* CTA section */}
-      <div className="p-5">
-        <p className="text-lg font-bold text-white mb-1">
-          Keep this board fresh
+      <div className="p-4">
+        <p
+          className="text-xs font-semibold mb-1 tracking-widest uppercase"
+          style={{ color: '#F59E0B' }}
+        >
+          Post to Switchboard
         </p>
         <p
           className="text-sm mb-4"
-          style={{ color: 'rgba(255,255,255,0.6)', fontWeight: 300 }}
+          style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}
         >
           {freshnessMsg}
         </p>
 
         <a
           href={`/post/${townSlug}/${businessSlug}`}
-          className="flex items-center justify-center gap-2 w-full py-3 font-semibold text-base no-underline"
+          className="flex items-center justify-center gap-3 w-full font-bold no-underline"
           style={{
             background: '#F59E0B',
             color: 'var(--sb-charcoal)',
-            borderRadius: '6px',
-            minHeight: '48px',
+            borderRadius: '8px',
+            height: '56px',
+            fontSize: '18px',
           }}
         >
-          <Camera size={18} />
-          Take a photo
+          <Camera size={22} strokeWidth={2.5} />
+          Take a Photo
         </a>
 
         <button
           onClick={() => setDismissed(true)}
-          className="w-full mt-3 text-center text-sm cursor-pointer bg-transparent border-none"
-          style={{ color: 'rgba(255,255,255,0.4)' }}
+          className="w-full mt-2 text-center text-sm cursor-pointer bg-transparent border-none"
+          style={{ color: 'rgba(255,255,255,0.35)' }}
         >
           Not right now
         </button>
