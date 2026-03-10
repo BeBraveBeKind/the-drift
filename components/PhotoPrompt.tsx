@@ -72,7 +72,7 @@ export default function PhotoPrompt({
         borderRadius: 'var(--sb-radius)',
       }}
     >
-      {/* Single active slide — no stacking/overlap */}
+      {/* Photo — clean, no text overlay */}
       <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -81,37 +81,7 @@ export default function PhotoPrompt({
           alt={tip.label}
           className="absolute inset-0 w-full h-full object-cover"
         />
-        {/* Dark overlay — heavy enough for legible text */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(to top, rgba(30,41,59,0.95) 0%, rgba(30,41,59,0.85) 40%, rgba(30,41,59,0.2) 100%)',
-          }}
-        />
-        {/* Tip text */}
-        <div className="absolute bottom-0 left-0 right-0 p-4">
-          <p
-            className="text-sm font-semibold mb-1"
-            style={{ color: '#F59E0B', letterSpacing: '0.1em' }}
-          >
-            TIP {current + 1}/{TIPS.length}
-          </p>
-          <p
-            className="text-2xl font-bold leading-tight"
-            style={{ color: '#ffffff', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}
-          >
-            {tip.label}
-          </p>
-          <p
-            className="text-base leading-snug"
-            style={{ color: 'rgba(255,255,255,0.9)', fontWeight: 400, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}
-          >
-            {tip.desc}
-          </p>
-        </div>
-
-        {/* Progress pips */}
+        {/* Progress pips only */}
         <div className="absolute top-0 left-0 right-0 flex gap-1 p-3">
           {TIPS.map((_, i) => (
             <div
@@ -135,8 +105,32 @@ export default function PhotoPrompt({
         </div>
       </div>
 
-      {/* CTA section */}
-      <div className="p-4">
+      {/* All text on solid dark background */}
+      <div className="px-5 pt-5 pb-6">
+        {/* Tip label */}
+        <p
+          className="text-sm font-semibold mb-2"
+          style={{ color: '#F59E0B', letterSpacing: '0.1em' }}
+        >
+          TIP {current + 1}/{TIPS.length}
+        </p>
+        <p className="text-2xl font-bold text-white leading-tight mb-1">
+          {tip.label}
+        </p>
+        <p
+          className="text-base leading-snug mb-5"
+          style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 400 }}
+        >
+          {tip.desc}
+        </p>
+
+        {/* Divider */}
+        <div
+          className="mb-5"
+          style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
+        />
+
+        {/* Post to Switchboard */}
         <p
           className="text-xs font-semibold mb-1 tracking-widest uppercase"
           style={{ color: '#F59E0B' }}
@@ -144,7 +138,7 @@ export default function PhotoPrompt({
           Post to Switchboard
         </p>
         <p
-          className="text-sm mb-4"
+          className="text-sm mb-5"
           style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}
         >
           {freshnessMsg}
