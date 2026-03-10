@@ -87,44 +87,33 @@ export default function TownHomePage() {
         {/* Hero banner */}
         <header className="max-w-[640px] mx-auto px-4 pt-4 pb-2">
           <div
-            className="relative overflow-hidden"
-            style={{ borderRadius: 'var(--sb-radius)' }}
+            className="flex flex-col items-center justify-center text-center px-6"
+            style={{
+              backgroundImage: 'linear-gradient(rgba(30,41,59,0.82), rgba(30,41,59,0.82)), url(/hero-banner.webp)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              borderRadius: 'var(--sb-radius)',
+              minHeight: '200px',
+            }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/hero-banner.webp"
-              alt=""
-              className="w-full h-auto"
-              width={640}
-              height={280}
-              style={{ display: 'block' }}
-            />
-            <div
-              className="absolute inset-0 flex flex-col items-center justify-center text-center px-6"
-              style={{
-                background: 'rgba(30,41,59,0.82)',
-                zIndex: 1,
-              }}
+            <p
+              className="text-sm sm:text-base uppercase tracking-widest mb-1"
+              style={{ color: '#ffffff', letterSpacing: '0.15em', fontWeight: 400 }}
             >
-              <p
-                className="text-sm sm:text-base uppercase tracking-widest mb-1"
-                style={{ color: '#ffffff', letterSpacing: '0.15em', fontWeight: 400 }}
-              >
-                Welcome to
-              </p>
-              <h1
-                className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-1"
-                style={{ color: '#F59E0B' }}
-              >
-                Switchboard
-              </h1>
-              <p
-                className="text-sm sm:text-base font-light"
-                style={{ color: 'rgba(255,255,255,0.85)' }}
-              >
-                What&rsquo;s posted in {townName}
-              </p>
-            </div>
+              Welcome to
+            </p>
+            <h1
+              className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-1"
+              style={{ color: '#F59E0B' }}
+            >
+              Switchboard
+            </h1>
+            <p
+              className="text-sm sm:text-base font-light"
+              style={{ color: 'rgba(255,255,255,0.85)' }}
+            >
+              What&rsquo;s posted in {townName}
+            </p>
           </div>
         </header>
 
