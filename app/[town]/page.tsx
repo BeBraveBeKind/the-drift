@@ -89,7 +89,7 @@ export default function TownHomePage() {
           <div
             className="flex flex-col items-center justify-center text-center px-6"
             style={{
-              backgroundImage: 'linear-gradient(rgba(30,41,59,0.82), rgba(30,41,59,0.82)), url(/hero-banner.webp)',
+              backgroundImage: 'linear-gradient(rgba(30,41,59,0.45), rgba(30,41,59,0.45)), url(/hero-banner.webp)',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               borderRadius: 'var(--sb-radius)',
@@ -98,19 +98,19 @@ export default function TownHomePage() {
           >
             <p
               className="text-sm sm:text-base uppercase tracking-widest mb-1"
-              style={{ color: '#ffffff', letterSpacing: '0.15em', fontWeight: 400 }}
+              style={{ color: '#ffffff', letterSpacing: '0.15em', fontWeight: 400, textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
             >
               Welcome to
             </p>
             <h1
               className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-1"
-              style={{ color: '#F59E0B' }}
+              style={{ color: '#F59E0B', textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}
             >
               Switchboard
             </h1>
             <p
               className="text-sm sm:text-base font-light"
-              style={{ color: 'rgba(255,255,255,0.85)' }}
+              style={{ color: 'rgba(255,255,255,0.85)', textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
             >
               What&rsquo;s posted in {townName}
             </p>
