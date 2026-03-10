@@ -77,8 +77,8 @@ export default function OptimizedBoardImage({
         loading={shouldPrioritize ? 'eager' : 'lazy'}
         placeholder="blur"
         blurDataURL={dataUrl}
-        quality={85}
-        onLoadingComplete={() => setIsLoading(false)}
+        quality={75}
+        onLoad={() => setIsLoading(false)}
         onError={() => setHasError(true)}
         style={{
           objectFit: 'cover',

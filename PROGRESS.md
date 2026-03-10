@@ -1,5 +1,41 @@
 # Switchboard - Development Progress Log
 
+## Session: 2026-03-10
+
+### Accomplished Today
+- **Server component conversion**: Rewrote `app/[town]/page.tsx` from client component to async server component with `revalidate: 60` ISR, `generateMetadata()` for dynamic SEO, and a `TownContent` client island for interactivity
+- **SEO infrastructure**: Created `app/sitemap.ts` (dynamic, pulls all towns/locations from Supabase), `app/robots.ts`, updated `app/layout.tsx` with `metadataBase: switchboardapp.com`, JSON-LD structured data, OG/Twitter cards
+- **Parallel data fetching**: Refactored `app/[town]/[slug]/page.tsx` to use `Promise.all` for photo + other-locations queries
+- **Interruptor redesign**: Rewrote from heavy bordered card to slim amber hint bar, positioned after first grid row, action-oriented copy ("Each card is a bulletin board in {townName}. Tap one to see what's posted.")
+- **PhotoPrompt 4th tip**: Added "No people in the shot — just the board"
+- **How-to-post improvements**: Added QR scanning instructional photo, good/bad photo comparison grid, aligned tip language with PhotoPrompt
+- **Root landing page**: Added hero image, aggregate stats bar (boards + towns), instructional photos in How It Works steps
+- **Gitignore cleanup**: Added 37 entries for unused asset source files, hero variants, booklet drafts, IDE config
+
+### Commits Pushed
+- `9185e3b` Convert town page to server component, add SEO infrastructure
+- `0367b99` Improve instructional touchpoints: Interruptor, PhotoPrompt, how-to-post
+- `18c123c` Add hero image, stats, and instructional photos to root landing page
+- `94b476d` Gitignore unused asset source files, hero variants, and IDE config
+
+### Current State
+**Active Branch**: main (all pushed)
+- Server-rendered town pages with client island architecture
+- Full SEO infrastructure live (sitemap, robots, metadata, JSON-LD)
+- Canonical domain: switchboardapp.com
+
+### Next Steps
+1. Wire `?source=qr` param into QR sign URLs as proximity trigger
+2. Create dedicated maskable icon with proper safe-zone padding
+3. Wait for MRRPC contest response (pitch already submitted)
+
+### Architectural Decisions
+- Client island pattern: server-render the page shell, delegate interactive grid/map/filter to `TownContent` client component
+- ISR with 60s revalidation for town pages (balances freshness with performance)
+- Interruptor as inline hint (col-span-full) rather than standalone card — keeps grid flow intact
+
+---
+
 ## Session: 2026-02-22
 
 ### Accomplished Today
