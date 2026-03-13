@@ -28,19 +28,29 @@ export default function PostPage({ params }: PageProps) {
     console.log('Original file size:', formatFileSize(file.size))
     
     try {
-      // Compress image before upload
-      const compressedBlob = await compressImage(file)
-      const compressedFile = new File(
-        [compressedBlob],
-        file.name.replace(/\.[^/.]+$/, '') + '.jpg',
-        { type: 'image/jpeg' }
-      )
-      
-      console.log('Compressed file size:', formatFileSize(compressedFile.size))
-      console.log('Compression saved:', formatFileSize(file.size - compressedFile.size))
-      
+      // HEIC/HEIF can't be compressed client-side (no browser support for Canvas)
+      // Send them raw to the server where heic-convert + sharp handle it
+      const isHEIC = /\.(heic|heif)$/i.test(file.name) ||
+                     file.type === 'image/heic' || file.type === 'image/heif'
+
+      let uploadFile: File
+
+      if (isHEIC) {
+        console.log('HEIC/HEIF detected — skipping client compression, server will convert')
+        uploadFile = file
+      } else {
+        const compressedBlob = await compressImage(file)
+        uploadFile = new File(
+          [compressedBlob],
+          file.name.replace(/\.[^/.]+$/, '') + '.jpg',
+          { type: 'image/jpeg' }
+        )
+        console.log('Compressed file size:', formatFileSize(uploadFile.size))
+        console.log('Compression saved:', formatFileSize(file.size - uploadFile.size))
+      }
+
       const formData = new FormData()
-      formData.append('file', compressedFile)
+      formData.append('file', uploadFile)
       formData.append('slug', slug)
       formData.append('town', town)
       

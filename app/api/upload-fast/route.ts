@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import sharp from 'sharp'
+import convert from 'heic-convert'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 // Configure route segment for larger uploads and longer timeout
 export const runtime = 'nodejs'
-export const maxDuration = 60 // 60 seconds max for Vercel Pro
+export const maxDuration = 60 // 60 seconds max
 
 // Add CORS headers
 function corsResponse(response: NextResponse) {
@@ -84,21 +86,41 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Upload directly without processing - let Supabase handle it
+    // Process image with sharp before upload
     const timestamp = Date.now()
-    const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg'
-    const storagePath = `${location.id}/${timestamp}.${fileExt}`
-    
-    // Convert file to buffer
+    const storagePath = `${location.id}/${timestamp}.jpg`
+
     const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-    
-    console.log('Uploading to storage...')
-    
+    let inputBuffer = Buffer.from(arrayBuffer)
+
+    // Convert HEIC/HEIF to JPEG first if needed
+    const isHEIC = file.name.toLowerCase().endsWith('.heic') ||
+                   file.name.toLowerCase().endsWith('.heif') ||
+                   file.type === 'image/heic' || file.type === 'image/heif'
+
+    if (isHEIC) {
+      console.log('Converting HEIC to JPEG...')
+      try {
+        const jpegBuffer = await convert({ buffer: inputBuffer, format: 'JPEG', quality: 0.9 })
+        inputBuffer = Buffer.from(jpegBuffer)
+      } catch (heicError) {
+        console.error('HEIC conversion failed:', heicError)
+      }
+    }
+
+    // Optimize with sharp
+    const processedBuffer = await sharp(inputBuffer, { sequentialRead: true })
+      .rotate()
+      .jpeg({ quality: 85, progressive: true, mozjpeg: true })
+      .resize(2048, 2048, { fit: 'inside', withoutEnlargement: true })
+      .toBuffer()
+
+    console.log(`Processed: ${file.size} -> ${processedBuffer.length} bytes`)
+
     const { error: uploadError } = await supabaseAdmin.storage
       .from('board-photos')
-      .upload(storagePath, buffer, { 
-        contentType: file.type || 'image/jpeg',
+      .upload(storagePath, processedBuffer, {
+        contentType: 'image/jpeg',
         cacheControl: '3600',
         upsert: false
       })

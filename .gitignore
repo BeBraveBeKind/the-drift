@@ -92,3 +92,4 @@ public/instructional/step-numbers.png
 public/switchboard-booklet.html
 public/switchboard-booklet.pdf
 public/switchboard-hero-[1-9]*
+scripts/reprocess-oversized-photos.ts

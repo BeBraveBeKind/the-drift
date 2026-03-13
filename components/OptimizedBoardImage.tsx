@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 interface OptimizedBoardImageProps {
   src: string
@@ -44,48 +44,39 @@ export default function OptimizedBoardImage({
   // Prioritize first 6 images for faster initial paint
   const shouldPrioritize = priority || index < 6
 
-  if (hasError) {
-    return (
-      <div 
-        className="board-card-polaroid__image board-card-polaroid__image--placeholder"
-        style={{
-          width: 280,
-          height: 210,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#f3f4f6'
-        }}
-      >
-        <span style={{ fontSize: '1rem', opacity: 0.5, color: 'var(--text-muted)' }}>
-          Image unavailable
-        </span>
-      </div>
-    )
-  }
-
   return (
     <div style={{ position: 'relative', width: 280, height: 210 }}>
-      <Image 
-        src={src}
-        alt={alt}
-        width={280}
-        height={210}
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 280px"
-        className={`board-card-polaroid__image ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
-        priority={shouldPrioritize}
-        loading={shouldPrioritize ? 'eager' : 'lazy'}
-        placeholder="blur"
-        blurDataURL={dataUrl}
-        quality={75}
-        onLoad={() => setIsLoading(false)}
-        onError={() => setHasError(true)}
-        style={{
-          objectFit: 'cover',
-          width: '100%',
-          height: '100%'
-        }}
-      />
+      {hasError ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img
+          src={src}
+          alt={alt}
+          className="board-card-polaroid__image"
+          onLoad={() => setIsLoading(false)}
+          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+        />
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          width={280}
+          height={210}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 280px"
+          className={`board-card-polaroid__image ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+          priority={shouldPrioritize}
+          loading={shouldPrioritize ? 'eager' : 'lazy'}
+          placeholder="blur"
+          blurDataURL={dataUrl}
+          quality={75}
+          onLoad={() => setIsLoading(false)}
+          onError={() => setHasError(true)}
+          style={{
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%'
+          }}
+        />
+      )}
     </div>
   )
 }

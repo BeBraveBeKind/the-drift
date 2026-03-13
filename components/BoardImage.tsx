@@ -15,6 +15,7 @@ import type { BoardImageProps } from '@/types'
 export default function BoardImage({ src, alt }: BoardImageProps) {
   const [showViewer, setShowViewer] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [optimizationFailed, setOptimizationFailed] = useState(false)
 
   return (
     <>
@@ -34,16 +35,27 @@ export default function BoardImage({ src, alt }: BoardImageProps) {
           />
         )}
 
-        <Image
-          src={src}
-          alt={alt}
-          width={1200}
-          height={900}
-          sizes="(max-width: 640px) 100vw, 640px"
-          className="w-full h-auto"
-          priority
-          onLoad={() => setImageLoaded(true)}
-        />
+        {optimizationFailed ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={src}
+            alt={alt}
+            className="w-full h-auto"
+            onLoad={() => setImageLoaded(true)}
+          />
+        ) : (
+          <Image
+            src={src}
+            alt={alt}
+            width={1200}
+            height={900}
+            sizes="(max-width: 640px) 100vw, 640px"
+            className="w-full h-auto"
+            priority
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setOptimizationFailed(true)}
+          />
+        )}
 
         {/* Hover overlay — zoom hint */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center pointer-events-none">
