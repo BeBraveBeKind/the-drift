@@ -1,138 +1,71 @@
-'use client'
+import { supabase } from '@/lib/supabase'
+import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
+import UploadFlow from '@/components/UploadFlow'
 
-import { useState, useRef, use } from 'react'
-import { useRouter } from 'next/navigation'
-import { compressImage, formatFileSize } from '@/lib/imageCompression'
+export const revalidate = 60
 
 interface PageProps {
   params: Promise<{ town: string; slug: string }>
 }
 
-export default function PostPage({ params }: PageProps) {
-  const { town, slug } = use(params)
-  const router = useRouter()
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [uploading, setUploading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [done, setDone] = useState(false)
-  
-  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    
-    setUploading(true)
-    setError(null)
-    
-    // Debug logging
-    console.log('Upload starting with params:', { town, slug, hasFile: !!file })
-    console.log('Original file size:', formatFileSize(file.size))
-    
-    try {
-      // HEIC/HEIF can't be compressed client-side (no browser support for Canvas)
-      // Send them raw to the server where heic-convert + sharp handle it
-      const isHEIC = /\.(heic|heif)$/i.test(file.name) ||
-                     file.type === 'image/heic' || file.type === 'image/heif'
+async function getBusinessContext(townSlug: string, slug: string) {
+  const { data: townData } = await supabase
+    .from('towns')
+    .select('id, name')
+    .eq('slug', townSlug)
+    .single()
 
-      let uploadFile: File
+  if (!townData) return null
 
-      if (isHEIC) {
-        console.log('HEIC/HEIF detected — skipping client compression, server will convert')
-        uploadFile = file
-      } else {
-        const compressedBlob = await compressImage(file)
-        uploadFile = new File(
-          [compressedBlob],
-          file.name.replace(/\.[^/.]+$/, '') + '.jpg',
-          { type: 'image/jpeg' }
-        )
-        console.log('Compressed file size:', formatFileSize(uploadFile.size))
-        console.log('Compression saved:', formatFileSize(file.size - uploadFile.size))
-      }
+  const { data: location } = await supabase
+    .from('locations')
+    .select('id, name, slug')
+    .eq('slug', slug)
+    .eq('town_id', townData.id)
+    .single()
 
-      const formData = new FormData()
-      formData.append('file', uploadFile)
-      formData.append('slug', slug)
-      formData.append('town', town)
-      
-      // Debug what we're sending
-      console.log('FormData contents:', {
-        file: file.name,
-        slug,
-        town,
-        formDataKeys: Array.from(formData.keys())
-      })
-      
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-      })
-      
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error || 'Upload failed')
-      }
-      
-      setDone(true)
-      setTimeout(() => router.push(`/${town}/${slug}`), 1500)
-      
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong')
-    } finally {
-      setUploading(false)
-    }
+  if (!location) return null
+
+  const { data: photo } = await supabase
+    .from('photos')
+    .select('created_at')
+    .eq('location_id', location.id)
+    .eq('is_current', true)
+    .eq('is_flagged', false)
+    .single()
+
+  return {
+    businessName: location.name,
+    townName: townData.name,
+    lastUpdated: photo?.created_at,
   }
-  
-  if (done) {
-    return (
-      <main className="min-h-screen flex items-center justify-center p-4 bg-stone-50">
-        <div className="text-center">
-          <div className="text-4xl mb-3">📌</div>
-          <p className="text-xl font-medium">Posted to Switchboard</p>
-        </div>
-      </main>
-    )
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { town, slug } = await params
+  const ctx = await getBusinessContext(town, slug)
+  if (!ctx) return { title: 'Not Found' }
+
+  return {
+    title: `Update ${ctx.businessName} — Switchboard`,
+    description: `Take a photo of the ${ctx.businessName} bulletin board in ${ctx.townName}.`,
   }
-  
+}
+
+export default async function PostPage({ params }: PageProps) {
+  const { town, slug } = await params
+  const ctx = await getBusinessContext(town, slug)
+
+  if (!ctx) notFound()
+
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-stone-50">
-      <div className="max-w-xs w-full text-center">
-        <h1 className="text-2xl font-bold mb-2">Post to Switchboard</h1>
-        <p className="text-stone-500 mb-4">
-          Snap a photo of the board. Give your post a longer life.
-        </p>
-        
-        {/* Debug info */}
-        <div className="mb-4 p-2 bg-gray-100 rounded text-xs">
-          <div>Town: {town || 'undefined'}</div>
-          <div>Slug: {slug || 'undefined'}</div>
-        </div>
-        
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*,.heic,.HEIC,.heif,.HEIF"
-          capture="environment"
-          onChange={handleFile}
-          className="hidden"
-        />
-        
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          disabled={uploading}
-          className="w-full py-4 px-6 bg-stone-900 text-white font-medium rounded-lg 
-                     hover:bg-stone-800 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {uploading ? 'Uploading...' : '📷 Take Photo'}
-        </button>
-        
-        {error && (
-          <p className="mt-4 text-orange-600 text-sm">{error}</p>
-        )}
-        
-        <p className="mt-8 text-xs text-stone-400">
-          Your photo will be public on Switchboard
-        </p>
-      </div>
-    </main>
+    <UploadFlow
+      townSlug={town}
+      businessSlug={slug}
+      businessName={ctx.businessName}
+      townName={ctx.townName}
+      lastUpdated={ctx.lastUpdated}
+    />
   )
 }

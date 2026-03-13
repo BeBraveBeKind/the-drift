@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useCallback, useSyncExternalStore } from 'react'
 import { Camera } from 'lucide-react'
 
 interface PhotoPromptProps {
@@ -9,14 +9,6 @@ interface PhotoPromptProps {
   lastUpdated?: string
 }
 
-const TIPS = [
-  'Step back — get the whole board in frame',
-  'Shoot straight on — avoid angles',
-  'Good light — make sure flyers are readable',
-  'No people in the shot — just the board',
-]
-
-const TIP_DURATION = 3200
 const DISMISS_KEY = 'sb-photo-prompt-dismissed'
 
 function getFreshnessMessage(lastUpdated?: string): string {
@@ -31,57 +23,31 @@ function getFreshnessMessage(lastUpdated?: string): string {
   return `Last updated ${days} days ago — this board needs you.`
 }
 
+/**
+ * QR-visitor prompt to update a bulletin board photo.
+ * Simplified: freshness message + CTA + dismiss.
+ * Tips are now shown on the post page where they're actionable.
+ */
 export default function PhotoPrompt({
   townSlug,
   businessSlug,
   lastUpdated,
 }: PhotoPromptProps) {
-  const [tipIndex, setTipIndex] = useState(0)
-  const [dismissed, setDismissed] = useState(true)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-
-  useEffect(() => {
-    const wasDismissed = localStorage.getItem(DISMISS_KEY)
-    if (!wasDismissed) setDismissed(false)
-
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
+  const subscribe = useCallback((cb: () => void) => {
+    window.addEventListener('storage', cb)
+    return () => window.removeEventListener('storage', cb)
   }, [])
-
-  const startInterval = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current)
-    if (prefersReducedMotion) return
-    intervalRef.current = setInterval(() => {
-      setTipIndex((prev) => (prev + 1) % TIPS.length)
-    }, TIP_DURATION)
-  }, [prefersReducedMotion])
-
-  useEffect(() => {
-    startInterval()
-    const handleVisibility = () => {
-      if (document.hidden) {
-        if (intervalRef.current) clearInterval(intervalRef.current)
-      } else {
-        startInterval()
-      }
-    }
-    document.addEventListener('visibilitychange', handleVisibility)
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
-      document.removeEventListener('visibilitychange', handleVisibility)
-    }
-  }, [startInterval])
+  const getSnapshot = useCallback(() => localStorage.getItem(DISMISS_KEY), [])
+  const getServerSnapshot = useCallback(() => '1', []) // SSR: assume dismissed
+  const dismissedValue = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
+  const [localDismissed, setLocalDismissed] = useState(false)
 
   function handleDismiss() {
     localStorage.setItem(DISMISS_KEY, '1')
-    setDismissed(true)
+    setLocalDismissed(true)
   }
 
-  if (dismissed) return null
+  if (dismissedValue || localDismissed) return null
 
   const freshnessMsg = getFreshnessMessage(lastUpdated)
 
@@ -96,7 +62,7 @@ export default function PhotoPrompt({
         padding: '20px',
       }}
     >
-      {/* Freshness urgency — the WHY */}
+      {/* Freshness urgency */}
       <p
         className="text-xs font-semibold tracking-widest uppercase mb-1"
         style={{ color: '#F59E0B' }}
@@ -110,7 +76,7 @@ export default function PhotoPrompt({
         {freshnessMsg}
       </p>
 
-      {/* Primary CTA — the WHAT */}
+      {/* Primary CTA */}
       <a
         href={`/post/${townSlug}/${businessSlug}`}
         className="flex items-center justify-center gap-3 w-full font-bold no-underline transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 active:brightness-90"
@@ -126,20 +92,10 @@ export default function PhotoPrompt({
         Take a Photo
       </a>
 
-      {/* Rotating tip — the HOW (supplementary) */}
-      <p
-        className="text-sm mt-4 mb-3 text-center"
-        style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}
-        aria-live="polite"
-      >
-        <span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>Tip:</span>{' '}
-        {TIPS[tipIndex]}
-      </p>
-
       {/* Dismiss */}
       <button
         onClick={handleDismiss}
-        className="flex items-center justify-center w-full font-semibold cursor-pointer transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 hover:text-white/90 active:bg-white/5"
+        className="flex items-center justify-center w-full font-semibold cursor-pointer transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 hover:text-white/90 active:bg-white/5 mt-3"
         style={{
           background: 'transparent',
           color: 'rgba(255,255,255,0.5)',

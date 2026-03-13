@@ -5,6 +5,7 @@ import BoardCard from '@/components/BoardCard'
 import DiscoveryFilter from '@/components/DiscoveryFilter'
 import MapView from '@/components/MapView'
 import Interruptor from '@/components/Interruptor'
+import SavedBoards from '@/components/SavedBoards'
 import type { LocationWithPhoto } from '@/types'
 import type { DiscoveryCategory } from '@/lib/businessProfiles'
 
@@ -33,6 +34,9 @@ export default function TownContent({ boards, townSlug, townName }: TownContentP
           onFilterChange={handleFilterChange}
         />
       )}
+
+      {/* Saved boards (from localStorage) */}
+      <SavedBoards boards={boards} townSlug={townSlug} />
 
       {/* View Mode Toggle */}
       <div className="max-w-[640px] mx-auto px-4 mb-6">
