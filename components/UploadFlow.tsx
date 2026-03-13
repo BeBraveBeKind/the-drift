@@ -189,15 +189,15 @@ export default function UploadFlow({
         style={{ background: 'var(--sb-warm-white)' }}
       >
         {fileInput}
-        <div className="max-w-[480px] mx-auto w-full px-4 py-8 flex-1 flex flex-col">
+        <div className="max-w-[480px] mx-auto w-full px-4 py-6 flex-1 flex flex-col">
           {/* Back link */}
           <a
             href={`/${townSlug}/${businessSlug}`}
-            className="inline-flex items-center gap-1.5 text-sm no-underline mb-6"
+            className="inline-flex items-center gap-1.5 text-sm no-underline mb-4"
             style={{ color: 'var(--sb-stone)' }}
           >
             <ArrowLeft size={14} />
-            Back to {businessName}
+            Back
           </a>
 
           {/* Business context */}
@@ -208,15 +208,39 @@ export default function UploadFlow({
             Update {businessName}
           </h1>
           <p
-            className="text-sm mb-6"
+            className="text-sm mb-5"
             style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
           >
             {getFreshnessMessage(lastUpdated)}
           </p>
 
-          {/* Photo tips */}
+          {/* Primary CTA — above the fold on all devices */}
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center justify-center gap-3 w-full font-bold no-underline transition-colors duration-200 active:brightness-90 mb-2"
+            style={{
+              background: 'var(--sb-amber)',
+              color: 'var(--sb-charcoal)',
+              borderRadius: 'var(--sb-radius)',
+              height: '56px',
+              fontSize: '18px',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            <Camera size={22} strokeWidth={2.5} />
+            Open Camera
+          </button>
+          <p
+            className="text-xs text-center mb-8"
+            style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+          >
+            Your photo will be public on Switchboard
+          </p>
+
+          {/* Tips — supplementary, below the CTA */}
           <div
-            className="p-5 mb-6"
+            className="p-4 mb-4"
             style={{
               background: 'var(--sb-white)',
               border: '1px solid var(--sb-warm-gray)',
@@ -224,12 +248,12 @@ export default function UploadFlow({
             }}
           >
             <p
-              className="text-sm font-semibold mb-3"
+              className="text-sm font-semibold mb-2.5"
               style={{ color: 'var(--sb-charcoal)' }}
             >
-              Quick tips for a great photo
+              Tips for a great photo
             </p>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2">
               {TIPS.map((tip) => (
                 <li
                   key={tip}
@@ -248,7 +272,7 @@ export default function UploadFlow({
           </div>
 
           {/* Good / Bad comparison */}
-          <div className="grid grid-cols-2 gap-3 mb-8">
+          <div className="grid grid-cols-2 gap-3">
             <div
               className="relative overflow-hidden"
               style={{ borderRadius: 'var(--sb-radius)' }}
@@ -297,32 +321,6 @@ export default function UploadFlow({
                 Good
               </span>
             </div>
-          </div>
-
-          {/* Primary CTA */}
-          <div className="mt-auto">
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="flex items-center justify-center gap-3 w-full font-bold no-underline transition-colors duration-200 active:brightness-90"
-              style={{
-                background: 'var(--sb-amber)',
-                color: 'var(--sb-charcoal)',
-                borderRadius: 'var(--sb-radius)',
-                height: '56px',
-                fontSize: '18px',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              <Camera size={22} strokeWidth={2.5} />
-              Open Camera
-            </button>
-            <p
-              className="text-xs text-center mt-4"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
-            >
-              Your photo will be public on Switchboard
-            </p>
           </div>
         </div>
       </main>
