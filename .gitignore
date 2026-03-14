@@ -92,4 +92,8 @@ public/instructional/step-numbers.png
 public/switchboard-booklet.html
 public/switchboard-booklet.pdf
 public/switchboard-hero-[1-9]*
+public/hero-option-1-director.jpg
+public/hero-option-2-mainstreet.jpg
+public/hero-option-2a-mainstreet.jpg
+public/hero-option-2b-mainstreet.jpg
 scripts/reprocess-oversized-photos.ts
