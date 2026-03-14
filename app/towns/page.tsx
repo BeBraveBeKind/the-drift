@@ -65,25 +65,26 @@ export default async function TownsPage() {
               <Link
                 key={town.slug}
                 href={`/${town.slug}`}
-                className="flex items-center justify-between py-4"
                 style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '16px 0',
                   borderBottom: '1px solid var(--sb-warm-gray)',
                   textDecoration: 'none',
                   minHeight: '56px',
                 }}
               >
-                <div className="flex items-center gap-3">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <MapPin size={18} color="var(--sb-amber)" />
                   <div>
                     <span
-                      className="text-base font-semibold"
-                      style={{ color: 'var(--sb-charcoal)' }}
+                      style={{ fontSize: '16px', fontWeight: 600, color: 'var(--sb-charcoal)' }}
                     >
                       {town.name}
                     </span>
                     <span
-                      className="text-sm ml-2"
-                      style={{ color: 'var(--sb-stone)' }}
+                      style={{ fontSize: '14px', color: 'var(--sb-stone)', marginLeft: '8px' }}
                     >
                       {town.boardCount} {town.boardCount === 1 ? 'board' : 'boards'}
                     </span>

@@ -131,29 +131,28 @@ export default function HowToPostPage() {
                     Capture the entire bulletin board — all the flyers, announcements, and posts currently displayed.
                   </p>
                   <ul
-                    className="space-y-2 text-sm mb-5"
-                    style={{ color: 'var(--sb-slate)' }}
+                    style={{ listStyle: 'none', padding: 0, margin: '0 0 20px 0', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px', color: 'var(--sb-slate)' }}
                   >
-                    <li className="flex items-start gap-2">
-                      <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <CheckCircle size={14} style={{ flexShrink: 0, marginTop: '2px', color: '#16A34A' }} />
                       Step back — get the whole board in frame
                     </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <CheckCircle size={14} style={{ flexShrink: 0, marginTop: '2px', color: '#16A34A' }} />
                       Shoot straight-on, not at an angle
                     </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <CheckCircle size={14} style={{ flexShrink: 0, marginTop: '2px', color: '#16A34A' }} />
                       Good light — make sure flyers are readable
                     </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <CheckCircle size={14} style={{ flexShrink: 0, marginTop: '2px', color: '#16A34A' }} />
                       No people in the shot — just the board
                     </li>
                   </ul>
 
                   {/* Good / Bad photo comparison */}
-                  <div className="grid grid-cols-2 gap-3">
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     <div>
                       <div
                         className="relative overflow-hidden"
@@ -263,8 +262,8 @@ export default function HowToPostPage() {
               background: 'var(--sb-white)',
             }}
           >
-            <div className="flex items-start gap-3 mb-4">
-              <AlertTriangle size={20} className="flex-shrink-0 mt-0.5" style={{ color: 'var(--sb-amber)' }} />
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
+              <AlertTriangle size={20} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--sb-amber)' }} />
               <h3
                 className="text-base font-semibold"
                 style={{ color: 'var(--sb-charcoal)' }}
@@ -273,8 +272,7 @@ export default function HowToPostPage() {
               </h3>
             </div>
             <ul
-              className="space-y-2 text-sm pl-8"
-              style={{ color: 'var(--sb-slate)' }}
+              style={{ listStyle: 'disc', paddingLeft: '32px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px', color: 'var(--sb-slate)' }}
             >
               <li>Heavy glare or reflections</li>
               <li>Blur or out-of-focus areas</li>
@@ -285,16 +283,14 @@ export default function HowToPostPage() {
           </div>
 
           {/* Guidelines */}
-          <div className="space-y-4 mb-12">
+          <div style={{ marginBottom: '48px' }}>
             <h3
-              className="text-lg font-semibold"
-              style={{ color: 'var(--sb-charcoal)' }}
+              style={{ fontSize: '18px', fontWeight: 600, color: 'var(--sb-charcoal)', marginBottom: '16px' }}
             >
               Guidelines
             </h3>
             <ul
-              className="space-y-3 text-base"
-              style={{ color: 'var(--sb-slate)' }}
+              style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '16px', color: 'var(--sb-slate)' }}
             >
               <li><strong style={{ fontWeight: 600 }}>Respect privacy:</strong> Avoid including people in your photos</li>
               <li><strong style={{ fontWeight: 600 }}>Be considerate:</strong> Don&rsquo;t obstruct others while taking photos</li>

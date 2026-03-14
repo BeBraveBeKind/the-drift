@@ -64,7 +64,7 @@ img {
     font-size: 1rem; /* 16px base */
     line-height: 1.5;
     color: var(--sb-charcoal);
-    background-color: var(--sb-warm-white);
+    background-color: var(--sb-white);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -72,6 +72,11 @@ img {
   /* Don't apply EXIF orientation - images are already rotated server-side */
   img {
     image-orientation: none;
+  }
+
+  /* Reset dd indent for FAQ sections */
+  dd {
+    margin-inline-start: 0;
   }
 
   /* Prevent layout shifts from dynamic content */

@@ -217,7 +217,7 @@ export default async function HomePage() {
               Works with any phone. No download required.
             </p>
 
-            <div className="grid grid-cols-1 gap-10 sm:gap-12">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
               {[
                 {
                   icon: <QrCode size={28} />,
@@ -260,7 +260,7 @@ export default async function HomePage() {
                   >
                     {s.icon}
                   </div>
-                  <div className="flex-1">
+                  <div style={{ flex: '1 1 0%' }}>
                     <h3
                       className="text-lg font-semibold mb-1"
                       style={{ color: 'var(--sb-charcoal)' }}
@@ -303,7 +303,7 @@ export default async function HomePage() {
               Built for how small towns actually work.
             </h2>
 
-            <div className="grid grid-cols-1 gap-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               {[
                 {
                   label: 'Community members',
@@ -323,8 +323,8 @@ export default async function HomePage() {
               ].map((card) => (
                 <div
                   key={card.label}
-                  className="p-6"
                   style={{
+                    padding: '24px',
                     border: '1px solid var(--sb-warm-gray)',
                     borderRadius: 'var(--sb-radius)',
                     background: 'var(--sb-white)',
@@ -367,21 +367,18 @@ export default async function HomePage() {
               No tricks. No tracking. No nonsense.
             </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px' }}>
               {[
                 { icon: <Shield size={20} />, text: 'No account required — scan and browse.' },
                 { icon: <Smartphone size={20} />, text: 'No app download — works in any phone browser.' },
                 { icon: <Camera size={20} />, text: 'Photo-verified — timestamped and geo-fenced.' },
                 { icon: <Flag size={20} />, text: 'Community-flagged — the community keeps itself honest.' },
               ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className="flex-shrink-0 mt-0.5" style={{ color: 'var(--sb-amber)' }}>
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                  <div style={{ flexShrink: 0, marginTop: '2px', color: 'var(--sb-amber)' }}>
                     {item.icon}
                   </div>
-                  <p
-                    className="text-sm"
-                    style={{ color: 'var(--sb-slate)' }}
-                  >
+                  <p style={{ fontSize: '14px', color: 'var(--sb-slate)', margin: 0 }}>
                     {item.text}
                   </p>
                 </div>
@@ -405,25 +402,26 @@ export default async function HomePage() {
                 <Link
                   key={town.slug}
                   href={`/${town.slug}`}
-                  className="flex items-center justify-between py-4"
                   style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '16px 0',
                     borderBottom: '1px solid var(--sb-warm-gray)',
                     textDecoration: 'none',
                     minHeight: '56px',
                   }}
                 >
-                  <div className="flex items-center gap-3">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <MapPin size={18} color="var(--sb-amber)" />
                     <div>
                       <span
-                        className="text-base font-semibold"
-                        style={{ color: 'var(--sb-charcoal)' }}
+                        style={{ fontSize: '16px', fontWeight: 600, color: 'var(--sb-charcoal)' }}
                       >
                         {town.name}
                       </span>
                       <span
-                        className="text-sm ml-2"
-                        style={{ color: 'var(--sb-stone)' }}
+                        style={{ fontSize: '14px', color: 'var(--sb-stone)', marginLeft: '8px' }}
                       >
                         {town.boardCount} {town.boardCount === 1 ? 'board' : 'boards'}
                       </span>

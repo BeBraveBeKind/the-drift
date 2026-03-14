@@ -66,7 +66,7 @@ export default function StartTownPage() {
             >
               What your town gets
             </h2>
-            <ul className="space-y-4">
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {[
                 'A custom town page with every participating business',
                 'QR codes printed and delivered for each board location',
@@ -75,12 +75,9 @@ export default function StartTownPage() {
                 'Onboarding support for every business',
                 'Ongoing platform updates at no cost',
               ].map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <Check size={18} className="flex-shrink-0 mt-0.5" style={{ color: 'var(--sb-amber)' }} />
-                  <span
-                    className="text-base"
-                    style={{ color: 'var(--sb-slate)' }}
-                  >
+                <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}><polyline points="20 6 9 17 4 12" /></svg>
+                  <span style={{ fontSize: '16px', color: 'var(--sb-slate)' }}>
                     {item}
                   </span>
                 </li>

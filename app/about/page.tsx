@@ -35,7 +35,7 @@ export default function AboutPage() {
           </div>
 
           {/* Content */}
-          <div className="space-y-10">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
             {/* What Is This */}
             <section>
@@ -46,10 +46,9 @@ export default function AboutPage() {
                 Bulletin boards are beautiful. But let&rsquo;s be real.
               </h2>
               <div
-                className="space-y-3 text-base"
-                style={{ color: 'var(--sb-slate)' }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '16px', color: 'var(--sb-slate)' }}
               >
-                <p><strong style={{ fontWeight: 600 }}>We forget to look at them.</strong></p>
+                <p><strong style={{ fontWeight: 600 }}>We forget what was on them.</strong></p>
                 <p>
                   There&rsquo;s a yoga instructor with a hand-written class schedule. A guy who fixes bikes
                   out of his garage. A local theater group doing something weird and wonderful next weekend.
@@ -76,8 +75,7 @@ export default function AboutPage() {
                 Post your flyer. Snap a photo. Done.
               </h2>
               <div
-                className="space-y-3 text-base"
-                style={{ color: 'var(--sb-slate)' }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '16px', color: 'var(--sb-slate)' }}
               >
                 <p><strong style={{ fontWeight: 600 }}>1.</strong> Find a business board you want to update</p>
                 <p><strong style={{ fontWeight: 600 }}>2.</strong> Scan the QR code at that location</p>
@@ -104,8 +102,7 @@ export default function AboutPage() {
                 This is for the flyer people.
               </h2>
               <div
-                className="space-y-3 text-base"
-                style={{ color: 'var(--sb-slate)' }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '16px', color: 'var(--sb-slate)' }}
               >
                 <p><strong style={{ fontWeight: 600 }}>You know who you are.</strong></p>
                 <p>
@@ -134,8 +131,7 @@ export default function AboutPage() {
                 A little nostalgia. A lot of community.
               </h2>
               <div
-                className="space-y-3 text-base"
-                style={{ color: 'var(--sb-slate)' }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '16px', color: 'var(--sb-slate)' }}
               >
                 <p>
                   There&rsquo;s something beautiful about a physical bulletin board. It&rsquo;s messy. It&rsquo;s democratic.
@@ -165,8 +161,7 @@ export default function AboutPage() {
                 Who built this?
               </h2>
               <div
-                className="space-y-3 text-base"
-                style={{ color: 'var(--sb-slate)' }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '16px', color: 'var(--sb-slate)' }}
               >
                 <p>
                   Switchboard is built by{' '}
