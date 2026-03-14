@@ -6,6 +6,7 @@ import TownContent from '@/components/TownContent'
 import SteveCTA from '@/components/SteveCTA'
 import Footer from '@/components/Footer'
 import type { LocationWithPhoto } from '@/types'
+import { generateTownMetadata, generateTownStructuredData } from './metadata'
 
 export const revalidate = 60
 
@@ -75,13 +76,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const data = await getTownBoards(town)
   if (!data) return { title: 'Not Found' }
 
-  const title = `${data.town.name} Bulletin Boards`
-  const desc = `See what's posted in ${data.town.name}. ${data.boards.length} community bulletin boards on Switchboard.`
+  const title = `${data.town.name} Community Bulletin Boards`
+  const desc = `Browse ${data.boards.length} community bulletin boards in ${data.town.name}. See local events, businesses, and services posted on real boards — updated by your neighbors. No app, no account.`
+  const geoMeta = generateTownMetadata(town)
 
   return {
     title,
     description: desc,
+    keywords: geoMeta.keywords,
+    alternates: { canonical: `https://switchboard.town/${town}` },
     openGraph: { title, description: desc, type: 'website' },
+    other: geoMeta.other as Record<string, string>,
   }
 }
 
@@ -94,9 +99,16 @@ export default async function TownHomePage({ params }: PageProps) {
   if (!data) notFound()
 
   const { town: townData, boards } = data
+  const townStructuredData = generateTownStructuredData(town)
 
   return (
     <>
+      {townStructuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(townStructuredData) }}
+        />
+      )}
       <Navigation />
       <main className="min-h-screen">
         {/* Hero banner — server-rendered */}
@@ -113,21 +125,21 @@ export default async function TownHomePage({ params }: PageProps) {
           >
             <p
               className="text-sm sm:text-base uppercase tracking-widest mb-1"
-              style={{ color: '#ffffff', letterSpacing: '0.15em', fontWeight: 400, textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
+              style={{ color: '#F59E0B', letterSpacing: '0.15em', fontWeight: 600, textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
             >
-              Welcome to
+              Switchboard
             </p>
             <h1
               className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-1"
-              style={{ color: '#F59E0B', textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}
+              style={{ color: '#ffffff', textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}
             >
-              Switchboard
+              {townData.name} Bulletin Boards
             </h1>
             <p
               className="text-sm sm:text-base font-light"
               style={{ color: 'rgba(255,255,255,0.85)', textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
             >
-              What&rsquo;s posted in {townData.name}
+              See what&rsquo;s posted in your community
             </p>
           </div>
         </header>

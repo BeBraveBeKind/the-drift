@@ -331,28 +331,28 @@ export default function UploadFlow({
   if (step === 'preview') {
     return (
       <main
-        className="min-h-screen flex flex-col"
+        className="h-dvh flex flex-col"
         style={{ background: 'var(--sb-warm-white)' }}
       >
         {fileInput}
-        <div className="max-w-[480px] mx-auto w-full px-4 py-8 flex-1 flex flex-col">
+        <div className="max-w-[480px] mx-auto w-full px-4 py-6 flex-1 flex flex-col min-h-0">
           <h2
-            className="text-xl font-bold mb-1"
+            className="text-xl font-bold mb-1 flex-shrink-0"
             style={{ color: 'var(--sb-charcoal)' }}
           >
             {businessName}
           </h2>
           <p
-            className="text-sm mb-5"
+            className="text-sm mb-4 flex-shrink-0"
             style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
           >
             Review your photo before uploading
           </p>
 
-          {/* Photo preview */}
+          {/* Photo preview — constrained to available space */}
           {previewUrl && (
             <div
-              className="mb-6 overflow-hidden"
+              className="mb-4 overflow-hidden flex-1 min-h-0"
               style={{
                 border: '1px solid var(--sb-warm-gray)',
                 borderRadius: 'var(--sb-radius)',
@@ -362,13 +362,14 @@ export default function UploadFlow({
               <img
                 src={previewUrl}
                 alt="Photo preview"
-                className="w-full h-auto"
+                className="w-full h-full"
+                style={{ objectFit: 'contain' }}
               />
             </div>
           )}
 
-          {/* Action buttons */}
-          <div className="flex gap-3 mt-auto">
+          {/* Action buttons — always visible */}
+          <div className="flex gap-3 flex-shrink-0 pb-2">
             <button
               onClick={handleRetake}
               className="flex-1 flex items-center justify-center gap-2 font-semibold transition-colors duration-200"

@@ -7,7 +7,8 @@ import { ArrowLeft, Check, Mail } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Get Listed — Switchboard',
   description:
-    'Get your business on Switchboard for free. A dedicated page, custom QR code, and community-powered visibility.',
+    'List your business on Switchboard for free. Get a dedicated page, custom QR code sign, and community-powered visibility — no ad spend, no content calendar, no social media required.',
+  alternates: { canonical: 'https://switchboard.town/get-listed' },
 }
 
 export default function GetListedPage() {

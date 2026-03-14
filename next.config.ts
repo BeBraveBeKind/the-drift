@@ -27,16 +27,7 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: true,
   },
-  // Redirect root to Viroqua
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/viroqua',
-        permanent: false,
-      },
-    ]
-  },
+  // Homepage now serves app/page.tsx (landing page with FAQ, how-it-works, town picker)
   // Headers for caching and performance
   async headers() {
     return [

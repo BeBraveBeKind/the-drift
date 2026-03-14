@@ -7,7 +7,8 @@ import { ArrowLeft } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'About Switchboard — Real. Local. Now.',
   description:
-    'Switchboard turns physical bulletin boards into live, browsable pages. Built for small towns by Rise Above Partners.',
+    'Switchboard is a community information network that turns physical bulletin boards into live, browsable pages. No accounts, no algorithms — just your community. Built by Rise Above Partners.',
+  alternates: { canonical: 'https://switchboard.town/about' },
 }
 
 export default function AboutPage() {

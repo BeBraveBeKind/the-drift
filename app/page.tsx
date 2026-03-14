@@ -42,12 +42,56 @@ async function getTowns() {
   return townsWithCounts
 }
 
+const FAQ_ITEMS = [
+  {
+    q: 'Do I need to create an account?',
+    a: 'No. Switchboard works without accounts, logins, or personal information. Scan a QR code and browse.',
+  },
+  {
+    q: 'How do listings stay current?',
+    a: 'Anyone can update a listing by taking a photo of the bulletin board. Photos are geo-verified — you must be physically at the board. Each listing shows when it was last updated.',
+  },
+  {
+    q: 'Is Switchboard free?',
+    a: 'Yes. Browsing is free for community members. Listing on a board is free for businesses. Always.',
+  },
+  {
+    q: 'What if someone posts something inappropriate?',
+    a: 'Community members can flag any listing. Flagged content is reviewed and reverted if needed.',
+  },
+  {
+    q: 'How is this different from Facebook or Google?',
+    a: 'Switchboard is tied to physical places, not algorithms. No ads, no engagement tricks, no account required. It shows you what\u2019s actually posted on real boards in your town.',
+  },
+  {
+    q: 'How do I get Switchboard in my town?',
+    a: 'We work with chambers of commerce, community organizations, and local partners to launch in new towns. Visit the "Start a Town" page to get in touch.',
+  },
+]
+
+const faqStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": FAQ_ITEMS.map((faq) => ({
+    "@type": "Question",
+    "name": faq.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.a,
+    },
+  })),
+}
+
 export default async function HomePage() {
   const towns = await getTowns()
   const totalBoards = towns.reduce((sum, t) => sum + t.boardCount, 0)
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
+      />
       <Navigation />
       <main className="min-h-screen">
 
@@ -443,32 +487,7 @@ export default async function HomePage() {
             </h2>
 
             <dl>
-              {[
-                {
-                  q: 'Do I need to create an account?',
-                  a: 'No. Switchboard works without accounts, logins, or personal information. Scan a QR code and browse.',
-                },
-                {
-                  q: 'How do listings stay current?',
-                  a: 'Anyone can update a listing by taking a photo of the bulletin board. Photos are geo-verified — you must be physically at the board. Each listing shows when it was last updated.',
-                },
-                {
-                  q: 'Is Switchboard free?',
-                  a: 'Yes. Browsing is free for community members. Listing on a board is free for businesses. Always.',
-                },
-                {
-                  q: 'What if someone posts something inappropriate?',
-                  a: 'Community members can flag any listing. Flagged content is reviewed and reverted if needed.',
-                },
-                {
-                  q: 'How is this different from Facebook or Google?',
-                  a: 'Switchboard is tied to physical places, not algorithms. No ads, no engagement tricks, no account required. It shows you what\u2019s actually posted on real boards in your town.',
-                },
-                {
-                  q: 'How do I get Switchboard in my town?',
-                  a: 'We work with chambers of commerce, community organizations, and local partners to launch in new towns. Visit the "Start a Town" page to get in touch.',
-                },
-              ].map((faq, i) => (
+              {FAQ_ITEMS.map((faq, i) => (
                 <div
                   key={i}
                   className="py-6"

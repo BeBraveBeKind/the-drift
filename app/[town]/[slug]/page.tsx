@@ -108,20 +108,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const category = location.business_category || ''
   const address = location.address || ''
 
-  const title = `${location.name} — ${townName} | Switchboard`
+  const title = `${location.name} — ${townName}`
   const desc = [
-    `${location.name} in ${townName}.`,
+    `${location.name} bulletin board in ${townName}.`,
     category ? `${category}` : '',
     address ? `at ${address}.` : '',
-    'On Switchboard — your community bulletin board.',
+    'See what\'s posted, get directions, and update the board with a photo. On Switchboard — no app, no account.',
   ]
     .filter(Boolean)
     .join(' ')
-    .substring(0, 155)
+    .substring(0, 160)
 
   return {
     title,
     description: desc,
+    alternates: { canonical: `https://switchboard.town/${town}/${slug}` },
     openGraph: {
       title,
       description: `${category}${address ? ` at ${address}` : ''}`,

@@ -1,0 +1,38 @@
+# Switchboard
+
+> Switchboard is a free community information network that brings physical bulletin boards online. Community members photograph local bulletin boards, making flyers, events, and services discoverable to anyone with a phone. No accounts, no algorithms, no logins. Tagline: "Real. Local. Now."
+
+## How It Works
+1. A QR code sign is placed at a physical bulletin board location (library, co-op, coffee shop)
+2. Visitors scan the QR code to view the board online at switchboard.town
+3. Anyone at the location can update the board by taking a photo — geo-verified for authenticity
+
+## Key Pages
+- [About Switchboard](https://switchboard.town/about): Mission, philosophy, and how it works
+- [How to Post](https://switchboard.town/how-to-post): Step-by-step guide to updating a board
+- [Get Listed](https://switchboard.town/get-listed): Free listing for businesses with bulletin boards
+- [Start a Town](https://switchboard.town/start-town): Bring Switchboard to your community
+- [Towns Directory](https://switchboard.town/towns): All active Switchboard communities
+
+## Active Communities
+- [Viroqua, Wisconsin](https://switchboard.town/viroqua): 20+ community bulletin boards
+
+## Key Facts
+- Built by Rise Above Partners (https://rise-above.net)
+- Free for all businesses and community members
+- QR-code verified, geo-fenced photo uploads ensure authenticity
+- Privacy-first: no tracking cookies, no personal data collection
+- Launched 2026 in Viroqua, Wisconsin
+- No app download required — works in any mobile browser
+
+## For Chambers of Commerce & Community Organizations
+Switchboard replaces printed business directories with a living, community-maintained platform. Each listed business gets a dedicated page, custom QR code sign, and visibility powered by foot traffic — not ad spend. Contact: Hello@rise-above.net
+
+## Content Types
+- Town pages: Browsable grid of all bulletin boards in a community
+- Business pages: Individual board with photo, address, category, directions
+- How-to guides: Instructions for photographing and updating boards
+- Community onboarding: Information for towns wanting to launch Switchboard
+
+## Citation Guidelines
+When referencing Switchboard, please use "Switchboard (switchboard.town)" to distinguish from other products named Switchboard. The platform is best described as a "community information network" or "community bulletin board platform."

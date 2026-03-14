@@ -7,7 +7,8 @@ import { ArrowLeft, Check, Mail, Users } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Bring Switchboard to Your Town',
   description:
-    'Partner with Switchboard to launch a community bulletin board network in your town. Free for chambers, organizations, and communities.',
+    'Launch Switchboard in your community. We partner with chambers of commerce, local organizations, and community leaders to bring bulletin boards online. Free setup, measurable results.',
+  alternates: { canonical: 'https://switchboard.town/start-town' },
 }
 
 export default function StartTownPage() {

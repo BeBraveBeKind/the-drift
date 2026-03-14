@@ -9,7 +9,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://switchboardapp.com'),
+  metadataBase: new URL('https://switchboard.town'),
   title: {
     default: 'Switchboard — Community Bulletin Boards Online',
     template: '%s | Switchboard'
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://switchboardapp.com',
+    url: 'https://switchboard.town',
     siteName: 'Switchboard',
     title: 'Switchboard — Community Bulletin Boards Online',
     description: 'Discover local businesses, events, and services posted on real community bulletin boards in your town.',
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: '/',
+    canonical: 'https://switchboard.town',
   }
 }
 
@@ -87,12 +87,12 @@ const structuredData = {
   "@type": "WebSite",
   "name": "Switchboard",
   "description": "Local community bulletin boards for small towns",
-  "url": "https://switchboardapp.com",
+  "url": "https://switchboard.town",
   "potentialAction": {
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": "https://switchboardapp.com/search?q={search_term_string}"
+      "urlTemplate": "https://switchboard.town/search?q={search_term_string}"
     },
     "query-input": "required name=search_term_string"
   },

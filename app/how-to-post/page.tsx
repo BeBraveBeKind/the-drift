@@ -8,7 +8,8 @@ import { ArrowLeft, QrCode, Camera, CheckCircle, AlertTriangle, X } from 'lucide
 export const metadata: Metadata = {
   title: 'How to Post — Switchboard',
   description:
-    'Learn how to update a community bulletin board on Switchboard. Scan the QR code, take a photo, done.',
+    'Update a community bulletin board on Switchboard in 3 steps: scan the QR code at any listed location, take a photo of the board, and it\'s live. No account needed.',
+  alternates: { canonical: 'https://switchboard.town/how-to-post' },
 }
 
 export default function HowToPostPage() {
