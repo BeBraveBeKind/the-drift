@@ -12,6 +12,7 @@
 - [How to Post](https://switchboard.town/how-to-post): Step-by-step guide to updating a board
 - [Get Listed](https://switchboard.town/get-listed): Free listing for businesses with bulletin boards
 - [Start a Town](https://switchboard.town/start-town): Bring Switchboard to your community
+- [For Chambers of Commerce](https://switchboard.town/for-chambers): Partnership details, pricing, and ROI for chambers
 - [Towns Directory](https://switchboard.town/towns): All active Switchboard communities
 
 ## Active Communities

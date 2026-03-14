@@ -99,6 +99,14 @@ export default function Navigation() {
           >
             For Businesses
           </Link>
+          <Link
+            href="/for-chambers"
+            className="block py-3 text-base font-medium"
+            style={{ color: 'var(--sb-charcoal)', textDecoration: 'none' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            For Chambers
+          </Link>
           <div className="pt-2">
             <Link
               href="/start-town"

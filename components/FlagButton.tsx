@@ -38,7 +38,7 @@ export default function FlagButton({ photoId }: { photoId: string }) {
       onClick={handleFlag}
       disabled={flagged || loading}
       className="inline-flex items-center gap-1.5 text-sm hover:underline cursor-pointer disabled:cursor-default"
-      style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+      style={{ color: 'var(--sb-stone)' }}
     >
       {flagged ? (
         <>

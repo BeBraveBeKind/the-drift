@@ -28,7 +28,7 @@ export default function GetListedPage() {
             </h1>
             <p
               className="text-base"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-stone)' }}
             >
               Free for every business. No catch.
             </p>
@@ -50,7 +50,7 @@ export default function GetListedPage() {
             </p>
             <p
               className="text-base"
-              style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-slate)' }}
             >
               Switchboard puts your business in front of the people already walking past your door — no ad
               spend, no content calendar, no social media. Your listing stays visible as long as it&rsquo;s
@@ -79,7 +79,7 @@ export default function GetListedPage() {
                   <Check size={18} className="flex-shrink-0 mt-0.5" style={{ color: 'var(--sb-amber)' }} />
                   <span
                     className="text-base"
-                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                    style={{ color: 'var(--sb-slate)' }}
                   >
                     {item}
                   </span>
@@ -92,7 +92,7 @@ export default function GetListedPage() {
           <section
             className="p-8 text-center mb-10"
             style={{
-              background: 'var(--sb-warm-white)',
+              background: 'var(--sb-white)',
               border: '2px solid var(--sb-amber)',
               borderRadius: 'var(--sb-radius)',
             }}
@@ -105,7 +105,7 @@ export default function GetListedPage() {
             </h2>
             <p
               className="text-base mb-6"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-stone)' }}
             >
               We handle setup personally. Send us an email and we&rsquo;ll get you live.
             </p>
@@ -124,7 +124,7 @@ export default function GetListedPage() {
             </a>
             <p
               className="text-sm mt-3"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-stone)' }}
             >
               We respond within 24 hours.
             </p>

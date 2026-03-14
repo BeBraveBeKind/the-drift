@@ -60,7 +60,7 @@ export default function PhotoHistory({ locationId }: { locationId: string }) {
         </h2>
         <p
           className="text-sm"
-          style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+          style={{ color: 'var(--sb-stone)' }}
         >
           No photo history yet
         </p>
@@ -104,7 +104,7 @@ export default function PhotoHistory({ locationId }: { locationId: string }) {
               </div>
               <p
                 className="text-xs text-center mt-1"
-                style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+                style={{ color: 'var(--sb-stone)' }}
               >
                 {formatThumbDate(photo.uploaded_at)}
               </p>

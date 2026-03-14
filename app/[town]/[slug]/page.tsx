@@ -165,7 +165,7 @@ export default async function BoardPage({ params }: PageProps) {
           {/* Brand header */}
           <p
             className="text-sm mb-6"
-            style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+            style={{ color: 'var(--sb-stone)' }}
           >
             Switchboard &middot; {townName}
           </p>
@@ -212,7 +212,7 @@ export default async function BoardPage({ params }: PageProps) {
               />
               <p
                 className="mt-2 text-sm"
-                style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+                style={{ color: 'var(--sb-stone)' }}
               >
                 Photo taken {formatPhotoDate(photo.created_at)}
               </p>
@@ -232,7 +232,7 @@ export default async function BoardPage({ params }: PageProps) {
               </p>
               <p
                 className="text-sm"
-                style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+                style={{ color: 'var(--sb-stone)' }}
               >
                 Be the first to add one.
               </p>

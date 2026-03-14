@@ -28,7 +28,7 @@ export default function AboutPage() {
             </h1>
             <p
               className="text-base"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-stone)' }}
             >
               Real. Local. Now.
             </p>
@@ -47,7 +47,7 @@ export default function AboutPage() {
               </h2>
               <div
                 className="space-y-3 text-base"
-                style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                style={{ color: 'var(--sb-slate)' }}
               >
                 <p><strong style={{ fontWeight: 600 }}>We forget to look at them.</strong></p>
                 <p>
@@ -77,7 +77,7 @@ export default function AboutPage() {
               </h2>
               <div
                 className="space-y-3 text-base"
-                style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                style={{ color: 'var(--sb-slate)' }}
               >
                 <p><strong style={{ fontWeight: 600 }}>1.</strong> Find a business board you want to update</p>
                 <p><strong style={{ fontWeight: 600 }}>2.</strong> Scan the QR code at that location</p>
@@ -105,7 +105,7 @@ export default function AboutPage() {
               </h2>
               <div
                 className="space-y-3 text-base"
-                style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                style={{ color: 'var(--sb-slate)' }}
               >
                 <p><strong style={{ fontWeight: 600 }}>You know who you are.</strong></p>
                 <p>
@@ -135,7 +135,7 @@ export default function AboutPage() {
               </h2>
               <div
                 className="space-y-3 text-base"
-                style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                style={{ color: 'var(--sb-slate)' }}
               >
                 <p>
                   There&rsquo;s something beautiful about a physical bulletin board. It&rsquo;s messy. It&rsquo;s democratic.
@@ -166,7 +166,7 @@ export default function AboutPage() {
               </h2>
               <div
                 className="space-y-3 text-base"
-                style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                style={{ color: 'var(--sb-slate)' }}
               >
                 <p>
                   Switchboard is built by{' '}

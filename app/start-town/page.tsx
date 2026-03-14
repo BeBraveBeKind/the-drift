@@ -28,7 +28,7 @@ export default function StartTownPage() {
             </h1>
             <p
               className="text-base"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-stone)' }}
             >
               A tangible benefit for every member business.
             </p>
@@ -50,7 +50,7 @@ export default function StartTownPage() {
             </p>
             <p
               className="text-base"
-              style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-slate)' }}
             >
               Printed directories are outdated by February. Facebook groups exclude half your members.
               Switchboard gives every business in town a live, visible listing — maintained by the community,
@@ -79,7 +79,7 @@ export default function StartTownPage() {
                   <Check size={18} className="flex-shrink-0 mt-0.5" style={{ color: 'var(--sb-amber)' }} />
                   <span
                     className="text-base"
-                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                    style={{ color: 'var(--sb-slate)' }}
                   >
                     {item}
                   </span>
@@ -92,7 +92,7 @@ export default function StartTownPage() {
           <section
             className="p-6 mb-10"
             style={{
-              background: 'var(--sb-warm-white)',
+              background: 'var(--sb-white)',
               borderRadius: 'var(--sb-radius)',
             }}
           >
@@ -107,7 +107,7 @@ export default function StartTownPage() {
             </div>
             <ul
               className="space-y-2 text-base pl-8"
-              style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-slate)' }}
             >
               <li>Chambers of Commerce</li>
               <li>Main Street Organizations</li>
@@ -123,7 +123,7 @@ export default function StartTownPage() {
             style={{
               border: '2px solid var(--sb-amber)',
               borderRadius: 'var(--sb-radius)',
-              background: 'var(--sb-warm-white)',
+              background: 'var(--sb-white)',
             }}
           >
             <h2
@@ -134,7 +134,7 @@ export default function StartTownPage() {
             </h2>
             <p
               className="text-base mb-6"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-stone)' }}
             >
               We&rsquo;ll walk you through how it works and what launch looks like.
             </p>
@@ -153,7 +153,7 @@ export default function StartTownPage() {
             </a>
             <p
               className="text-sm mt-3"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-stone)' }}
             >
               We respond within 24 hours.
             </p>

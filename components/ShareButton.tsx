@@ -33,7 +33,7 @@ export default function ShareButton({ town, slug, name }: { town: string; slug: 
     <button
       onClick={handleShare}
       className="inline-flex items-center gap-1.5 text-sm hover:underline cursor-pointer"
-      style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+      style={{ color: 'var(--sb-stone)' }}
     >
       {copied ? (
         <>

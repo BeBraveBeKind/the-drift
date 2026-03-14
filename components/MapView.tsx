@@ -322,7 +322,7 @@ export default function MapView({ locations, townSlug, activeFilter = 'all' }: M
                 {selectedLocation.profile_completed && selectedLocation.business_category && (
                   <p
                     className="text-xs mt-1"
-                    style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+                    style={{ color: 'var(--sb-stone)' }}
                   >
                     {selectedLocation.business_category}
                   </p>

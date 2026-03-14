@@ -114,7 +114,7 @@ export default async function HomePage() {
 
             <p
               className="text-lg sm:text-xl mb-10"
-              style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-slate)' }}
             >
               Switchboard turns physical bulletin boards into live, browsable pages.
               Scan a QR code to see what&rsquo;s posted. No app. No account. Just your community.
@@ -144,7 +144,7 @@ export default async function HomePage() {
 
             <p
               className="text-sm mt-4 mb-10"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-stone)' }}
             >
               Free for everyone. Always.
             </p>
@@ -173,7 +173,7 @@ export default async function HomePage() {
                 </p>
                 <p
                   className="text-sm"
-                  style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+                  style={{ color: 'var(--sb-stone)' }}
                 >
                   bulletin boards
                 </p>
@@ -187,7 +187,7 @@ export default async function HomePage() {
                 </p>
                 <p
                   className="text-sm"
-                  style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+                  style={{ color: 'var(--sb-stone)' }}
                 >
                   {towns.length === 1 ? 'community' : 'communities'}
                 </p>
@@ -200,7 +200,7 @@ export default async function HomePage() {
         <section
           id="how-it-works"
           className="py-16 sm:py-20"
-          style={{ background: 'var(--sb-warm-white)' }}
+          style={{ background: 'var(--sb-white)' }}
         >
           <div className="max-w-[640px] mx-auto px-4">
             <h2
@@ -262,7 +262,7 @@ export default async function HomePage() {
                     </h3>
                     <p
                       className="text-base mb-4"
-                      style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                      style={{ color: 'var(--sb-slate)' }}
                     >
                       {s.desc}
                     </p>
@@ -337,7 +337,7 @@ export default async function HomePage() {
                   </p>
                   <p
                     className="text-sm"
-                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                    style={{ color: 'var(--sb-slate)' }}
                   >
                     {card.desc}
                   </p>
@@ -350,7 +350,7 @@ export default async function HomePage() {
         {/* ── Trust Signals ────────────────────────────────── */}
         <section
           className="py-16 sm:py-20"
-          style={{ background: 'var(--sb-warm-white)' }}
+          style={{ background: 'var(--sb-white)' }}
         >
           <div className="max-w-[640px] mx-auto px-4">
             <h2
@@ -373,7 +373,7 @@ export default async function HomePage() {
                   </div>
                   <p
                     className="text-sm"
-                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                    style={{ color: 'var(--sb-slate)' }}
                   >
                     {item.text}
                   </p>
@@ -416,7 +416,7 @@ export default async function HomePage() {
                       </span>
                       <span
                         className="text-sm ml-2"
-                        style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+                        style={{ color: 'var(--sb-stone)' }}
                       >
                         {town.boardCount} {town.boardCount === 1 ? 'board' : 'boards'}
                       </span>
@@ -451,7 +451,7 @@ export default async function HomePage() {
             </h2>
             <p
               className="text-base mb-8"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-stone)' }}
             >
               Real. Local. Now.
             </p>
@@ -469,7 +469,7 @@ export default async function HomePage() {
             </a>
             <p
               className="text-sm mt-4"
-              style={{ color: '#94A3B8', fontWeight: 300 }}
+              style={{ color: '#94A3B8' }}
             >
               No signup. No download. Just scan.
             </p>
@@ -501,7 +501,7 @@ export default async function HomePage() {
                   </dt>
                   <dd
                     className="mt-2 text-sm"
-                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                    style={{ color: 'var(--sb-slate)' }}
                   >
                     {faq.a}
                   </dd>

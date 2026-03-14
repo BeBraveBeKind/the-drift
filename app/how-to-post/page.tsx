@@ -29,7 +29,7 @@ export default function HowToPostPage() {
             </h1>
             <p
               className="text-base"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-stone)' }}
             >
               Keep community boards fresh with new photos
             </p>
@@ -62,7 +62,7 @@ export default function HowToPostPage() {
                   </h2>
                   <p
                     className="text-base mb-4"
-                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                    style={{ color: 'var(--sb-slate)' }}
                   >
                     Each bulletin board has its own unique QR code. You must physically visit the location
                     and scan the code posted there. This ensures photos are authentic and taken at the actual location.
@@ -108,13 +108,13 @@ export default function HowToPostPage() {
                   </h2>
                   <p
                     className="text-base mb-3"
-                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                    style={{ color: 'var(--sb-slate)' }}
                   >
                     Capture the entire bulletin board — all the flyers, announcements, and posts currently displayed.
                   </p>
                   <ul
                     className="space-y-2 text-sm mb-5"
-                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                    style={{ color: 'var(--sb-slate)' }}
                   >
                     <li className="flex items-start gap-2">
                       <CheckCircle size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#16A34A' }} />
@@ -217,7 +217,7 @@ export default function HowToPostPage() {
                   </h2>
                   <p
                     className="text-base"
-                    style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                    style={{ color: 'var(--sb-slate)' }}
                   >
                     That&rsquo;s it. Your photo is now the latest view of the board.
                     No account, no login, no approval process. The community keeps its own boards current.
@@ -233,7 +233,7 @@ export default function HowToPostPage() {
             style={{
               border: '2px solid var(--sb-amber)',
               borderRadius: 'var(--sb-radius)',
-              background: 'var(--sb-warm-white)',
+              background: 'var(--sb-white)',
             }}
           >
             <div className="flex items-start gap-3 mb-4">
@@ -247,7 +247,7 @@ export default function HowToPostPage() {
             </div>
             <ul
               className="space-y-2 text-sm pl-8"
-              style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-slate)' }}
             >
               <li>Heavy glare or reflections</li>
               <li>Blur or out-of-focus areas</li>
@@ -267,7 +267,7 @@ export default function HowToPostPage() {
             </h3>
             <ul
               className="space-y-3 text-base"
-              style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-slate)' }}
             >
               <li><strong style={{ fontWeight: 600 }}>Respect privacy:</strong> Avoid including people in your photos</li>
               <li><strong style={{ fontWeight: 600 }}>Be considerate:</strong> Don&rsquo;t obstruct others while taking photos</li>

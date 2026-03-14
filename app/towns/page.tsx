@@ -83,7 +83,7 @@ export default async function TownsPage() {
                     </span>
                     <span
                       className="text-sm ml-2"
-                      style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+                      style={{ color: 'var(--sb-stone)' }}
                     >
                       {town.boardCount} {town.boardCount === 1 ? 'board' : 'boards'}
                     </span>
@@ -100,7 +100,7 @@ export default async function TownsPage() {
             style={{
               border: '2px dashed var(--sb-amber)',
               borderRadius: 'var(--sb-radius)',
-              background: 'var(--sb-warm-white)',
+              background: 'var(--sb-white)',
             }}
           >
             <h2

@@ -209,7 +209,7 @@ export default function UploadFlow({
           </h1>
           <p
             className="text-sm mb-5"
-            style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+            style={{ color: 'var(--sb-stone)' }}
           >
             {getFreshnessMessage(lastUpdated)}
           </p>
@@ -233,7 +233,7 @@ export default function UploadFlow({
           </button>
           <p
             className="text-xs text-center mb-8"
-            style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+            style={{ color: 'var(--sb-stone)' }}
           >
             Your photo will be public on Switchboard
           </p>
@@ -258,7 +258,7 @@ export default function UploadFlow({
                 <li
                   key={tip}
                   className="flex items-start gap-2 text-sm"
-                  style={{ color: 'var(--sb-slate)', fontWeight: 300 }}
+                  style={{ color: 'var(--sb-slate)' }}
                 >
                   <CheckCircle
                     size={14}
@@ -344,7 +344,7 @@ export default function UploadFlow({
           </h2>
           <p
             className="text-sm mb-4 flex-shrink-0"
-            style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+            style={{ color: 'var(--sb-stone)' }}
           >
             Review your photo before uploading
           </p>
@@ -427,7 +427,7 @@ export default function UploadFlow({
           </p>
           <p
             className="text-sm mt-1"
-            style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+            style={{ color: 'var(--sb-stone)' }}
           >
             Updating {businessName}
           </p>
@@ -460,7 +460,7 @@ export default function UploadFlow({
             </h2>
             <p
               className="text-sm"
-              style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+              style={{ color: 'var(--sb-stone)' }}
             >
               The board is now up to date. Thank you!
             </p>
@@ -535,7 +535,7 @@ export default function UploadFlow({
         </h2>
         <p
           className="text-sm mb-6"
-          style={{ color: 'var(--sb-stone)', fontWeight: 300 }}
+          style={{ color: 'var(--sb-stone)' }}
         >
           {error || 'Something went wrong. Please try again.'}
         </p>

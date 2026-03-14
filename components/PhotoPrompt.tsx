@@ -71,7 +71,7 @@ export default function PhotoPrompt({
       </p>
       <p
         className="text-sm mb-5"
-        style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 300 }}
+        style={{ color: 'rgba(255,255,255,0.55)' }}
       >
         {freshnessMsg}
       </p>
