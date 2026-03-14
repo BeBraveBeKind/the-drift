@@ -9,22 +9,8 @@ import TownsList from './TownsList'
 import LocationForm from './LocationForm'
 import LocationsTable from './LocationsTable'
 import AutoFlaggedReview from './AutoFlaggedReview'
+import AnalyticsPanel from './AnalyticsPanel'
 import type { Location, LocationFormData, Town } from '@/types'
-
-function getRandomRotation() {
-  return Math.random() * 6 - 3
-}
-
-const pushpinColors = [
-  '#D94F4F',
-  '#F4D03F',
-  '#5B9BD5',
-  '#6BBF59'
-]
-
-function getRandomPushpinColor() {
-  return pushpinColors[Math.floor(Math.random() * pushpinColors.length)]
-}
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -34,6 +20,7 @@ export default function AdminDashboard() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [showAddForm, setShowAddForm] = useState(false)
   const [showTownsSection, setShowTownsSection] = useState(false)
+  const [showAnalytics, setShowAnalytics] = useState(false)
   const [uploadingPhoto, setUploadingPhoto] = useState<string | null>(null)
   const [autoFlaggedCount, setAutoFlaggedCount] = useState(0)
   const [showAutoFlagged, setShowAutoFlagged] = useState(false)
@@ -422,90 +409,93 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-[#C4A574] relative">
-      <div 
-        className="absolute inset-0 opacity-30"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A68B5B' fill-opacity='0.4'%3E%3Ccircle cx='9' cy='9' r='1'/%3E%3Ccircle cx='49' cy='21' r='1'/%3E%3Ccircle cx='19' cy='29' r='1'/%3E%3Ccircle cx='39' cy='41' r='1'/%3E%3Ccircle cx='9' cy='49' r='1'/%3E%3Ccircle cx='29' cy='9' r='1'/%3E%3Ccircle cx='51' cy='51' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto p-6">
+    <main className="min-h-screen" style={{ background: 'var(--sb-warm-white)' }}>
+      <div className="max-w-7xl mx-auto p-6">
         <div className="flex justify-between items-center mb-8">
-          <div className="relative inline-block">
-            <div 
-              className="bg-[#FFFEF9] p-4 shadow-lg border-[1px] border-[#E5E5E5] relative"
-              style={{ 
-                transform: `rotate(${getRandomRotation()}deg)`,
-                boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
-                borderRadius: '2px'
-              }}
-            >
-              <h1 className="text-[24px] font-bold text-[#2C2C2C]">Admin Dashboard</h1>
-              
-              <div 
-                className="absolute -top-2 left-1/2 w-5 h-5 rounded-full shadow-sm transform -translate-x-1/2"
-                style={{ backgroundColor: getRandomPushpinColor() }}
-              >
-                <div 
-                  className="w-3 h-3 rounded-full absolute top-1 left-1"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
-                />
-              </div>
-            </div>
-          </div>
+          <h1
+            className="text-2xl font-bold"
+            style={{ color: 'var(--sb-charcoal)' }}
+          >
+            Admin Dashboard
+          </h1>
 
-          <div className="flex gap-4">
+          <div className="flex gap-3 flex-wrap justify-end">
             <a
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#5B9BD5] text-white px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#4a8bc2] transition-colors"
+              className="px-4 py-2 rounded-md font-semibold text-sm transition-colors"
+              style={{ background: 'var(--sb-slate)', color: '#fff' }}
             >
               View Site ↗
             </a>
             {autoFlaggedCount > 0 && (
               <button
                 onClick={() => setShowAutoFlagged(true)}
-                className="bg-orange-500 text-white px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-orange-600 transition-colors relative"
+                className="px-4 py-2 rounded-md font-semibold text-sm transition-colors relative"
+                style={{ background: '#EA580C', color: '#fff' }}
               >
                 Review Flagged
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+                <span
+                  className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold"
+                  style={{ background: 'var(--sb-red)', color: '#fff' }}
+                >
                   {autoFlaggedCount}
                 </span>
               </button>
             )}
             <a
               href="/admin/signs"
-              className="bg-[#8B5CF6] text-white px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#7c4fe0] transition-colors"
+              className="px-4 py-2 rounded-md font-semibold text-sm transition-colors"
+              style={{ background: '#7C3AED', color: '#fff' }}
             >
               Signs
             </a>
             <button
+              onClick={() => setShowAnalytics(!showAnalytics)}
+              className="px-4 py-2 rounded-md font-semibold text-sm transition-colors"
+              style={{ background: '#0EA5E9', color: '#fff' }}
+            >
+              {showAnalytics ? 'Hide' : 'Show'} Analytics
+            </button>
+            <button
               onClick={() => setShowTownsSection(!showTownsSection)}
-              className="bg-[#F4D03F] text-[#2C2C2C] px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#e6c337] transition-colors"
+              className="btn-primary text-sm"
+              style={{ padding: '8px 16px' }}
             >
               {showTownsSection ? 'Hide' : 'Manage'} Towns
             </button>
             <button
               onClick={() => setShowAddForm(true)}
-              className="bg-[#6BBF59] text-white px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#5da850] transition-colors"
+              className="px-4 py-2 rounded-md font-semibold text-sm transition-colors"
+              style={{ background: 'var(--sb-green)', color: '#fff' }}
             >
               Add Location
             </button>
             <button
               onClick={handleLogout}
-              className="bg-[#D94F4F] text-white px-4 py-2 rounded-md font-semibold text-[14px] hover:bg-[#c44545] transition-colors"
+              className="px-4 py-2 rounded-md font-semibold text-sm transition-colors"
+              style={{ background: 'var(--sb-red)', color: '#fff' }}
             >
               Logout
             </button>
           </div>
         </div>
 
+        {showAnalytics && <AnalyticsPanel />}
+
         {showTownsSection && (
           <div className="mb-8">
-            <div className="bg-[#FFFEF9] p-6 rounded-lg border border-[#E5E5E5] shadow-sm">
-              <h2 className="text-[20px] font-bold text-[#2C2C2C] mb-4">Towns Management</h2>
+            <div
+              className="p-6 rounded-lg"
+              style={{ background: 'var(--sb-white)', border: '1px solid var(--sb-warm-gray)' }}
+            >
+              <h2
+                className="text-xl font-bold mb-4"
+                style={{ color: 'var(--sb-charcoal)' }}
+              >
+                Towns Management
+              </h2>
               <TownsList onTownsUpdated={loadTowns} />
             </div>
           </div>

@@ -33,112 +33,139 @@ export default function LocationsTable({
 
   if (loading) {
     return (
-      <div className="bg-[#FFFEF9] rounded-lg border border-[#E5E5E5] shadow-sm">
-        <div className="p-8 text-center text-[#6B6B6B]">Loading...</div>
+      <div
+        className="rounded-lg"
+        style={{ background: 'var(--sb-white)', border: '1px solid var(--sb-warm-gray)' }}
+      >
+        <div className="p-8 text-center" style={{ color: 'var(--sb-stone)' }}>Loading...</div>
       </div>
     )
   }
 
   return (
-    <div className="bg-[#FFFEF9] rounded-lg border border-[#E5E5E5] shadow-sm overflow-hidden">
-      <div className="p-4 border-b border-[#E5E5E5]">
-        <h2 className="text-[18px] font-semibold text-[#2C2C2C]">
+    <div
+      className="rounded-lg overflow-hidden"
+      style={{ background: 'var(--sb-white)', border: '1px solid var(--sb-warm-gray)' }}
+    >
+      <div
+        className="p-4"
+        style={{ borderBottom: '1px solid var(--sb-warm-gray)' }}
+      >
+        <h2
+          className="text-lg font-semibold"
+          style={{ color: 'var(--sb-charcoal)' }}
+        >
           All Locations ({locations.length})
         </h2>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                Name
-              </th>
-              <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                Slug
-              </th>
-              <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                Town
-              </th>
-              <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                Address
-              </th>
-              <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                Views
-              </th>
-              <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-4 py-3 text-left text-[12px] font-semibold text-[#2C2C2C] uppercase tracking-wider">
-                Actions
-              </th>
+          <thead>
+            <tr style={{ background: 'var(--sb-warm-white)' }}>
+              {['Name', 'Slug', 'Town', 'Address', 'Views', 'Status', 'Actions'].map((header) => (
+                <th
+                  key={header}
+                  className="text-left text-xs font-semibold uppercase tracking-wider"
+                  style={{ padding: '12px 16px', color: 'var(--sb-slate)' }}
+                >
+                  {header}
+                </th>
+              ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody>
             {locations.map((location, index) => {
               const town = towns.find(t => t.id === location.town_id)
+              const isOdd = index % 2 === 1
               return (
-                <tr 
-                  key={location.id} 
-                  className={`${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'} hover:bg-blue-100 transition-colors`}
+                <tr
+                  key={location.id}
+                  style={{
+                    background: isOdd ? '#F8F5F0' : 'var(--sb-white)',
+                    borderBottom: '1px solid var(--sb-warm-gray)',
+                    transition: 'background 150ms ease',
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = '#FEF3C7'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = isOdd ? '#F8F5F0' : 'var(--sb-white)'}
                 >
-                  <td className="px-4 py-3 text-[14px] text-[#2C2C2C] font-medium">
+                  <td
+                    className="text-sm font-medium"
+                    style={{ padding: '12px 16px', color: 'var(--sb-charcoal)' }}
+                  >
                     {location.name}
                   </td>
-                  <td className="px-4 py-3 text-[14px] text-[#6B6B6B] font-mono">
+                  <td
+                    className="text-sm font-mono"
+                    style={{ padding: '12px 16px', color: 'var(--sb-stone)' }}
+                  >
                     {location.slug}
                   </td>
-                  <td className="px-4 py-3 text-[14px] text-[#6B6B6B]">
+                  <td
+                    className="text-sm"
+                    style={{ padding: '12px 16px', color: 'var(--sb-stone)' }}
+                  >
                     {town?.name || location.town || 'Unknown'}
                   </td>
-                  <td className="px-4 py-3 text-[14px] text-[#6B6B6B]">
+                  <td
+                    className="text-sm"
+                    style={{ padding: '12px 16px', color: 'var(--sb-stone)' }}
+                  >
                     {location.address || '-'}
                   </td>
-                  <td className="px-4 py-3 text-[14px] text-[#6B6B6B]">
+                  <td
+                    className="text-sm"
+                    style={{ padding: '12px 16px', color: 'var(--sb-stone)' }}
+                  >
                     {location.view_count}
                   </td>
-                  <td className="px-4 py-3">
+                  <td style={{ padding: '12px 16px' }}>
                     <button
                       onClick={() => onToggleActive(location.id, location.is_active)}
-                      className={`px-2 py-1 rounded-full text-[12px] font-medium ${
-                        location.is_active
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}
+                      className="px-2 py-1 rounded-full text-xs font-medium"
+                      style={{
+                        background: location.is_active ? '#DCFCE7' : '#FEE2E2',
+                        color: location.is_active ? '#166534' : '#991B1B',
+                      }}
                     >
                       {location.is_active ? 'Active' : 'Inactive'}
                     </button>
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex gap-2">
+                  <td style={{ padding: '12px 16px' }}>
+                    <div className="flex gap-3">
                       <button
                         onClick={() => onEdit(location)}
-                        className="text-[#5B9BD5] hover:text-[#4a8bc2] text-[12px] font-medium"
+                        className="text-xs font-medium"
+                        style={{ color: 'var(--sb-amber)' }}
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => onGenerateQR(location)}
-                        className="text-[#6BBF59] hover:text-[#5da850] text-[12px] font-medium"
+                        className="text-xs font-medium"
+                        style={{ color: 'var(--sb-green)' }}
                       >
-                        QR Code
+                        QR
                       </button>
                       <button
                         onClick={() => onUploadPhoto(location)}
                         disabled={uploadingPhoto === location.slug}
-                        className="text-[#5B9BD5] hover:text-[#4a8bc2] text-[12px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{ color: 'var(--sb-slate)' }}
                       >
-                        {uploadingPhoto === location.slug ? 'Uploading...' : 'Upload Photo'}
+                        {uploadingPhoto === location.slug ? 'Uploading...' : 'Photo'}
                       </button>
                       <button
                         onClick={() => setShowPhotoHistory({ id: location.id, name: location.name })}
-                        className="text-[#F4D03F] hover:text-[#e6c337] text-[12px] font-medium"
+                        className="text-xs font-medium"
+                        style={{ color: 'var(--sb-stone)' }}
                       >
                         History
                       </button>
                       <button
                         onClick={() => onRemove(location.id, location.name)}
-                        className="text-[#D94F4F] hover:text-[#c44343] text-[12px] font-medium"
+                        className="text-xs font-medium"
+                        style={{ color: 'var(--sb-red)' }}
                       >
                         Remove
                       </button>

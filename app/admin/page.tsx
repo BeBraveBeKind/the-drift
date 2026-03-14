@@ -28,8 +28,8 @@ export default function AdminPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#C4A574] flex items-center justify-center">
-        <div className="text-white">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--sb-warm-white)' }}>
+        <div style={{ color: 'var(--sb-stone)' }}>Loading...</div>
       </div>
     )
   }
