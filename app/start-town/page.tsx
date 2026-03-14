@@ -1,8 +1,7 @@
 import { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
-import Link from 'next/link'
-import { ArrowLeft, Check, Mail, Users } from 'lucide-react'
+import { Mail, Users } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Bring Switchboard to Your Town',
@@ -16,13 +15,13 @@ export default function StartTownPage() {
     <>
       <Navigation />
       <main className="min-h-screen">
-        <div className="max-w-[640px] mx-auto px-4 py-12">
+        <div className="max-w-[640px] mx-auto px-4" style={{ paddingTop: '48px', paddingBottom: '0' }}>
 
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center" style={{ marginBottom: '48px' }}>
             <h1
-              className="text-3xl sm:text-4xl font-bold mb-3"
-              style={{ color: 'var(--sb-charcoal)' }}
+              className="text-3xl sm:text-4xl font-bold"
+              style={{ color: 'var(--sb-charcoal)', marginBottom: '12px' }}
             >
               Bring Switchboard to Your Town
             </h1>
@@ -36,21 +35,22 @@ export default function StartTownPage() {
 
           {/* Carol's pain */}
           <section
-            className="p-6 mb-10"
             style={{
               border: '1px solid var(--sb-warm-gray)',
               borderRadius: 'var(--sb-radius)',
+              padding: '24px',
+              marginBottom: '40px',
             }}
           >
             <p
-              className="text-base italic mb-4"
-              style={{ color: 'var(--sb-charcoal)' }}
+              className="text-base italic"
+              style={{ color: 'var(--sb-charcoal)', marginBottom: '16px' }}
             >
               &ldquo;I need something real I can offer my members.&rdquo;
             </p>
             <p
               className="text-base"
-              style={{ color: 'var(--sb-slate)' }}
+              style={{ color: 'var(--sb-slate)', lineHeight: '1.6' }}
             >
               Printed directories are outdated by February. Facebook groups exclude half your members.
               Switchboard gives every business in town a live, visible listing — maintained by the community,
@@ -59,10 +59,10 @@ export default function StartTownPage() {
           </section>
 
           {/* What a town gets */}
-          <section className="mb-10">
+          <section style={{ marginBottom: '40px' }}>
             <h2
-              className="text-xl font-semibold mb-6"
-              style={{ color: 'var(--sb-charcoal)' }}
+              className="text-xl font-semibold"
+              style={{ color: 'var(--sb-charcoal)', marginBottom: '24px' }}
             >
               What your town gets
             </h2>
@@ -87,13 +87,15 @@ export default function StartTownPage() {
 
           {/* Perfect for */}
           <section
-            className="p-6 mb-10"
             style={{
               background: 'var(--sb-white)',
               borderRadius: 'var(--sb-radius)',
+              border: '1px solid var(--sb-warm-gray)',
+              padding: '24px',
+              marginBottom: '40px',
             }}
           >
-            <div className="flex items-center gap-3 mb-4">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
               <Users size={20} style={{ color: 'var(--sb-amber)' }} />
               <h3
                 className="text-base font-semibold"
@@ -102,10 +104,7 @@ export default function StartTownPage() {
                 Perfect for
               </h3>
             </div>
-            <ul
-              className="space-y-2 text-base pl-8"
-              style={{ color: 'var(--sb-slate)' }}
-            >
+            <ul style={{ listStyle: 'disc', paddingLeft: '32px', margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', color: 'var(--sb-slate)', fontSize: '16px' }}>
               <li>Chambers of Commerce</li>
               <li>Main Street Organizations</li>
               <li>Business Improvement Districts</li>
@@ -116,22 +115,24 @@ export default function StartTownPage() {
 
           {/* CTA */}
           <section
-            className="p-8 text-center mb-10"
+            className="text-center"
             style={{
               border: '2px solid var(--sb-amber)',
               borderRadius: 'var(--sb-radius)',
               background: 'var(--sb-white)',
+              padding: '32px 32px 40px',
+              marginBottom: '40px',
             }}
           >
             <h2
-              className="text-xl font-semibold mb-2"
-              style={{ color: 'var(--sb-charcoal)' }}
+              className="text-xl font-semibold"
+              style={{ color: 'var(--sb-charcoal)', marginBottom: '8px' }}
             >
               Let&rsquo;s talk about your town.
             </h2>
             <p
-              className="text-base mb-6"
-              style={{ color: 'var(--sb-stone)' }}
+              className="text-base"
+              style={{ color: 'var(--sb-stone)', marginBottom: '24px' }}
             >
               We&rsquo;ll walk you through how it works and what launch looks like.
             </p>
@@ -144,31 +145,14 @@ export default function StartTownPage() {
               Email Hello@rise-above.net
             </a>
             <p
-              className="text-sm mt-3"
-              style={{ color: 'var(--sb-stone)' }}
+              className="text-sm"
+              style={{ color: 'var(--sb-stone)', marginTop: '12px' }}
             >
               We respond within 24 hours.
             </p>
           </section>
 
-          {/* Back link */}
-          <div
-            className="pt-8"
-            style={{ borderTop: '1px solid var(--sb-warm-gray)' }}
-          >
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-base no-underline"
-              style={{ color: 'var(--sb-amber)' }}
-            >
-              <ArrowLeft size={16} />
-              Back to Home
-            </Link>
-          </div>
-
-          <div className="mt-8">
-            <Footer />
-          </div>
+          <Footer />
         </div>
       </main>
     </>

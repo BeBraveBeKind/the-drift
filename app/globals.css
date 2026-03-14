@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* Critical CSS - Prevent layout shift on initial load */
 html {
@@ -77,12 +75,6 @@ img {
   /* Reset dd indent for FAQ sections */
   dd {
     margin-inline-start: 0;
-  }
-
-  /* Prevent layout shifts from dynamic content */
-  .min-h-screen {
-    min-height: 100vh;
-    min-height: 100dvh;
   }
 }
 
