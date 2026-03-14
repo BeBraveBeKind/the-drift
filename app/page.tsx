@@ -53,7 +53,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Is Switchboard free?',
-    a: 'Yes. Browsing is free for community members. Listing on a board is free for businesses. Always.',
+    a: 'Yes. Browsing is free for community members. Listing on a board is free for businesses.',
   },
   {
     q: 'What if someone posts something inappropriate?',
@@ -141,7 +141,7 @@ export default async function HomePage() {
               className="text-sm mt-4 mb-10"
               style={{ color: 'var(--sb-stone)' }}
             >
-              Free for everyone. Always.
+              Free for everyone.
             </p>
 
             <Image
@@ -283,7 +283,7 @@ export default async function HomePage() {
                         width={480}
                         height={320}
                         className="w-full h-auto"
-                        style={{ maxHeight: '220px', objectFit: 'cover', objectPosition: 'top' }}
+                        style={{ maxHeight: '320px', objectFit: 'cover', objectPosition: 'center' }}
                       />
                     </div>
                   </div>
@@ -486,12 +486,16 @@ export default async function HomePage() {
               Questions
             </h2>
 
-            <dl>
+            <dl style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {FAQ_ITEMS.map((faq, i) => (
                 <div
                   key={i}
-                  className="py-6"
-                  style={{ borderBottom: '1px solid var(--sb-warm-gray)' }}
+                  style={{
+                    background: 'var(--sb-white)',
+                    borderRadius: 'var(--sb-radius)',
+                    border: '1px solid var(--sb-warm-gray)',
+                    padding: '20px 24px',
+                  }}
                 >
                   <dt
                     className="text-base font-semibold"
@@ -500,8 +504,8 @@ export default async function HomePage() {
                     {faq.q}
                   </dt>
                   <dd
-                    className="mt-2 text-sm"
-                    style={{ color: 'var(--sb-slate)' }}
+                    className="text-sm"
+                    style={{ color: 'var(--sb-slate)', marginTop: '8px', lineHeight: '1.6' }}
                   >
                     {faq.a}
                   </dd>

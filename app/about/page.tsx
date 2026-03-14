@@ -2,7 +2,6 @@ import { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'About Switchboard — Real. Local. Now.',
@@ -164,10 +163,10 @@ export default function AboutPage() {
                 style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '16px', color: 'var(--sb-slate)' }}
               >
                 <p>
-                  Switchboard is built by{' '}
-                  <strong style={{ fontWeight: 600 }}>Rise Above Partners</strong>, a consulting studio
-                  focused on community-first technology. We believe the best tools are the ones that
-                  disappear — that make real-world connections easier without getting in the way.
+                  Switchboard is built in collaboration between{' '}
+                  <strong style={{ fontWeight: 600 }}>Ofigona LLC</strong> and{' '}
+                  <strong style={{ fontWeight: 600 }}>Rise Above Partners</strong> in focused development
+                  of community-first technology.
                 </p>
                 <p>
                   Questions? Reach us at{' '}
@@ -182,24 +181,7 @@ export default function AboutPage() {
             </section>
           </div>
 
-          {/* Back link */}
-          <div
-            className="mt-12 pt-8"
-            style={{ borderTop: '1px solid var(--sb-warm-gray)' }}
-          >
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-base no-underline"
-              style={{ color: 'var(--sb-amber)' }}
-            >
-              <ArrowLeft size={16} />
-              Back to Home
-            </Link>
-          </div>
-
-          <div className="mt-8">
-            <Footer />
-          </div>
+          <Footer />
         </div>
       </main>
     </>

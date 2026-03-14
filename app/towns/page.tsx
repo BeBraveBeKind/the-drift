@@ -97,11 +97,12 @@ export default async function TownsPage() {
 
           {/* Expansion CTA */}
           <div
-            className="p-8 text-center mb-10"
+            className="text-center mb-10"
             style={{
               border: '2px dashed var(--sb-amber)',
               borderRadius: 'var(--sb-radius)',
               background: 'var(--sb-white)',
+              padding: '32px 32px 40px',
             }}
           >
             <h2

@@ -36,10 +36,11 @@ export default function GetListedPage() {
 
           {/* Value prop */}
           <section
-            className="p-6 mb-10"
+            className="mb-10"
             style={{
               border: '1px solid var(--sb-warm-gray)',
               borderRadius: 'var(--sb-radius)',
+              padding: '24px',
             }}
           >
             <p
@@ -73,7 +74,7 @@ export default function GetListedPage() {
                 'Photo-verified listing that stays current',
                 'Community members update it for you',
                 'View count and freshness tracking',
-                'Free. Always.',
+                'Free.',
               ].map((item) => (
                 <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}><polyline points="20 6 9 17 4 12" /></svg>
