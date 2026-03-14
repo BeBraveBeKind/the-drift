@@ -117,13 +117,8 @@ export default async function TownsPage() {
             </p>
             <Link
               href="/start-town"
-              className="inline-flex items-center gap-2 px-6 py-3 font-semibold text-base no-underline"
-              style={{
-                background: 'var(--sb-amber)',
-                color: 'var(--sb-charcoal)',
-                borderRadius: '6px',
-                minHeight: '48px',
-              }}
+              className="btn-primary"
+              style={{ gap: '8px', textDecoration: 'none', fontSize: '16px', padding: '14px 32px' }}
             >
               Become a Partner
             </Link>

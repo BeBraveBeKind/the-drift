@@ -46,10 +46,19 @@ export default function HowToPostPage() {
                 borderRadius: 'var(--sb-radius)',
               }}
             >
-              <div className="flex items-start gap-4">
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
                 <div
-                  className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full"
-                  style={{ background: 'var(--sb-amber)', color: 'var(--sb-charcoal)' }}
+                  style={{
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    background: 'var(--sb-amber)',
+                    color: 'var(--sb-charcoal)',
+                  }}
                 >
                   <QrCode size={20} />
                 </div>
@@ -92,10 +101,19 @@ export default function HowToPostPage() {
                 borderRadius: 'var(--sb-radius)',
               }}
             >
-              <div className="flex items-start gap-4">
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
                 <div
-                  className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full"
-                  style={{ background: 'var(--sb-amber)', color: 'var(--sb-charcoal)' }}
+                  style={{
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    background: 'var(--sb-amber)',
+                    color: 'var(--sb-charcoal)',
+                  }}
                 >
                   <Camera size={20} />
                 </div>
@@ -201,10 +219,19 @@ export default function HowToPostPage() {
                 borderRadius: 'var(--sb-radius)',
               }}
             >
-              <div className="flex items-start gap-4">
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
                 <div
-                  className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full"
-                  style={{ background: 'var(--sb-amber)', color: 'var(--sb-charcoal)' }}
+                  style={{
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    background: 'var(--sb-amber)',
+                    color: 'var(--sb-charcoal)',
+                  }}
                 >
                   <CheckCircle size={20} />
                 </div>

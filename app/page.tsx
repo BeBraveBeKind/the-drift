@@ -120,23 +120,18 @@ export default async function HomePage() {
               Scan a QR code to see what&rsquo;s posted. No app. No account. Just your community.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
               <a
                 href="#towns"
-                className="inline-flex items-center gap-2 px-8 py-4 font-semibold text-base no-underline"
-                style={{
-                  background: 'var(--sb-amber)',
-                  color: 'var(--sb-charcoal)',
-                  borderRadius: '6px',
-                  minHeight: '48px',
-                }}
+                className="btn-primary"
+                style={{ gap: '8px', textDecoration: 'none', fontSize: '16px', padding: '14px 32px' }}
               >
                 Find my town
               </a>
               <a
                 href="#how-it-works"
-                className="inline-flex items-center gap-1 text-base font-semibold no-underline"
-                style={{ color: 'var(--sb-charcoal)' }}
+                className="btn-text"
+                style={{ gap: '4px', fontSize: '16px', textDecoration: 'none' }}
               >
                 See how it works <span aria-hidden="true">&rarr;</span>
               </a>
@@ -161,8 +156,14 @@ export default async function HomePage() {
 
             {/* Aggregate stats */}
             <div
-              className="flex justify-center gap-10 mt-8 pt-6"
-              style={{ borderTop: '1px solid var(--sb-warm-gray)' }}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '40px',
+                marginTop: '32px',
+                paddingTop: '24px',
+                borderTop: '1px solid var(--sb-warm-gray)',
+              }}
             >
               <div className="text-center">
                 <p
@@ -243,10 +244,16 @@ export default async function HomePage() {
                   imageAlt: 'Person stepping back to photograph the full bulletin board',
                 },
               ].map((s) => (
-                <div key={s.step} className="flex items-start gap-5">
+                <div key={s.step} style={{ display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
                   <div
-                    className="flex-shrink-0 flex items-center justify-center w-14 h-14 rounded-full"
                     style={{
+                      flexShrink: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '56px',
+                      height: '56px',
+                      borderRadius: '50%',
                       background: 'var(--sb-amber)',
                       color: 'var(--sb-charcoal)',
                     }}
@@ -457,13 +464,8 @@ export default async function HomePage() {
             </p>
             <a
               href="#towns"
-              className="inline-flex items-center gap-2 px-8 py-4 font-semibold text-base no-underline"
-              style={{
-                background: 'var(--sb-amber)',
-                color: 'var(--sb-charcoal)',
-                borderRadius: '6px',
-                minHeight: '48px',
-              }}
+              className="btn-primary"
+              style={{ gap: '8px', textDecoration: 'none', fontSize: '16px', padding: '14px 32px' }}
             >
               Find my town
             </a>

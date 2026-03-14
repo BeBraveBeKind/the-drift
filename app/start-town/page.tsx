@@ -140,13 +140,8 @@ export default function StartTownPage() {
             </p>
             <a
               href="mailto:Hello@rise-above.net?subject=Bring%20Switchboard%20to%20Our%20Town"
-              className="inline-flex items-center gap-2 px-8 py-4 font-semibold text-base no-underline"
-              style={{
-                background: 'var(--sb-amber)',
-                color: 'var(--sb-charcoal)',
-                borderRadius: '6px',
-                minHeight: '48px',
-              }}
+              className="btn-primary"
+              style={{ gap: '8px', textDecoration: 'none', fontSize: '16px', padding: '14px 32px' }}
             >
               <Mail size={18} />
               Email Hello@rise-above.net

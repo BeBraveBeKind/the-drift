@@ -28,8 +28,16 @@ export default function Footer() {
         </p>
 
         <div
-          className="pt-6 flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm"
-          style={{ borderTop: '1px solid var(--sb-warm-gray)' }}
+          style={{
+            paddingTop: '24px',
+            borderTop: '1px solid var(--sb-warm-gray)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            columnGap: '24px',
+            rowGap: '12px',
+            fontSize: '14px',
+          }}
         >
           <Link href="/about" className="hover:underline" style={{ color: 'var(--sb-slate)', fontWeight: 500, textDecoration: 'none' }}>
             About
