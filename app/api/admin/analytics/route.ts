@@ -54,8 +54,11 @@ export async function GET(request: NextRequest) {
 
     if (!res.ok) {
       const errText = await res.text()
-      console.error('Plausible API error:', errText)
-      throw new Error(`Plausible API error: ${res.status}`)
+      console.error(`Plausible API error [${query}]:`, res.status, errText)
+      return NextResponse.json(
+        { error: `Plausible ${res.status}: ${errText}` },
+        { status: res.status }
+      )
     }
 
     const data = await res.json()
@@ -112,7 +115,7 @@ function buildQuery(query: string, period: string) {
         ...base,
         metrics: ['visitors', 'events'],
         dimensions: ['event:name'],
-        filters: [['is', 'event:name', ['pageview'], { negated: true }]],
+        filters: [['is_not', 'event:name', ['pageview']]],
         order_by: [['events', 'desc']],
       }
 

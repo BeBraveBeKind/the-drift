@@ -43,79 +43,84 @@ export default function AnalyticsPanel() {
   }, [period])
 
   async function fetchQuery(q: string) {
-    const res = await fetch(`/api/admin/analytics?q=${q}&period=${period}`)
-    if (!res.ok) throw new Error(`Failed to fetch ${q}`)
-    return res.json()
+    try {
+      const res = await fetch(`/api/admin/analytics?q=${q}&period=${period}`)
+      if (!res.ok) return null
+      return res.json()
+    } catch {
+      return null
+    }
   }
 
   async function loadAnalytics() {
     setState(prev => ({ ...prev, loading: true, error: null }))
 
-    try {
-      const [overviewRes, realtimeRes, pagesRes, sourcesRes, timeseriesRes, eventsRes] = await Promise.all([
-        fetchQuery('overview'),
-        fetchQuery('realtime'),
-        fetchQuery('pages'),
-        fetchQuery('sources'),
-        fetchQuery('timeseries'),
-        fetchQuery('events'),
-      ])
+    const [overviewRes, realtimeRes, pagesRes, sourcesRes, timeseriesRes, eventsRes] = await Promise.all([
+      fetchQuery('overview'),
+      fetchQuery('realtime'),
+      fetchQuery('pages'),
+      fetchQuery('sources'),
+      fetchQuery('timeseries'),
+      fetchQuery('events'),
+    ])
 
-      // Parse overview (single row, metrics in order: visitors, pageviews, bounce_rate, visit_duration, visits)
-      const om = overviewRes.results?.[0]?.metrics || []
-      const overview = {
-        visitors: om[0] || 0,
-        pageviews: om[1] || 0,
-        bounceRate: om[2] || 0,
-        avgDuration: om[3] || 0,
-        visits: om[4] || 0,
-      }
-
-      // Parse pages
-      const pages = (pagesRes.results || []).map((r: { dimensions: string[]; metrics: number[] }) => ({
-        page: r.dimensions[0],
-        visitors: r.metrics[0],
-        pageviews: r.metrics[1],
-      }))
-
-      // Parse sources
-      const sources = (sourcesRes.results || []).map((r: { dimensions: string[]; metrics: number[] }) => ({
-        source: r.dimensions[0] || 'Direct / None',
-        visitors: r.metrics[0],
-      }))
-
-      // Parse timeseries
-      const timeseries = (timeseriesRes.results || []).map((r: { dimensions: string[]; metrics: number[] }) => ({
-        date: r.dimensions[0],
-        visitors: r.metrics[0],
-        pageviews: r.metrics[1],
-      }))
-
-      // Parse events
-      const events = (eventsRes.results || []).map((r: { dimensions: string[]; metrics: number[] }) => ({
-        name: r.dimensions[0],
-        visitors: r.metrics[0],
-        count: r.metrics[1],
-      }))
-
-      setState({
-        overview,
-        realtime: realtimeRes.realtime_visitors ?? 0,
-        pages,
-        sources,
-        timeseries,
-        events,
-        loading: false,
-        error: null,
-      })
-    } catch (err) {
-      console.error('Analytics load error:', err)
+    // If overview fails, the API key is likely bad
+    if (!overviewRes) {
       setState(prev => ({
         ...prev,
         loading: false,
-        error: err instanceof Error ? err.message : 'Failed to load analytics',
+        error: 'Could not reach Plausible API. Check your API key and that it has access to switchboard.town',
       }))
+      return
     }
+
+    // Parse overview (single row, metrics in order: visitors, pageviews, bounce_rate, visit_duration, visits)
+    const om = overviewRes.results?.[0]?.metrics || []
+    const overview = {
+      visitors: om[0] || 0,
+      pageviews: om[1] || 0,
+      bounceRate: om[2] || 0,
+      avgDuration: om[3] || 0,
+      visits: om[4] || 0,
+    }
+
+    // Parse pages (graceful if null)
+    const pages = (pagesRes?.results || []).map((r: { dimensions: string[]; metrics: number[] }) => ({
+      page: r.dimensions[0],
+      visitors: r.metrics[0],
+      pageviews: r.metrics[1],
+    }))
+
+    // Parse sources
+    const sources = (sourcesRes?.results || []).map((r: { dimensions: string[]; metrics: number[] }) => ({
+      source: r.dimensions[0] || 'Direct / None',
+      visitors: r.metrics[0],
+    }))
+
+    // Parse timeseries
+    const timeseries = (timeseriesRes?.results || []).map((r: { dimensions: string[]; metrics: number[] }) => ({
+      date: r.dimensions[0],
+      visitors: r.metrics[0],
+      pageviews: r.metrics[1],
+    }))
+
+    // Parse events
+    const events = (eventsRes?.results || []).map((r: { dimensions: string[]; metrics: number[] }) => ({
+      name: r.dimensions[0],
+      visitors: r.metrics[0],
+      count: r.metrics[1],
+    }))
+
+    setState({
+      overview,
+      realtime: realtimeRes?.realtime_visitors ?? 0,
+      pages,
+      sources,
+      timeseries,
+      events,
+      loading: false,
+      error: null,
+    })
   }
 
   if (state.error) {
