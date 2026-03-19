@@ -67,10 +67,6 @@ img {
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Don't apply EXIF orientation - images are already rotated server-side */
-  img {
-    image-orientation: none;
-  }
 
   /* Reset dd indent for FAQ sections */
   dd {
