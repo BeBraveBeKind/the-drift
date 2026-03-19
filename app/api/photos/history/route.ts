@@ -31,7 +31,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    return NextResponse.json({ photos: data || [] })
+    // Build full photo URLs server-side (DB function returns storage_path only)
+    const photos = (data || []).map((photo: { storage_path: string; photo_url?: string; [key: string]: unknown }) => ({
+      ...photo,
+      photo_url: `${supabaseUrl}/storage/v1/object/public/board-photos/${photo.storage_path}`
+    }))
+
+    return NextResponse.json({ photos })
   } catch (error) {
     console.error('Unexpected error:', error)
     return NextResponse.json({ 
