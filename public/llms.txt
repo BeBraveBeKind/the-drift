@@ -16,10 +16,10 @@
 - [Towns Directory](https://switchboard.town/towns): All active Switchboard communities
 
 ## Active Communities
-- [Viroqua, Wisconsin](https://switchboard.town/viroqua): 20+ community bulletin boards
+- [Viroqua, Wisconsin](https://switchboard.town/viroqua): 17 community bulletin boards
 
 ## Key Facts
-- Built by Rise Above Partners (https://rise-above.net)
+- Built by Ofigona LLC
 - Free for all businesses and community members
 - QR-code verified, geo-fenced photo uploads ensure authenticity
 - Privacy-first: no tracking cookies, no personal data collection
@@ -27,7 +27,7 @@
 - No app download required — works in any mobile browser
 
 ## For Chambers of Commerce & Community Organizations
-Switchboard replaces printed business directories with a living, community-maintained platform. Each listed business gets a dedicated page, custom QR code sign, and visibility powered by foot traffic — not ad spend. Contact: Hello@rise-above.net
+Switchboard replaces printed business directories with a living, community-maintained platform. Each listed business gets a dedicated page, custom QR code sign, and visibility powered by foot traffic — not ad spend. Built by Ofigona LLC. Contact: Hello@rise-above.net
 
 ## Content Types
 - Town pages: Browsable grid of all bulletin boards in a community

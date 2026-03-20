@@ -150,7 +150,7 @@ export default function PrivacyPage() {
                   Hello@rise-above.net
                 </a>
                 <br />
-                <strong style={{ color: 'var(--sb-charcoal)' }}>Operated by:</strong> Rise Above Partners and Ofigona LLC
+                <strong style={{ color: 'var(--sb-charcoal)' }}>Operated by:</strong> Ofigona LLC
               </p>
             </section>
           </div>

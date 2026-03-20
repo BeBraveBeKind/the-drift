@@ -6,7 +6,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'About Switchboard — Real. Local. Now.',
   description:
-    'Switchboard is a community information network that turns physical bulletin boards into live, browsable pages. No accounts, no algorithms — just your community. Built by Rise Above Partners.',
+    'Switchboard is a community information network that turns physical bulletin boards into live, browsable pages. No accounts, no algorithms — just your community. Built by Ofigona LLC.',
   alternates: { canonical: 'https://switchboard.town/about' },
 }
 
@@ -163,10 +163,9 @@ export default function AboutPage() {
                 style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '16px', color: 'var(--sb-slate)' }}
               >
                 <p>
-                  Switchboard is built in collaboration between{' '}
-                  <strong style={{ fontWeight: 600 }}>Ofigona LLC</strong> and{' '}
-                  <strong style={{ fontWeight: 600 }}>Rise Above Partners</strong> in focused development
-                  of community-first technology.
+                  Switchboard is built by{' '}
+                  <strong style={{ fontWeight: 600 }}>Ofigona LLC</strong>, focused on
+                  community-first technology.
                 </p>
                 <p>
                   Questions? Reach us at{' '}

@@ -92,7 +92,7 @@ export default async function ForChambersPage() {
               Schedule a Walkthrough
             </a>
             <p style={{ fontSize: '13px', color: '#78716C', marginTop: '10px' }}>
-              Free first month &middot; No commitment
+              $250/mo founding rate &middot; Annual contract
             </p>
           </div>
 
@@ -314,7 +314,7 @@ export default async function ForChambersPage() {
                 <span style={{ fontSize: '16px', color: '#94a3b8' }}>/month</span>
               </div>
               <p style={{ fontSize: '14px', fontWeight: 600, color: '#F59E0B', marginBottom: '20px' }}>
-                First month free.
+                Introductory rate for next 3 towns.
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
                 {[

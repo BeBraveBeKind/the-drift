@@ -1,5 +1,5 @@
 #                    GNU GENERAL PUBLIC LICENSE
-##Copyright (c) 2026 BeBraveBeKind / Rise Above Partners
+##Copyright (c) 2026 Ofigona LLC
 
 All Rights Reserved.
 

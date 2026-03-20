@@ -16,9 +16,9 @@ export const metadata: Metadata = {
   },
   description: 'Switchboard brings your community bulletin board online. Discover local businesses, events, and services posted on real bulletin boards in your town — no logins, no algorithms.',
   keywords: ['community bulletin board', 'local events', 'small town', 'local business', 'community services', 'rural communities', 'bulletin board online'],
-  authors: [{ name: 'Rise Above Partners' }],
-  creator: 'Rise Above Partners',
-  publisher: 'Rise Above Partners',
+  authors: [{ name: 'Ofigona LLC' }],
+  creator: 'Ofigona LLC',
+  publisher: 'Ofigona LLC',
   formatDetection: {
     email: false,
     address: false,
@@ -98,7 +98,7 @@ const structuredData = {
   },
   "publisher": {
     "@type": "Organization",
-    "name": "Rise Above Partners",
+    "name": "Ofigona LLC",
     "email": "Hello@rise-above.net"
   }
 }
