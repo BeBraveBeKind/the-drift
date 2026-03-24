@@ -3,12 +3,12 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, MapPin } from 'lucide-react'
 
 /**
- * Navigation — design system spec.
- * Sticky white bar, 640px max, Lucide icons.
- * Marketing nav variant will be built with marketing pages.
+ * Navigation — single-town variant.
+ * Logo left, town pill + hamburger right.
+ * Hamburger holds secondary/B2B pages only.
  */
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -41,22 +41,51 @@ export default function Navigation() {
             Switchboard
           </Link>
 
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            className="flex items-center justify-center"
-            style={{ minWidth: 44, minHeight: 44 }}
-          >
-            {menuOpen ? (
-              <X size={24} color="var(--sb-charcoal)" />
-            ) : (
-              <Menu size={24} color="var(--sb-charcoal)" />
-            )}
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Town pill — direct link to the live town */}
+            <Link
+              href="/viroqua"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '8px 14px',
+                borderRadius: 'var(--sb-radius-badge)',
+                background: pathname.startsWith('/viroqua')
+                  ? 'var(--sb-amber)'
+                  : 'var(--sb-warm-white)',
+                border: pathname.startsWith('/viroqua')
+                  ? '1px solid var(--sb-amber)'
+                  : '1px solid var(--sb-warm-gray)',
+                color: 'var(--sb-charcoal)',
+                fontSize: '14px',
+                fontWeight: 600,
+                textDecoration: 'none',
+                transition: 'all var(--sb-transition)',
+                minHeight: '36px',
+              }}
+            >
+              <MapPin size={14} color="var(--sb-amber)" />
+              Viroqua
+            </Link>
+
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              className="flex items-center justify-center"
+              style={{ minWidth: 44, minHeight: 44 }}
+            >
+              {menuOpen ? (
+                <X size={24} color="var(--sb-charcoal)" />
+              ) : (
+                <Menu size={24} color="var(--sb-charcoal)" />
+              )}
+            </button>
+          </div>
         </div>
       </nav>
 
-      {/* Dropdown */}
+      {/* Dropdown — secondary pages only */}
       <div
         className={`fixed top-16 left-0 right-0 z-40 transition-all duration-150 ease-in-out ${
           menuOpen ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0 pointer-events-none'
@@ -68,28 +97,12 @@ export default function Navigation() {
       >
         <div className="max-w-[640px] mx-auto px-4 py-4 space-y-1">
           <Link
-            href="/towns"
-            className="block py-3 text-base font-medium"
-            style={{ color: 'var(--sb-charcoal)', textDecoration: 'none' }}
-            onClick={() => setMenuOpen(false)}
-          >
-            Towns
-          </Link>
-          <Link
             href="/about"
             className="block py-3 text-base font-medium"
             style={{ color: 'var(--sb-charcoal)', textDecoration: 'none' }}
             onClick={() => setMenuOpen(false)}
           >
             About
-          </Link>
-          <Link
-            href="/how-to-post"
-            className="block py-3 text-base font-medium"
-            style={{ color: 'var(--sb-charcoal)', textDecoration: 'none' }}
-            onClick={() => setMenuOpen(false)}
-          >
-            How It Works
           </Link>
           <Link
             href="/get-listed"
@@ -107,16 +120,14 @@ export default function Navigation() {
           >
             For Chambers
           </Link>
-          <div className="pt-2">
-            <Link
-              href="/start-town"
-              className="btn-primary w-full text-center"
-              style={{ textDecoration: 'none' }}
-              onClick={() => setMenuOpen(false)}
-            >
-              Bring Switchboard to Your Town
-            </Link>
-          </div>
+          <Link
+            href="/start-town"
+            className="block py-3 text-base font-medium"
+            style={{ color: 'var(--sb-charcoal)', textDecoration: 'none' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            Start a Town
+          </Link>
         </div>
       </div>
 

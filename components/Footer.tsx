@@ -42,14 +42,11 @@ export default function Footer() {
           <Link href="/about" className="hover:underline" style={{ color: 'var(--sb-slate)', fontWeight: 500, textDecoration: 'none' }}>
             About
           </Link>
-          <Link href="/how-to-post" className="hover:underline" style={{ color: 'var(--sb-slate)', fontWeight: 500, textDecoration: 'none' }}>
-            How It Works
-          </Link>
           <Link href="/get-listed" className="hover:underline" style={{ color: 'var(--sb-slate)', fontWeight: 500, textDecoration: 'none' }}>
             For Businesses
           </Link>
           <Link href="/start-town" className="hover:underline" style={{ color: 'var(--sb-slate)', fontWeight: 500, textDecoration: 'none' }}>
-            For Your Town
+            Start a Town
           </Link>
           <Link href="/privacy" className="hover:underline" style={{ color: 'var(--sb-slate)', fontWeight: 500, textDecoration: 'none' }}>
             Privacy

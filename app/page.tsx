@@ -4,42 +4,59 @@ import Link from 'next/link'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import { supabase } from '@/lib/supabase'
-import { MapPin, ChevronRight, QrCode, Camera, Shield, Flag, Smartphone } from 'lucide-react'
+import { getPhotoUrl, timeAgo } from '@/lib/utils'
+import { QrCode, Camera, Smartphone, MapPin, ArrowRight } from 'lucide-react'
 
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Switchboard — Your Town\'s Bulletin Boards, Online',
+  title: 'Switchboard — Viroqua\'s Bulletin Boards, Online',
   description:
-    'Scan a QR code to browse your local bulletin board from your phone. Find businesses, events, and services. No app, no account, free. Real. Local. Now.',
+    'Browse Viroqua\'s community bulletin boards from your phone. Find local businesses, events, and services. No app, no account, free. Real. Local. Now.',
 }
 
-async function getTowns() {
-  const { data: towns } = await supabase
+async function getViroquaPreview() {
+  // Get Viroqua town
+  const { data: town } = await supabase
     .from('towns')
     .select('id, name, slug')
+    .eq('slug', 'viroqua')
     .eq('is_active', true)
-    .order('name')
+    .single()
 
-  if (!towns || towns.length === 0) return []
+  if (!town) return { town: null, boards: [], totalBoards: 0 }
 
-  const townsWithCounts = await Promise.all(
-    towns.map(async (town) => {
-      const { count } = await supabase
-        .from('locations')
-        .select('*', { count: 'exact', head: true })
-        .eq('town_id', town.id)
-        .eq('is_active', true)
+  // Get total board count
+  const { count } = await supabase
+    .from('locations')
+    .select('*', { count: 'exact', head: true })
+    .eq('town_id', town.id)
+    .eq('is_active', true)
 
-      return {
-        name: town.name.charAt(0).toUpperCase() + town.name.slice(1),
-        slug: town.slug,
-        boardCount: count || 0,
-      }
-    })
-  )
+  // Get recent boards with photos for the preview strip
+  const { data: locationsData } = await supabase
+    .from('locations')
+    .select(`
+      id, name, slug, business_category, updated_at,
+      photos!inner(id, storage_path, created_at)
+    `)
+    .eq('is_active', true)
+    .eq('town_id', town.id)
+    .eq('photos.is_current', true)
+    .eq('photos.is_flagged', false)
+    .order('updated_at', { ascending: false })
+    .limit(6)
 
-  return townsWithCounts
+  const boards = (locationsData || []).map(location => ({
+    id: location.id,
+    name: location.name,
+    slug: location.slug,
+    category: location.business_category,
+    photoUrl: getPhotoUrl(location.photos[0].storage_path),
+    updatedAt: location.photos[0].created_at,
+  }))
+
+  return { town, boards, totalBoards: count || 0 }
 }
 
 const FAQ_ITEMS = [
@@ -83,8 +100,7 @@ const faqStructuredData = {
 }
 
 export default async function HomePage() {
-  const towns = await getTowns()
-  const totalBoards = towns.reduce((sum, t) => sum + t.boardCount, 0)
+  const { town, boards, totalBoards } = await getViroquaPreview()
 
   return (
     <>
@@ -109,99 +125,111 @@ export default async function HomePage() {
               className="text-4xl sm:text-5xl font-bold leading-tight mb-6"
               style={{ color: 'var(--sb-charcoal)' }}
             >
-              Your town&rsquo;s bulletin boards, online.
+              Viroqua&rsquo;s bulletin boards, online.
             </h1>
 
             <p
               className="text-lg sm:text-xl mb-10"
               style={{ color: 'var(--sb-slate)' }}
             >
-              Switchboard turns physical bulletin boards into live, browsable pages.
-              Scan a QR code to see what&rsquo;s posted. No app. No account. Just your community.
+              {totalBoards} boards. Updated by your neighbors. No app, no account.
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <a
-                href="#towns"
+              <Link
+                href="/viroqua"
                 className="btn-primary"
                 style={{ gap: '8px', textDecoration: 'none', fontSize: '16px', padding: '14px 32px' }}
               >
-                Find my town
-              </a>
+                <MapPin size={18} />
+                Browse Viroqua
+              </Link>
               <a
                 href="#how-it-works"
                 className="btn-text"
                 style={{ gap: '4px', fontSize: '16px', textDecoration: 'none' }}
               >
-                See how it works <span aria-hidden="true">&rarr;</span>
+                How does this work? <span aria-hidden="true">&rarr;</span>
               </a>
             </div>
-
-            <p
-              className="text-sm mt-4 mb-10"
-              style={{ color: 'var(--sb-stone)' }}
-            >
-              Free for everyone.
-            </p>
 
             <Image
               src="/hero-banner.webp"
               alt="Illustrated community bulletin board with flyers, business cards, and local postings"
               width={640}
               height={280}
-              className="w-full h-auto"
+              className="w-full h-auto mt-10"
               priority
               style={{ borderRadius: 'var(--sb-radius)' }}
             />
-
-            {/* Aggregate stats */}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                gap: '40px',
-                marginTop: '32px',
-                paddingTop: '24px',
-                borderTop: '1px solid var(--sb-warm-gray)',
-              }}
-            >
-              <div className="text-center">
-                <p
-                  className="text-2xl font-bold"
-                  style={{ color: 'var(--sb-charcoal)' }}
-                >
-                  {totalBoards}
-                </p>
-                <p
-                  className="text-sm"
-                  style={{ color: 'var(--sb-stone)' }}
-                >
-                  bulletin boards
-                </p>
-              </div>
-              <div className="text-center">
-                <p
-                  className="text-2xl font-bold"
-                  style={{ color: 'var(--sb-charcoal)' }}
-                >
-                  {towns.length}
-                </p>
-                <p
-                  className="text-sm"
-                  style={{ color: 'var(--sb-stone)' }}
-                >
-                  {towns.length === 1 ? 'community' : 'communities'}
-                </p>
-              </div>
-            </div>
           </div>
         </section>
+
+        {/* ── Live Preview Strip ──────────────────────────────── */}
+        {boards.length > 0 && (
+          <section
+            className="py-12 sm:py-16"
+            style={{ background: 'var(--sb-white)' }}
+          >
+            <div className="max-w-[640px] mx-auto px-4">
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '20px' }}>
+                <h2
+                  className="text-lg font-semibold"
+                  style={{ color: 'var(--sb-charcoal)' }}
+                >
+                  Recently updated
+                </h2>
+                <Link
+                  href="/viroqua"
+                  className="text-sm font-medium"
+                  style={{ color: 'var(--sb-amber)', textDecoration: 'none' }}
+                >
+                  See all {totalBoards} <span aria-hidden="true">&rarr;</span>
+                </Link>
+              </div>
+
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+                  gap: '12px',
+                }}
+              >
+                {boards.slice(0, 4).map((board) => (
+                  <Link
+                    key={board.id}
+                    href={`/viroqua/${board.slug}`}
+                    className="board-card"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <div className="board-card__image-wrapper">
+                      <img
+                        src={board.photoUrl}
+                        alt={`${board.name} bulletin board`}
+                        className="board-card__image"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="board-card__content">
+                      <p className="board-card__title">{board.name}</p>
+                      <p
+                        className="text-xs mt-1"
+                        style={{ color: 'var(--sb-stone)' }}
+                      >
+                        Updated {timeAgo(board.updatedAt)}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ── How It Works ─────────────────────────────────── */}
         <section
           id="how-it-works"
           className="py-16 sm:py-20"
-          style={{ background: 'var(--sb-white)' }}
         >
           <div className="max-w-[640px] mx-auto px-4">
             <h2
@@ -217,42 +245,36 @@ export default async function HomePage() {
               Works with any phone. No download required.
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
               {[
                 {
-                  icon: <QrCode size={28} />,
+                  icon: <QrCode size={24} />,
                   step: '1',
                   title: 'Scan',
-                  desc: 'A QR code on a local bulletin board opens it on your phone. Library, co-op, coffee shop — wherever boards already exist.',
-                  image: '/instructional/IMG_2404.jpg',
-                  imageAlt: 'Person scanning a Switchboard QR code at a bulletin board with their phone',
+                  desc: 'A QR code on a local bulletin board opens it on your phone.',
                 },
                 {
-                  icon: <Smartphone size={28} />,
+                  icon: <Smartphone size={24} />,
                   step: '2',
                   title: 'Browse',
-                  desc: 'See every listing as a photo. Filter by category. Check when it was last updated. Find what you need in seconds.',
-                  image: '/instructional/IMG_2408.jpg',
-                  imageAlt: 'Phone showing the Switchboard business page after scanning a QR code',
+                  desc: 'See every listing as a photo. Filter by category. Check freshness.',
                 },
                 {
-                  icon: <Camera size={28} />,
+                  icon: <Camera size={24} />,
                   step: '3',
                   title: 'Update',
-                  desc: 'Snap a photo of the board to keep it current. Geo-verified — you must be there in person. The community keeps it real.',
-                  image: '/instructional/tip-2.webp',
-                  imageAlt: 'Person stepping back to photograph the full bulletin board',
+                  desc: 'Snap a photo to keep the board current. Geo-verified — you must be there.',
                 },
               ].map((s) => (
-                <div key={s.step} style={{ display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
+                <div key={s.step} style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
                   <div
                     style={{
                       flexShrink: 0,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      width: '56px',
-                      height: '56px',
+                      width: '48px',
+                      height: '48px',
                       borderRadius: '50%',
                       background: 'var(--sb-amber)',
                       color: 'var(--sb-charcoal)',
@@ -260,32 +282,19 @@ export default async function HomePage() {
                   >
                     {s.icon}
                   </div>
-                  <div style={{ flex: '1 1 0%' }}>
+                  <div>
                     <h3
-                      className="text-lg font-semibold mb-1"
+                      className="text-base font-semibold mb-1"
                       style={{ color: 'var(--sb-charcoal)' }}
                     >
                       {s.title}
                     </h3>
                     <p
-                      className="text-base mb-4"
+                      className="text-sm"
                       style={{ color: 'var(--sb-slate)' }}
                     >
                       {s.desc}
                     </p>
-                    <div
-                      className="overflow-hidden"
-                      style={{ borderRadius: 'var(--sb-radius)' }}
-                    >
-                      <Image
-                        src={s.image}
-                        alt={s.imageAlt}
-                        width={480}
-                        height={320}
-                        className="w-full h-auto"
-                        style={{ maxHeight: '320px', objectFit: 'cover', objectPosition: 'center' }}
-                      />
-                    </div>
                   </div>
                 </div>
               ))}
@@ -293,186 +302,49 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── Who It's For ─────────────────────────────────── */}
-        <section className="py-16 sm:py-20">
-          <div className="max-w-[640px] mx-auto px-4">
-            <h2
-              className="text-2xl sm:text-3xl font-bold text-center mb-12"
-              style={{ color: 'var(--sb-charcoal)' }}
-            >
-              Built for how small towns actually work.
-            </h2>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              {[
-                {
-                  label: 'Community members',
-                  quote: '\u201CI deleted Facebook but I still want to know what\u2019s happening in town.\u201D',
-                  desc: 'Find local businesses, events, and services from the boards you already pass every day — now from your phone.',
-                },
-                {
-                  label: 'Local businesses',
-                  quote: '\u201CI don\u2019t have time for Instagram. I just want people to know I\u2019m here.\u201D',
-                  desc: 'Your listing stays visible as long as it\u2019s current. Update it by taking a photo. No ad spend. No content calendar.',
-                },
-                {
-                  label: 'Chambers & towns',
-                  quote: '\u201CI need something real I can offer my members.\u201D',
-                  desc: 'One platform serves every business in town. Community-maintained. Measurable. Replaces your printed directory on day one.',
-                },
-              ].map((card) => (
-                <div
-                  key={card.label}
-                  style={{
-                    padding: '24px',
-                    border: '1px solid var(--sb-warm-gray)',
-                    borderRadius: 'var(--sb-radius)',
-                    background: 'var(--sb-white)',
-                  }}
-                >
-                  <p
-                    className="text-xs font-semibold uppercase tracking-wide mb-2"
-                    style={{ color: 'var(--sb-amber)' }}
-                  >
-                    {card.label}
-                  </p>
-                  <p
-                    className="text-base italic mb-3"
-                    style={{ color: 'var(--sb-charcoal)' }}
-                  >
-                    {card.quote}
-                  </p>
-                  <p
-                    className="text-sm"
-                    style={{ color: 'var(--sb-slate)' }}
-                  >
-                    {card.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Trust Signals ────────────────────────────────── */}
+        {/* ── Expansion CTA ──────────────────────────────────── */}
         <section
           className="py-16 sm:py-20"
           style={{ background: 'var(--sb-white)' }}
         >
           <div className="max-w-[640px] mx-auto px-4">
-            <h2
-              className="text-2xl sm:text-3xl font-bold text-center mb-10"
-              style={{ color: 'var(--sb-charcoal)' }}
+            <div
+              className="text-center"
+              style={{
+                border: '2px dashed var(--sb-warm-gray)',
+                borderRadius: 'var(--sb-radius)',
+                padding: '32px 24px',
+              }}
             >
-              No tricks. No tracking. No nonsense.
-            </h2>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px' }}>
-              {[
-                { icon: <Shield size={20} />, text: 'No account required — scan and browse.' },
-                { icon: <Smartphone size={20} />, text: 'No app download — works in any phone browser.' },
-                { icon: <Camera size={20} />, text: 'Photo-verified — timestamped and geo-fenced.' },
-                { icon: <Flag size={20} />, text: 'Community-flagged — the community keeps itself honest.' },
-              ].map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <div style={{ flexShrink: 0, marginTop: '2px', color: 'var(--sb-amber)' }}>
-                    {item.icon}
-                  </div>
-                  <p style={{ fontSize: '14px', color: 'var(--sb-slate)', margin: 0 }}>
-                    {item.text}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Town Picker ──────────────────────────────────── */}
-        <section id="towns" className="py-16 sm:py-20">
-          <div className="max-w-[640px] mx-auto px-4">
-            <h2
-              className="text-2xl sm:text-3xl font-bold text-center mb-10"
-              style={{ color: 'var(--sb-charcoal)' }}
-            >
-              See what&rsquo;s posted in your town.
-            </h2>
-
-            <div className="mb-8">
-              {towns.map((town) => (
-                <Link
-                  key={town.slug}
-                  href={`/${town.slug}`}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '16px 0',
-                    borderBottom: '1px solid var(--sb-warm-gray)',
-                    textDecoration: 'none',
-                    minHeight: '56px',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <MapPin size={18} color="var(--sb-amber)" />
-                    <div>
-                      <span
-                        style={{ fontSize: '16px', fontWeight: 600, color: 'var(--sb-charcoal)' }}
-                      >
-                        {town.name}
-                      </span>
-                      <span
-                        style={{ fontSize: '14px', color: 'var(--sb-stone)', marginLeft: '8px' }}
-                      >
-                        {town.boardCount} {town.boardCount === 1 ? 'board' : 'boards'}
-                      </span>
-                    </div>
-                  </div>
-                  <ChevronRight size={16} color="var(--sb-stone)" />
-                </Link>
-              ))}
-            </div>
-
-            <p className="text-center text-sm" style={{ color: 'var(--sb-stone)' }}>
-              Don&rsquo;t see your town?{' '}
-              <Link
-                href="/start-town"
-                className="font-semibold no-underline"
-                style={{ color: 'var(--sb-amber)' }}
+              <h2
+                className="text-xl sm:text-2xl font-bold mb-3"
+                style={{ color: 'var(--sb-charcoal)' }}
               >
-                Bring Switchboard to your community &rarr;
-              </Link>
-            </p>
-          </div>
-        </section>
-
-        {/* ── Final CTA ────────────────────────────────────── */}
-        <section
-          className="py-16 sm:py-20"
-          style={{ background: 'var(--sb-charcoal)' }}
-        >
-          <div className="max-w-[640px] mx-auto px-4 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-white">
-              Every town has a bulletin board. Now yours is online.
-            </h2>
-            <p
-              className="text-base mb-8"
-              style={{ color: 'var(--sb-stone)' }}
-            >
-              Real. Local. Now.
-            </p>
-            <a
-              href="#towns"
-              className="btn-primary"
-              style={{ gap: '8px', textDecoration: 'none', fontSize: '16px', padding: '14px 32px' }}
-            >
-              Find my town
-            </a>
-            <p
-              className="text-sm mt-4"
-              style={{ color: '#94A3B8' }}
-            >
-              No signup. No download. Just scan.
-            </p>
+                Want Switchboard in your town?
+              </h2>
+              <p
+                className="text-sm mb-6"
+                style={{ color: 'var(--sb-stone)', maxWidth: '400px', margin: '0 auto 24px' }}
+              >
+                We partner with chambers of commerce and local organizations to launch new communities.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                <Link
+                  href="/start-town"
+                  className="btn-primary"
+                  style={{ gap: '8px', textDecoration: 'none', fontSize: '15px', padding: '12px 28px' }}
+                >
+                  Start a Town <ArrowRight size={16} />
+                </Link>
+                <Link
+                  href="/get-listed"
+                  className="btn-text"
+                  style={{ fontSize: '14px', textDecoration: 'none', padding: '8px' }}
+                >
+                  I&rsquo;m a local business <span aria-hidden="true">&rarr;</span>
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
 
