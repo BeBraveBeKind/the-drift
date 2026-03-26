@@ -193,9 +193,11 @@ export default async function HomePage() {
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
                   gap: '12px',
+                  maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
                 }}
               >
-                {boards.slice(0, 4).map((board) => (
+                {boards.slice(0, 3).map((board) => (
                   <Link
                     key={board.id}
                     href={`/viroqua/${board.slug}`}
@@ -222,6 +224,27 @@ export default async function HomePage() {
                   </Link>
                 ))}
               </div>
+
+              <Link
+                href="/viroqua"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  marginTop: '16px',
+                  padding: '14px 24px',
+                  background: 'var(--sb-amber)',
+                  color: 'var(--sb-charcoal)',
+                  borderRadius: 'var(--sb-radius)',
+                  fontWeight: 600,
+                  fontSize: '15px',
+                  textDecoration: 'none',
+                  transition: 'opacity 0.15s',
+                }}
+              >
+                Browse all {totalBoards} boards in Viroqua <ArrowRight size={16} />
+              </Link>
             </div>
           </section>
         )}
