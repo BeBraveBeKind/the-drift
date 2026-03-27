@@ -97,3 +97,31 @@ public/hero-option-2-mainstreet.jpg
 public/hero-option-2a-mainstreet.jpg
 public/hero-option-2b-mainstreet.jpg
 scripts/reprocess-oversized-photos.ts
+
+# One-off SQL scripts (already executed, not part of migrations)
+/*.sql
+
+# Stale setup/planning docs (completed work)
+CREATE_BUCKET_INSTRUCTIONS.md
+CRITICAL_FOUNDATIONS_IMPLEMENTATION.md
+DEPLOYMENT_CHECKLIST.md
+ENVIRONMENT_SETUP.md
+MIGRATION_SUMMARY.md
+SECURITY_FIX_README.md
+SECURITY_REVIEW.md
+SETUP-INSTRUCTIONS.md
+switchboard-style-guide.md
+
+# Shipped/inactive PRDs
+PRD-donation-feature.md
+PRD-business-board-redesign.md
+
+# Generated artifacts
+lighthouse-report.json
+*.pdf
+
+# TaskMaster agent state
+.taskmaster/
+
+# Python virtual environment
+.venv/
