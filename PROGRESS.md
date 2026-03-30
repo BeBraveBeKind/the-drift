@@ -1,5 +1,51 @@
 # Switchboard - Development Progress Log
 
+## Session: 2026-03-29
+
+### Accomplished
+- **Fixed timezone bug in freshness indicators**: "Updated today" used a rolling 24-hour window instead of calendar days — a 10pm upload still showed "today" at 9am the next morning
+- Created `calendarDaysAgo()` helper in `lib/utils.ts` using `Intl.DateTimeFormat` with `America/Chicago` (Central time) for proper calendar-day comparison
+- Updated 3 consumer components: `FreshnessIndicator.tsx`, `PhotoPrompt.tsx`, `UploadFlow.tsx`
+- Build verified clean
+
+### Decisions
+- `America/Chicago` is the canonical timezone for all freshness calculations (Viroqua-focused app)
+
+### Files Changed
+| File | Action | Description |
+|------|--------|-------------|
+| `lib/utils.ts` | Edited | Added `calendarDaysAgo()` with Central time |
+| `components/FreshnessIndicator.tsx` | Edited | Uses `calendarDaysAgo` instead of rolling hours |
+| `components/PhotoPrompt.tsx` | Edited | Uses `calendarDaysAgo` instead of inline calc |
+| `components/UploadFlow.tsx` | Edited | Uses `calendarDaysAgo` instead of inline calc |
+
+### Next Steps
+- Distribute press release
+- Search feature — Execute PRD
+- Send /for-chambers to chamber directors
+
+---
+
+## Session: 2026-03-25
+
+### Accomplished
+- **Chamber networking flyer**: Created print-ready 8.5x11 two-sided PDF flyer for Viroqua chamber of commerce networking event
+- Built Python generator script (`scripts/generate-flyer.py`) using ReportLab + qrcode libraries
+- Iterated through 6 revisions to simplify from information-dense to punchy business format
+- Front: Switchboard logo, headline ("Viroqua's bulletin boards, online."), "No app. No account. Free.", large QR code to switchboard.town
+- Back: "What is Switchboard?" explainer, "For Your Business" (4 bullet benefits), "Get Involved" CTA with contact info
+
+### Files Created (not committed)
+- `scripts/generate-flyer.py` — PDF generator script
+- `switchboard-flyer.pdf` — final flyer output
+
+### Next Steps
+- Print flyer for chamber networking event
+- Distribute press release
+- Send /for-chambers to target chamber directors
+
+---
+
 ## Session: 2026-03-10
 
 ### Accomplished Today

@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useSyncExternalStore } from 'react'
 import { Camera } from 'lucide-react'
+import { calendarDaysAgo } from '@/lib/utils'
 
 interface PhotoPromptProps {
   townSlug: string
@@ -13,9 +14,7 @@ const DISMISS_KEY = 'sb-photo-prompt-dismissed'
 
 function getFreshnessMessage(lastUpdated?: string): string {
   if (!lastUpdated) return 'This board has never been photographed.'
-  const days = Math.floor(
-    (Date.now() - new Date(lastUpdated).getTime()) / (1000 * 60 * 60 * 24)
-  )
+  const days = calendarDaysAgo(lastUpdated)
   if (days === 0) return 'Updated today — keep it fresh!'
   if (days === 1) return 'Updated yesterday.'
   if (days < 7) return `Updated ${days} days ago.`

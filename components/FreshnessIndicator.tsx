@@ -10,6 +10,7 @@
  */
 
 import { CircleCheck, AlertTriangle, AlertCircle, CircleDashed } from 'lucide-react'
+import { calendarDaysAgo } from '@/lib/utils'
 
 type FreshnessState = 'just-now' | 'today' | 'this-week' | 'getting-stale' | 'stale' | 'very-stale' | 'never'
 
@@ -22,26 +23,20 @@ interface FreshnessConfig {
 function getFreshnessState(updatedAt: string | null | undefined): FreshnessState {
   if (!updatedAt) return 'never'
 
-  const now = Date.now()
-  const updated = new Date(updatedAt).getTime()
-  const diffMs = now - updated
+  const diffMs = Date.now() - new Date(updatedAt).getTime()
   const diffHours = diffMs / (1000 * 60 * 60)
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+  const days = calendarDaysAgo(updatedAt)
 
   if (diffHours < 1) return 'just-now'
-  if (diffHours < 24) return 'today'
-  if (diffDays <= 7) return 'this-week'
-  if (diffDays <= 14) return 'getting-stale'
-  if (diffDays <= 30) return 'stale'
+  if (days === 0) return 'today'
+  if (days <= 7) return 'this-week'
+  if (days <= 14) return 'getting-stale'
+  if (days <= 30) return 'stale'
   return 'very-stale'
 }
 
-function getDaysAgo(updatedAt: string): number {
-  return Math.floor((Date.now() - new Date(updatedAt).getTime()) / (1000 * 60 * 60 * 24))
-}
-
 function getFreshnessConfig(state: FreshnessState, updatedAt: string | null | undefined): FreshnessConfig {
-  const daysAgo = updatedAt ? getDaysAgo(updatedAt) : 0
+  const daysAgo = updatedAt ? calendarDaysAgo(updatedAt) : 0
 
   switch (state) {
     case 'just-now':

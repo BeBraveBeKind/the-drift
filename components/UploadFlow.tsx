@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Camera, CheckCircle, X, Share2, Bookmark, ArrowLeft, Loader2 } from 'lucide-react'
 import { compressImage } from '@/lib/imageCompression'
+import { calendarDaysAgo } from '@/lib/utils'
 
 type FlowStep = 'tips' | 'preview' | 'uploading' | 'success' | 'error'
 
@@ -25,9 +26,7 @@ const TIPS = [
 
 function getFreshnessMessage(lastUpdated?: string): string {
   if (!lastUpdated) return 'This board has never been photographed.'
-  const days = Math.floor(
-    (Date.now() - new Date(lastUpdated).getTime()) / (1000 * 60 * 60 * 24)
-  )
+  const days = calendarDaysAgo(lastUpdated)
   if (days === 0) return 'Updated today — keep it fresh!'
   if (days === 1) return 'Updated yesterday.'
   if (days < 7) return `Updated ${days} days ago.`
