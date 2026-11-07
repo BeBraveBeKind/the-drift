@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
 
     const salt = process.env.FLAG_SALT
     if (!supabaseAdmin || !salt) {
+      console.error('Flag route: server configuration incomplete')
       return NextResponse.json({ error: 'Service unavailable' }, { status: 503 })
     }
 
@@ -52,6 +53,9 @@ export async function POST(request: NextRequest) {
     if (outcome === 'duplicate') {
       return NextResponse.json({ success: true, counted: false })
     }
+    if (outcome === 'missing') {
+      return NextResponse.json({ error: 'Invalid photo' }, { status: 400 })
+    }
     if (outcome === 'error') {
       console.error('Flag insert error:', insertError?.message)
       return NextResponse.json({ error: 'Failed' }, { status: 500 })
@@ -66,7 +70,8 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true, counted: true })
-  } catch {
+  } catch (err) {
+    console.error('Flag route error:', err instanceof Error ? err.message : 'unknown')
     return NextResponse.json({ error: 'Failed' }, { status: 500 })
   }
 }

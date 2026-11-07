@@ -32,8 +32,15 @@ export function isUuid(value: unknown): value is string {
   return typeof value === 'string' && UUID_PATTERN.test(value)
 }
 
-/** Maps a database error to a flag result; unique violation (23505) is a duplicate. */
-export function flagOutcome(error: { code?: string } | null): 'count' | 'duplicate' | 'error' {
+/**
+ * Maps a database error to a flag result: unique violation (23505) is a duplicate,
+ * foreign key violation (23503) means the photo does not exist.
+ */
+export function flagOutcome(
+  error: { code?: string } | null
+): 'count' | 'duplicate' | 'missing' | 'error' {
   if (!error) return 'count'
-  return error.code === '23505' ? 'duplicate' : 'error'
+  if (error.code === '23505') return 'duplicate'
+  if (error.code === '23503') return 'missing'
+  return 'error'
 }

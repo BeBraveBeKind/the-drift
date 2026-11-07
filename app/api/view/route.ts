@@ -16,6 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!supabaseAdmin) {
+      console.error('View route: server configuration incomplete')
       return NextResponse.json({ error: 'Service unavailable' }, { status: 503 })
     }
 

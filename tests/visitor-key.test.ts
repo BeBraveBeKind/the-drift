@@ -32,6 +32,7 @@ test('isUuid and flagOutcome', () => {
   assert.ok(!isUuid('1 or 1=1'))
   assert.strictEqual(flagOutcome(null), 'count')
   assert.strictEqual(flagOutcome({ code: '23505' }), 'duplicate')
+  assert.strictEqual(flagOutcome({ code: '23503' }), 'missing')
   assert.strictEqual(flagOutcome({ code: '42501' }), 'error')
 })
 test('isUuid accepts any canonical UUID case-insensitively and rejects non-strings', () => {
