@@ -1,5 +1,6 @@
 /**
- * AnalyticsMockup — static visual mockup of a Plausible-style analytics dashboard.
+ * AnalyticsMockup — static visual mockup of a Plausible-style analytics dashboard,
+ * labeled as an example with illustrative numbers.
  * Used on the /for-chambers page to show Carol what reporting looks like.
  * Pure CSS, no JS, no client component needed.
  */
@@ -47,16 +48,22 @@ export default function AnalyticsMockup() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div
+          <span
             style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: '#22c55e',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              color: '#92400e',
+              background: '#fef3c7',
+              borderRadius: '4px',
+              padding: '2px 6px',
             }}
-          />
+          >
+            Example
+          </span>
           <span style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b' }}>
-            switchboard.town/viroqua
+            switchboard.town/your-town
           </span>
         </div>
         <span style={{ fontSize: '12px', color: '#94a3b8' }}>Last 7 days</span>

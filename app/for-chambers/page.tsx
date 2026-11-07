@@ -125,6 +125,9 @@ export default async function ForChambersPage() {
               numbers. Zero staff time.
             </p>
             <AnalyticsMockup />
+            <p style={{ fontSize: '13px', color: '#64748B', marginTop: '8px' }}>
+              Example dashboard with illustrative numbers. Your town&rsquo;s report uses its own visitor data.
+            </p>
           </section>
 
           {/* ── How Every Member Benefits ──────────────────────── */}
