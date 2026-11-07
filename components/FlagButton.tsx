@@ -13,27 +13,34 @@ import { Flag, CheckCircle } from 'lucide-react'
 export default function FlagButton({ photoId }: { photoId: string }) {
   const [flagged, setFlagged] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [failed, setFailed] = useState(false)
 
   async function handleFlag() {
     if (flagged || loading) return
 
     setLoading(true)
+    setFailed(false)
 
     try {
-      await fetch('/api/flag', {
+      const res = await fetch('/api/flag', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ photoId }),
       })
-      setFlagged(true)
+      if (res.ok) {
+        setFlagged(true)
+      } else {
+        setFailed(true)
+      }
     } catch {
-      // Silent fail
+      setFailed(true)
     } finally {
       setLoading(false)
     }
   }
 
   return (
+    <>
     <button
       onClick={handleFlag}
       disabled={flagged || loading}
@@ -52,5 +59,11 @@ export default function FlagButton({ photoId }: { photoId: string }) {
         </>
       )}
     </button>
+    {failed && (
+      <span className="ml-2 text-sm" style={{ color: 'var(--sb-stone)' }}>
+        Couldn&apos;t send. Try again later.
+      </span>
+    )}
+    </>
   )
 }
