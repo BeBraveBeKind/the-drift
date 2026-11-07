@@ -1,24 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase'
+import { isUuid } from '@/lib/visitor-key'
 
 export async function POST(request: NextRequest) {
   try {
-    const { locationId } = await request.json()
-    
-    if (!locationId) {
-      return NextResponse.json({ error: 'Missing location' }, { status: 400 })
+    let locationId: unknown
+    try {
+      locationId = (await request.json())?.locationId
+    } catch {
+      return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
     }
-    
-    // Use RPC for atomic increment (runs as security definer)
-    const { error } = await supabase.rpc('increment_view_count', { loc_id: locationId })
-    
+
+    if (!isUuid(locationId)) {
+      return NextResponse.json({ error: 'Invalid location' }, { status: 400 })
+    }
+
+    if (!supabaseAdmin) {
+      console.error('View route: server configuration incomplete')
+      return NextResponse.json({ error: 'Service unavailable' }, { status: 503 })
+    }
+
+    // Atomic increment via RPC
+    const { error } = await supabaseAdmin.rpc('increment_view_count', { loc_id: locationId })
+
     if (error) {
-      console.error('View increment error:', error)
+      console.error('View increment error:', error.message)
       return NextResponse.json({ error: 'Failed' }, { status: 500 })
     }
-    
+
     return NextResponse.json({ success: true })
-  } catch {
+  } catch (err) {
+    console.error('View route error:', err instanceof Error ? err.message : 'unknown')
     return NextResponse.json({ error: 'Failed' }, { status: 500 })
   }
 }
