@@ -22,7 +22,11 @@ type Handler = (request: NextRequest) => Promise<Response>
 // Add further routes here; each entry is exercised by every test below.
 async function routes(): Promise<Array<{ name: string; path: string; field: string; handler: Handler }>> {
   const flag = await import('@/app/api/flag/route')
-  return [{ name: 'flag', path: '/api/flag', field: 'photoId', handler: flag.POST }]
+  const view = await import('@/app/api/view/route')
+  return [
+    { name: 'flag', path: '/api/flag', field: 'photoId', handler: flag.POST },
+    { name: 'view', path: '/api/view', field: 'locationId', handler: view.POST },
+  ]
 }
 
 test('routes return 503 when server config is missing', async () => {
